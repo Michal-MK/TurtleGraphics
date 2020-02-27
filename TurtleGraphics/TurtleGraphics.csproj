@@ -106,6 +106,7 @@
     <Compile Include="IO\FileSystemManager.cs" />
     <Compile Include="InteliCommands\InteliCommandsHandler.cs" />
     <Compile Include="InteliCommands\InteliCommandsState.cs" />
+    <Compile Include="Parsed Data\LineCacheData.cs" />
     <Compile Include="Parsed Data\RestorePositionData.cs" />
     <Compile Include="Parsed Data\ScreenCaptureData.cs" />
     <Compile Include="Parsed Data\StoredPositionData.cs" />

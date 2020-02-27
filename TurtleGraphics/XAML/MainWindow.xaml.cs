@@ -577,17 +577,30 @@ namespace TurtleGraphics {
 
 		private Task<List<TurtleData>> CompileTasks(Queue<ParsedData> tasks, CancellationToken token) {
 			return Task.Run(() => {
-				List<TurtleData> ret = new List<TurtleData>(8192) {
+
+				Dictionary<int, LineCacheData> compCache = new Dictionary<int, LineCacheData>();
+
+				List<TurtleData> ret = new List<TurtleData>(64) {
 					new TurtleData() { Angle = Angle, Brush = Brushes.Blue, BrushThickness = BrushSize, MoveTo = new Point(X, Y), PenDown = true }
 				};
 
 				while (tasks.Count > 0) {
 					ParsedData current = tasks.Dequeue();
 					if (current.IsBlock) {
-						ret.AddRange(current.CompileBlock(token));
+						IList<TurtleData> data = current.CompileBlock(token, compCache);
+						ret.AddRange(data);
 					}
 					else {
-						ret.Add(current.Compile(token));
+						if (compCache.ContainsKey(current.LineHash)) {
+							if (!compCache[current.LineHash].ContainsVariable) {
+								ret.Add(compCache[current.LineHash].CompiledData);
+							}
+						}
+						else {
+							TurtleData compiled = current.Compile(token);
+							compCache.Add(current.LineHash, new LineCacheData(current, compiled));
+							ret.Add(compiled);
+						}
 					}
 				}
 				return ret;

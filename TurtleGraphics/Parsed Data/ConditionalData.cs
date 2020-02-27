@@ -36,22 +36,22 @@ namespace TurtleGraphics {
 			ElseData = data;
 		}
 
-		public override IList<TurtleData> CompileBlock(CancellationToken token) {
-			List<TurtleData> ret = new List<TurtleData>(4096);
+		public override IList<TurtleData> CompileBlock(CancellationToken token, Dictionary<int, LineCacheData> cache) {
+			List<TurtleData> ret = new List<TurtleData>(64);
 			UpdateVars(IfCondition);
 
 			if (IfCondition.Evaluate()) {
-				ret.AddRange(CompileQueue(IfData, token));
+				ret.AddRange(CompileQueue(IfData, token, cache));
 			}
 			else {
 				if (ElseData != null) {
-					ret.AddRange(CompileQueue(ElseData, token));
+					ret.AddRange(CompileQueue(ElseData, token, cache));
 				}
 			}
 			return ret;
 		}
 
-		private IEnumerable<TurtleData> CompileQueue(Queue<ParsedData> data, CancellationToken token) {
+		private IEnumerable<TurtleData> CompileQueue(Queue<ParsedData> data, CancellationToken token, Dictionary<int, LineCacheData> cache) {
 			List<TurtleData> interData = new List<TurtleData>();
 			ParsedData current;
 			int counter = 0;
@@ -64,10 +64,20 @@ namespace TurtleGraphics {
 				current = data.Dequeue();
 				counter++;
 				if (current.IsBlock) {
-					interData.AddRange(current.CompileBlock(token));
+					interData.AddRange(current.CompileBlock(token, cache));
 				}
 				else {
-					interData.Add(current.Compile(token));
+					if (cache.ContainsKey(current.LineHash)) {
+						if (!cache[current.LineHash].ContainsVariable) {
+							interData.Add(cache[current.LineHash].CompiledData);
+						}
+					}
+					else {
+						TurtleData compiled = current.Compile(token);
+						cache.Add(current.LineHash, new LineCacheData(current, compiled));
+						interData.Add(compiled);
+					}
+					//interData.Add(current.Compile(token));
 				}
 				data.Enqueue(current);
 				if (counter == data.Count) {

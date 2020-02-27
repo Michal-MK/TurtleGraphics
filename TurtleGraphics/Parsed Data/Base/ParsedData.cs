@@ -10,13 +10,14 @@ namespace TurtleGraphics {
 			Parameters = parameters;
 			Variables = variables;
 			Line = originalLine;
+			LineHash = Line.GetHashCode();
 		}
 
 		public abstract bool IsBlock { get; }
 
 		public abstract string Line { get; set; }
 
-		public int LineHash => Line.GetHashCode();
+		public int LineHash { get; }
 
 		public Dictionary<string, object> Variables { get; set; }
 
@@ -32,7 +33,7 @@ namespace TurtleGraphics {
 		public abstract TurtleData Compile(CancellationToken token);
 
 
-		public abstract IList<TurtleData> CompileBlock(CancellationToken token);
+		public abstract IList<TurtleData> CompileBlock(CancellationToken token, Dictionary<int, LineCacheData> cache);
 
 		internal void UpdateVars(IDynamicExpression exp) {
 			foreach (var item in Variables) {

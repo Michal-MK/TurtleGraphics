@@ -22,7 +22,7 @@ namespace TurtleGraphics {
 			};
 		}
 
-		public override IList<TurtleData> CompileBlock(CancellationToken token) {
+		public override IList<TurtleData> CompileBlock(CancellationToken token, Dictionary<int, LineCacheData> cache) {
 			throw new NotImplementedException();
 		}
 	}

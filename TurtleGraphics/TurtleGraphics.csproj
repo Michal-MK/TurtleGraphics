@@ -138,6 +138,10 @@
     <Compile Include="Parsers\BlockParser.cs" />
     <Compile Include="Parsers\IfStatementParser.cs" />
     <Compile Include="IO\SavedData.cs" />
+    <Compile Include="XAML\MainWindowEmpty.xaml.cs">
+      <DependentUpon>MainWindowEmpty.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="XAML\MyVisualHost.cs" />
     <Compile Include="XAML\SaveDialog.xaml.cs">
       <DependentUpon>SaveDialog.xaml</DependentUpon>
     </Compile>
@@ -171,6 +175,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="XAML\MainWindowEmpty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="XAML\SaveDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -46,5 +46,11 @@ namespace TurtleGraphics {
 				exp.Context.Variables[item.Key] = item.Value;
 			}
 		}
+		
+		internal void UpdateVars(ExpressionContext exp) {
+			foreach (var item in Variables) {
+				exp.Variables[item.Key] = item.Value;
+			}
+		}
 	}
 }

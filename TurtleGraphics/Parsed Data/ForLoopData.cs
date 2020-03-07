@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Flee.PublicTypes;
 
 namespace TurtleGraphics {
@@ -28,8 +29,8 @@ namespace TurtleGraphics {
 		}
 
 		public override IList<TurtleData> CompileBlock(CancellationToken token, Dictionary<int, LineCacheData> cache) {
-			List<TurtleData> ret = new List<TurtleData>(4096);
-			List<ParsedData> loopContents = CompileLoop();
+			List<TurtleData> ret = new List<TurtleData>();
+			List<ParsedData> loopContents = CompileLoop().Result;
 
 			ret.AddRange(CompileQueue(loopContents, token, cache));
 			return ret;
@@ -68,14 +69,15 @@ namespace TurtleGraphics {
 						Variables[variableChange.VariableName] = variableChange.Value.Evaluate();
 					}
 					else {
-						if (cache.ContainsKey(current.LineHash)) {
-							if (!cache[current.LineHash].ContainsVariable) {
-								interData.Add(cache[current.LineHash].CompiledData);
-							}
+						bool cached = cache.ContainsKey(current.LineHash);
+						if (cached && !cache[current.LineHash].ContainsVariable) {
+							interData.Add(cache[current.LineHash].CompiledData);
 						}
 						else {
 							TurtleData compiled = current.Compile(token);
-							cache.Add(current.LineHash, new LineCacheData(current, compiled));
+							if (!cached) {
+								cache.Add(current.LineHash, new LineCacheData(current, compiled));
+							}
 							interData.Add(compiled);
 						}
 						//interData.Add(current.Compile(token));
@@ -180,17 +182,22 @@ namespace TurtleGraphics {
 			return interData;
 		}
 
-		private List<ParsedData> CompileLoop() {
-			List<ParsedData> singleIteration = new List<ParsedData>();
 
-			Queue<ParsedData> data = CommandParser.Parse(
+		private List<ParsedData> parsedDataC;
+		private async Task<List<ParsedData>> CompileLoop() {
+			if (parsedDataC != null)
+				return parsedDataC;
+
+			parsedDataC = new List<ParsedData>();
+
+			Queue<ParsedData> data = await CommandParser.ParseAsync(
 				string.Join(Environment.NewLine, Lines),
 				CommandParser.Window,
 				Helpers.Join(Variables, new Dictionary<string, object> { { LoopVariable, 0 } }));
 
-			singleIteration.AddRange(data);
+			parsedDataC.AddRange(data);
 
-			return singleIteration;
+			return parsedDataC;
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Flee.PublicTypes;
 using TurtleGraphics.Parsers;
 using TurtleGraphics.Validation;
@@ -12,7 +13,7 @@ namespace TurtleGraphics {
 		private static readonly Stack<ConditionalData> conditionals = new Stack<ConditionalData>();
 		public static Dictionary<string, int> LineIndexes = new Dictionary<string, int>();
 
-		public static Queue<ParsedData> ParseCommands(string commands, MainWindow window) {
+		public static async Task<Queue<ParsedData>> ParseCommandsAsync(string commands, MainWindow window) {
 			LineIndexes.Clear();
 			string[] split = commands.Replace("\r", "").Split('\n');
 			for (int i = 0; i < split.Length; i++) {
@@ -35,10 +36,10 @@ namespace TurtleGraphics {
 			}
 
 			commands = string.Join(Environment.NewLine, split);
-			return Parse(commands, window);
+			return await Task.Run(async () => await ParseAsync(commands, window));
 		}
 
-		public static Queue<ParsedData> Parse(string commands, MainWindow window, Dictionary<string, object> additionalVars = null) {
+		public static async Task<Queue<ParsedData>> ParseAsync(string commands, MainWindow window, Dictionary<string, object> additionalVars = null) {
 			Window = window;
 			conditionals.Clear();
 
@@ -57,7 +58,7 @@ namespace TurtleGraphics {
 				}
 
 				while (reader.Peek() != -1) {
-					ParsedData data = ParseLine(reader.ReadLine(), reader, globalVars);
+					ParsedData data = await ParseLineAsync(reader.ReadLine(), reader, globalVars);
 					if (data != null) {
 						ret.Enqueue(data);
 					}
@@ -67,7 +68,7 @@ namespace TurtleGraphics {
 		}
 
 
-		private static ParsedData ParseLine(string line, StringReader reader, Dictionary<string, object> variables) {
+		private static async Task<ParsedData> ParseLineAsync(string line, StringReader reader, Dictionary<string, object> variables) {
 			if (string.IsNullOrWhiteSpace(line) || line.Trim() == "}")
 				return null;
 			string original = line;
@@ -88,15 +89,15 @@ namespace TurtleGraphics {
 				}
 				switch (info.FunctionName) {
 					case "Rotate": {
-						return new RotateParseData(ParseGenericExpression<double>(info.GetArg(0, line), line, variables), info, variables.Copy(), original);
+						return new RotateParseData(ParseGenericExpression<double>(info.GetArg(0, line), line, variables), info.Arguments, info, variables.Copy(), original);
 					}
 
 					case "Forward": {
-						return new ForwardParseData(ParseGenericExpression<double>(info.GetArg(0, line), line, variables), variables.Copy(), original);
+						return new ForwardParseData(ParseGenericExpression<double>(info.GetArg(0, line), line, variables), info.Arguments, variables.Copy(), original);
 					}
 
 					case "SetBrushSize": {
-						return new BrushSizeData(ParseGenericExpression<double>(info.GetArg(0, line), line, variables), variables.Copy(), original);
+						return new BrushSizeData(ParseGenericExpression<double>(info.GetArg(0, line), line, variables), info.Arguments, variables.Copy(), original);
 					}
 
 					case "PenUp": {
@@ -147,16 +148,16 @@ namespace TurtleGraphics {
 
 			if (LineValidators.IsConditional(line)) {
 				if (line.Contains("if")) {
-					ConditionalData data = IfStatementParser.ParseIfBlock(line, reader, variables.Copy());
+					ConditionalData data = await IfStatementParser.ParseIfBlockAsync(line, reader, variables.Copy());
 					conditionals.Push(data);
 					return data;
 				}
 				if (line.Contains("else")) {
-					if(conditionals.Count == 0) {
+					if (conditionals.Count == 0) {
 						throw new ParsingException("Missing 'if' statement for this 'else' branch", line);
 					}
 					ConditionalData latest = conditionals.Peek();
-					latest.AddElse(reader, line);
+					await latest.AddElseAsync(reader, line);
 					latest.IsModifiable = false;
 					return null;
 				}

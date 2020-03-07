@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using Flee.PublicTypes;
 
 namespace TurtleGraphics {
@@ -26,13 +27,13 @@ namespace TurtleGraphics {
 			Line = line;
 		}
 
-		public void AddElse(StringReader reader, string line) {
+		public async Task AddElseAsync(StringReader reader, string line) {
 			if (!line.EndsWith("{")) {
 				BlockParser.ReadToBlock(reader, line);
 			}
 			List<string> lines = BlockParser.ParseBlock(reader);
 
-			Queue<ParsedData> data = CommandParser.Parse(string.Join(Environment.NewLine, lines), CommandParser.Window, Variables);
+			Queue<ParsedData> data = await CommandParser.ParseAsync(string.Join(Environment.NewLine, lines), CommandParser.Window, Variables);
 			ElseData = data;
 		}
 

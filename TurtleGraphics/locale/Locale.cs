@@ -1,6 +1,7 @@
 ﻿namespace TurtleGraphics {
 	public static class Locale {
 		public const int COMP_STATUS__COMPILING = 41051367;
+		public const int COMP_STATUS__PARSING = 30163776;
 
 		public const int SAVE__NAME = 84416465;
 

@@ -15,3 +15,4 @@
 30044441:Nastavení WIP
 80317709:Start
 59860665:Stop
+30163776:Čtu příkazy...

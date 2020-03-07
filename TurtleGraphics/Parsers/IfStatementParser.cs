@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Flee.PublicTypes;
 
 namespace TurtleGraphics.Parsers {
 	public class IfStatementParser {
-		public static ConditionalData ParseIfBlock(string line, StringReader reader, Dictionary<string, object> variables) {
+		public static async Task<ConditionalData> ParseIfBlockAsync(string line, StringReader reader, Dictionary<string, object> variables) {
 
 			//if (i > 50) {
 			//if (i <= 50) {
@@ -50,7 +51,7 @@ namespace TurtleGraphics.Parsers {
 
 				List<ParsedData> isStatement = new List<ParsedData>();
 
-				Queue<ParsedData> data = CommandParser.Parse(string.Join(Environment.NewLine, lines), MainWindow.Instance, variables);
+				Queue<ParsedData> data = await CommandParser.ParseAsync(string.Join(Environment.NewLine, lines), MainWindow.Instance, variables);
 				isStatement.AddRange(data);
 
 				return new ConditionalData(line, ifCondition, data, variables.Copy());

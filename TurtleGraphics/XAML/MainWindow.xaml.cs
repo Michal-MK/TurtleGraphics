@@ -550,8 +550,10 @@ namespace TurtleGraphics {
 			ButtonText = GenericStop;
 			try {
 				FSSManager.CreateCodeBackup(CommandsText);
-				Queue<ParsedData> tasks = CommandParser.ParseCommands(CommandsText, this);
-				List<TurtleData> compiledTasks = await CompileTasks(tasks, cancellationTokenSource.Token);
+				_compilationStatus.Status = LocaleProvider.Instance.Get(Locale.COMP_STATUS__PARSING);
+				Queue<ParsedData> tasks = await CommandParser.ParseCommandsAsync(CommandsText, this);
+				_compilationStatus.Status = LocaleProvider.Instance.Get(Locale.COMP_STATUS__COMPILING);
+				List<TurtleData> compiledTasks = await CompileTasksAsync(tasks, cancellationTokenSource.Token);
 				_compilationStatus.Stop();
 				Stopwatch s = new Stopwatch();
 				s.Start();
@@ -575,7 +577,7 @@ namespace TurtleGraphics {
 			}
 		}
 
-		private Task<List<TurtleData>> CompileTasks(Queue<ParsedData> tasks, CancellationToken token) {
+		private Task<List<TurtleData>> CompileTasksAsync(Queue<ParsedData> tasks, CancellationToken token) {
 			return Task.Run(() => {
 
 				Dictionary<int, LineCacheData> compCache = new Dictionary<int, LineCacheData>();

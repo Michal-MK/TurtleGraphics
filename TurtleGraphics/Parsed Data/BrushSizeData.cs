@@ -15,7 +15,7 @@ namespace TurtleGraphics {
 
 		public override string Line { get; set; }
 
-		public BrushSizeData(IGenericExpression<double> expression, Dictionary<string, object> variables, string line) : base(variables, line) {
+		public BrushSizeData(IGenericExpression<double> expression, string[] args, Dictionary<string, object> variables, string line) : base(variables, line, args) {
 			_expression = expression;
 		}
 

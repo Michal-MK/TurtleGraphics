@@ -564,6 +564,14 @@ namespace TurtleGraphics {
 				//Operation was canceled
 				_compilationStatus.Stop();
 			}
+			catch (AggregateException e) {
+				if (e.InnerException is ParsingException pe) {
+					_compilationStatus.Stop();
+					_exceptionDisplay.Exception = pe;
+					_exceptionDisplay.ExceptionMessage = pe.Message;
+					_exceptionDisplay.Show();
+				}
+			}
 			catch (ParsingException e) {
 				_compilationStatus.Stop();
 				_exceptionDisplay.Exception = e;

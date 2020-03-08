@@ -37,11 +37,15 @@ namespace TurtleGraphics {
 
 				int end = ind + word.Length;
 
+				if(ind == 0 && end == arg.Length) {
+					return true;
+				}
+
 				if (ind == 0 && end < arg.Length && !char.IsLetterOrDigit(arg[end])) {
 					return true;
 				}
 
-				if (!char.IsLetterOrDigit(arg[ind - 1]) || (end < arg.Length && !char.IsLetterOrDigit(arg[end]))) {
+				if ((ind -1 > -1 && !char.IsLetterOrDigit(arg[ind - 1])) || (end < arg.Length && !char.IsLetterOrDigit(arg[end]))) {
 					return true;
 				}
 

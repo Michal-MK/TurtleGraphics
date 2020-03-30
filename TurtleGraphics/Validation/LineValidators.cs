@@ -133,7 +133,7 @@ namespace TurtleGraphics.Validation {
 				if (!SupportedTypes.Types.Contains(typeName[0])) { return false; }
 				if (typeName[1] == "Width" || typeName[1] == "Height" || variables.ContainsKey(typeName[1])) { throw new ParsingException($"'{typeName[1]}' is already defined in an outer scope!", line); }
 				if (!values[1].EndsWith(";")) { return false; }
-				values[1] = values[1].TrimEnd(' ', ';');
+				values[1] = values[1].TrimStart().TrimEnd(' ', ';');
 				data = (typeName[0], typeName[1], values[1]);
 				return true;
 			}

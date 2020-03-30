@@ -16,6 +16,7 @@ using static TurtleGraphics.Helpers;
 using Path = System.Windows.Shapes.Path;
 using Igor.Localization;
 using System.Windows.Interop;
+using Igor.Configuration;
 
 namespace TurtleGraphics {
 	/// <summary>
@@ -63,7 +64,9 @@ namespace TurtleGraphics {
 		private ICommand _controlsVisibleCommand;
 		private bool _animatePath;
 		private ImageSource _imgSource;
+		private ICommand _settingsCommand;
 
+		public ICommand SettingsCommand { get => _settingsCommand; set { _settingsCommand = value; Notify(nameof(SettingsCommand)); } }
 		public ImageSource ImgSource { get => _imgSource; set { _imgSource = value; Notify(nameof(ImgSource)); } }
 		public bool AnimatePath { get => _animatePath; set { _animatePath = value; Notify(nameof(AnimatePath)); } }
 		public ICommand ControlsVisibleCommand { get => _controlsVisibleCommand; set { _controlsVisibleCommand = value; Notify(nameof(ControlsVisibleCommand)); } }
@@ -99,20 +102,24 @@ namespace TurtleGraphics {
 
 		#region Language
 
-		public string Main_WindowName => LocaleProvider.Instance.Get(Locale.MAIN__WINDOW_NAME);
-		public string Main_Angle => LocaleProvider.Instance.Get(Locale.MAIN__ANGLE);
-		public string Main_AnimatePath => LocaleProvider.Instance.Get(Locale.MAIN__ANIMATE_PATH);
-		public string Main_BackgroundCol => LocaleProvider.Instance.Get(Locale.MAIN__BACKGROUND_COL);
-		public string Main_PathAnimSpeed => LocaleProvider.Instance.Get(Locale.MAIN__PATH_ANIM_SPEED);
-		public string Main_ToggleControlPanel => LocaleProvider.Instance.Get(Locale.MAIN__TOGGLE_CONTROL_PANEL);
-		public string Main_TurtleSpeed => LocaleProvider.Instance.Get(Locale.MAIN__TURTLE_SPEED);
-		public string Main_ShowTurtle => LocaleProvider.Instance.Get(Locale.MAIN__SHOW_TURTLE);
-		public string GenericLoad => LocaleProvider.Instance.Get(Locale.GENERIC_LOAD);
-		public string GenericSave => LocaleProvider.Instance.Get(Locale.GENERIC_SAVE);
-		public string Main_RunFullscreen => LocaleProvider.Instance.Get(Locale.MAIN__RUN_FULLSCREEN) + " (Ctrl + F5)";
-		public string Main_Settings => LocaleProvider.Instance.Get(Locale.MAIN__SETTINGS);
-		public string GenericRun => LocaleProvider.Instance.Get(Locale.GENERIC_RUN) + " (F5)";
-		public string GenericStop => LocaleProvider.Instance.Get(Locale.GENERIC_STOP) + " (F5)";
+		public class Lang {
+			public string Main_WindowName => LocaleProvider.Instance.Get(Locale.MAIN__WINDOW_NAME);
+			public string Main_Angle => LocaleProvider.Instance.Get(Locale.MAIN__ANGLE);
+			public string Main_AnimatePath => LocaleProvider.Instance.Get(Locale.MAIN__ANIMATE_PATH);
+			public string Main_BackgroundCol => LocaleProvider.Instance.Get(Locale.MAIN__BACKGROUND_COL);
+			public string Main_PathAnimSpeed => LocaleProvider.Instance.Get(Locale.MAIN__PATH_ANIM_SPEED);
+			public string Main_ToggleControlPanel => LocaleProvider.Instance.Get(Locale.MAIN__TOGGLE_CONTROL_PANEL);
+			public string Main_TurtleSpeed => LocaleProvider.Instance.Get(Locale.MAIN__TURTLE_SPEED);
+			public string Main_ShowTurtle => LocaleProvider.Instance.Get(Locale.MAIN__SHOW_TURTLE);
+			public string GenericLoad => LocaleProvider.Instance.Get(Locale.GENERIC_LOAD);
+			public string GenericSave => LocaleProvider.Instance.Get(Locale.GENERIC_SAVE);
+			public string Main_RunFullscreen => LocaleProvider.Instance.Get(Locale.MAIN__RUN_FULLSCREEN) + " (Ctrl + F5)";
+			public string Main_Settings => LocaleProvider.Instance.Get(Locale.MAIN__SETTINGS);
+			public string GenericRun => LocaleProvider.Instance.Get(Locale.GENERIC_RUN) + " (F5)";
+			public string GenericStop => LocaleProvider.Instance.Get(Locale.GENERIC_STOP) + " (F5)";
+		}
+
+		public Lang L { get; } = new Lang();
 
 		#endregion
 
@@ -149,9 +156,11 @@ namespace TurtleGraphics {
 			LoadCommand = new AsyncCommand(LoadCommandAction);
 			ControlsVisibleCommand = new Command(() => ControlsVisible ^= true);
 			RunFullscreenCommand = new AsyncCommand(RunFullscreenCommandAction);
+			SettingsCommand = new Command(OpenSettingsAction);
+			LocaleProvider.Instance.OnLanguageChanged += (s, e) => { Notify(nameof(L)); };
 
 			ButtonCommand = RunCommand;
-			ButtonText = GenericRun;
+			ButtonText = L.GenericRun;
 
 			FSSManager = new FileSystemManager();
 
@@ -547,7 +556,7 @@ namespace TurtleGraphics {
 			Init();
 			cancellationTokenSource = new CancellationTokenSource();
 			ButtonCommand = StopCommand;
-			ButtonText = GenericStop;
+			ButtonText = L.GenericStop;
 			try {
 				FSSManager.CreateCodeBackup(CommandsText);
 				Queue<ParsedData> tasks = CommandParser.ParseCommands(CommandsText, this);
@@ -570,7 +579,7 @@ namespace TurtleGraphics {
 			}
 			finally {
 				ButtonCommand = RunCommand;
-				ButtonText = GenericRun;
+				ButtonText = L.GenericRun;
 				ToggleFullscreenEnabled = true;
 			}
 		}
@@ -656,7 +665,7 @@ namespace TurtleGraphics {
 		public void StopCommandAction() {
 			cancellationTokenSource.Cancel();
 			ButtonCommand = RunCommand;
-			ButtonText = GenericRun;
+			ButtonText = L.GenericRun;
 		}
 
 		public async Task RunFullscreenCommandAction() {
@@ -668,6 +677,20 @@ namespace TurtleGraphics {
 			}
 			await RunCommandAction();
 		}
+
+		private void OpenSettingsAction() {
+			Settings s = new Settings();
+			IsEnabled = false;
+			s.Closed += SettingsClosed;
+			s.Show();
+			void SettingsClosed(object sender, EventArgs e) {
+				s.Closed -= SettingsClosed;
+				IsEnabled = true;
+				BringIntoView();
+				App.Instance.Cfg.Save();
+			}
+		}
+
 
 		public bool NoWindowsActive => !(SaveDialogActive || LoadDialogActive || ExceptionDialogActive);
 

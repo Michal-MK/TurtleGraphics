@@ -1,4 +1,5 @@
-﻿using Igor.Localization;
+﻿using Igor.Configuration;
+using Igor.Localization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
@@ -17,8 +18,12 @@ namespace TurtleGraphics {
 
 		public static App Instance { get; private set; }
 
+		public ConfigurationManager<Config> Cfg => ConfigurationManager<Config>.Instance;
+
 		public App() {
-			LocaleProvider.Initialize("locale").SetActiveLanguage("cs-cz");
+			ConfigurationManager<Config>.Initialize("settings.cfg", true);
+
+			LocaleProvider.Initialize("locale").SetActiveLanguage(Cfg.CurrentSettings.ActiveLanguage);
 			Instance = this;
 		}
 
@@ -27,7 +32,7 @@ namespace TurtleGraphics {
 				if (arg == "-f") {
 					LaunchFullScreen = true;
 				}
-				if(arg == "-thc") {
+				if (arg == "-thc") {
 					LaunchHiddenControlPanel = true;
 				}
 

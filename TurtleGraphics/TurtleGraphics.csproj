@@ -58,9 +58,15 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>turtle.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Flee.Net45, Version=1.0.0.0, Culture=neutral, PublicKeyToken=951a102ce2413032, processorArchitecture=MSIL">
       <HintPath>..\packages\Flee.1.2.2\lib\net45\Flee.Net45.dll</HintPath>
+    </Reference>
+    <Reference Include="Igor.Configuration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Igor.Configuration.1.0.0\lib\netstandard2.0\Igor.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Igor.Controls">
       <HintPath>..\packages\Igor.WPF\Igor.Controls.dll</HintPath>
@@ -98,8 +104,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Configuration\Config.cs" />
     <Compile Include="Exceptions\ParsingException.cs" />
     <Compile Include="Helpers\FleeHelper.cs" />
+    <Compile Include="Models\LanguageButtonModel.cs" />
+    <Compile Include="XAML\LoadDialogItem.xaml.cs">
+      <DependentUpon>LoadDialogItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="locale\Locale.cs" />
     <Compile Include="Parsed Data\BrushCappingData.cs" />
     <Compile Include="Parsed Data\ContextExtensions.cs" />
@@ -143,6 +154,13 @@
     </Compile>
     <Compile Include="Parsers\TurtleData.cs" />
     <Compile Include="Validation\LineValidators.cs" />
+    <Compile Include="XAML\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Page Include="XAML\LoadDialogItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="XAML\CompilationStatus.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -172,6 +190,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="XAML\SaveDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="XAML\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -221,6 +243,7 @@
     <Content Include="locale\en-us.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="turtle.ico" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="locale\cs-cz.txt">

@@ -12,3 +12,4 @@ packages/*Fody*
 Bezanyi*
 TurtleGraphicsCode/Rules/*.cs
 *Ignored*
+/packages/Igor.Configuration*

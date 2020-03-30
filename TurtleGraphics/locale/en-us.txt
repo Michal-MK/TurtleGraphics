@@ -1,4 +1,5 @@
-﻿41051367:Compiling...
+﻿/English
+41051367:Compiling...
 5665650:Cancel
 70725580:Load
 84416465:Sketch name:
@@ -12,6 +13,7 @@
 47297997:Turtle Graphics
 36001163:Show Turtle
 2417883:Run in fullscreen mode
-30044441:Settings WIP
+30044441:Settings
 80317709:Run
 59860665:Stop
+18137498:Language

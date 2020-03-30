@@ -21,5 +21,7 @@
 
 		public const int MAIN__WINDOW_NAME = 47297997;
 		public const int MAIN__SHOW_TURTLE = 36001163;
+
+		public const int SETT__AVAILABLE_LANGUAGES = 18137498;
 	}
 }

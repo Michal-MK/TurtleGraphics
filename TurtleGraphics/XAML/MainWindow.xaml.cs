@@ -628,7 +628,7 @@ namespace TurtleGraphics {
 			if (isFullscreen) {
 				WindowStyle = WindowStyle.None;
 				// When the window is maximized, fullscreen toggle fails to cover the taskbar, this hack fixes it
-				if (WindowState == WindowState.Minimized) {
+				if (WindowState == WindowState.Maximized) {
 					WindowState = WindowState.Normal;
 				}
 				WindowState = WindowState.Maximized;

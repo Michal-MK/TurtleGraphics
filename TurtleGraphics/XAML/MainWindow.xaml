@@ -24,7 +24,7 @@
 				<RowDefinition x:Name="DrawAreaY"/>
 			</Grid.RowDefinitions>
 
-			<Grid Grid.Column="0" Background="#c9c9c9">
+			<Grid Grid.Column="0" Grid.ColumnSpan="2" Background="#c9c9c9" Panel.ZIndex="2">
 				<Grid.RowDefinitions>
 					<RowDefinition/>
 					<RowDefinition Height="auto"/>
@@ -44,8 +44,8 @@
 						 x:Name="InteliCommands"/>
 				
 				<StackPanel Grid.Row="1" Visibility="{Binding ControlsVisible, Converter={StaticResource BoolToVis}}">
-					<Border BorderThickness="1" BorderBrush="Red"/>
-					<StackPanel Margin="5 0">
+					<Border BorderThickness="0 5 0 0" BorderBrush="Red" Margin="0 0 0 2"/>
+					<StackPanel Margin="5 0 10 0">
 						<TextBlock>
 							<Run Text="{Binding L.Main_Angle, Mode=OneWay, FallbackValue='Angle:'}"/>
 							<Run Text="{Binding AngleStr, Mode=OneWay}" FontWeight="Bold"/>
@@ -83,7 +83,7 @@
 						</TextBlock>
 						<Slider Value="{Binding CalculationFramesPreUIUpdate, UpdateSourceTrigger=PropertyChanged}" Minimum="1" Maximum="50" TickFrequency="1" Name="TurtleSpeed"/>
 					</StackPanel>
-					<StackPanel>
+					<StackPanel Margin="0 0 5 0">
 						<Button Content="{Binding ButtonText, FallbackValue='Run/Stop'}" Command="{Binding ButtonCommand}"/>
 						<Button Content="{Binding L.Main_RunFullscreen, FallbackValue='Full-screen'}" Command="{Binding RunFullscreenCommand}"/>
 						<Button Content="{Binding L.GenericSave, FallbackValue='Save...'}" Command="{Binding SaveCommand}"/>
@@ -91,20 +91,20 @@
 						<Button Content="{Binding L.Main_Settings, FallbackValue='Settings...'}" Command="{Binding SettingsCommand}"/>
 					</StackPanel>
 				</StackPanel>
-				<StackPanel Grid.Row="2">
+				<StackPanel Grid.Row="2" Margin="0 0 5 0">
 					<Button Content="{Binding L.Main_ToggleControlPanel}" Command="{Binding ControlsVisibleCommand}"/>
 				</StackPanel>
 			</Grid>
 
-			<GridSplitter Grid.Column="1"
+			<GridSplitter Grid.Column="1" Panel.ZIndex="2"
 						  Width="{Binding ElementName=SplitterCol, Path=Width}" 
 						  HorizontalAlignment="Stretch"
 						  ResizeDirection="Columns"
-						  Background="Transparent"/>
+						  Background="Red"/>
 
-			<Image Grid.Column="1" Grid.ColumnSpan="2" Source="{Binding ImgSource}"/>
+			<Image Grid.Column="1" Source="{Binding ImgSource}"/>
 
-			<Grid Grid.Column="1" Grid.ColumnSpan="2" Panel.ZIndex="1" SizeChanged="Grid_SizeChanged">
+			<Grid Grid.Column="1" SizeChanged="Grid_SizeChanged" Panel.ZIndex="1">
 
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="auto"/>
@@ -112,7 +112,9 @@
 				<Grid.RowDefinitions>
 					<RowDefinition Height="auto"/>
 				</Grid.RowDefinitions>
-				<Image Width="24" Height="24" Margin="-12,-12" Visibility="{Binding ShowTurtleCheckBox, Converter={StaticResource BoolToVis}}" Source="/TurtleGraphics;component/Resources/turtle.png">
+				<Image Width="24" Height="24" Margin="-12,-12" 
+					   Visibility="{Binding ShowTurtleCheckBox, Converter={StaticResource BoolToVis}}"
+					   Source="/TurtleGraphics;component/Resources/turtle.png">
 					<Image.RenderTransform>
 						<TransformGroup>
 							<RotateTransform x:Name="TurtleRotation" CenterX="12" CenterY="12"/>

@@ -41,7 +41,21 @@
 				<RowDefinition/>
 				<RowDefinition Height="auto"/>
 			</Grid.RowDefinitions>
-			<TextBlock Text="WIP" FontSize="90" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Comic Sans MS"/>
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="8*"/>
+					<RowDefinition Height="2*"/>
+				</Grid.RowDefinitions>
+				<TextBlock Text="WIP" FontSize="90" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Comic Sans MS"/>
+
+				<StackPanel Grid.Row="1" Margin="5">
+					<Label Content="Tips:" FontFamily="Comic Sans MS" FontSize="20" />
+					<TextBlock>
+						<Run Text="Screenshot:" FontWeight="Bold"/>
+						<Run Text="'Ctrl+Alt+C' when in full-screen mode TODO"/>
+					</TextBlock>
+				</StackPanel>
+			</Grid>
 			<StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
 				<StackPanel.Resources>
 					<Style TargetType="Button">

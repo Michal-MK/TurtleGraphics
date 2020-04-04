@@ -14,7 +14,7 @@
 36001163:Show Turtle
 2417883:Run in fullscreen mode
 30044441:Settings
-80317709:Run
+80317709:Start
 59860665:Stop
 18137498:Language
 53128316:Back

@@ -199,8 +199,8 @@ namespace TurtleGraphics {
 			_currentFigure = null;
 			_currentPath = null;
 
-			Color = "Blue";
-			PenDown = true;
+			_color = "Blue";
+			_penDown = true;
 			X = DrawWidth / 2;
 			Y = DrawHeight / 2;
 			TurtleTranslation.X = X;
@@ -210,11 +210,11 @@ namespace TurtleGraphics {
 			TurtleScale.ScaleY = 1;
 			StartPoint = new Point(X, Y);
 			Angle = 0;
-			BrushSize = 4;
+			_brushSize = 4;
 			PathAnimationFrames = 5;
 			LineCapping = PenLineCap.Round;
 
-			NewPath();
+			//NewPath();
 		}
 
 		#region Events
@@ -261,9 +261,21 @@ namespace TurtleGraphics {
 					ToggleControlPanel();
 				}
 				ImgSource = null;
+				StopCommand.Execute(null);
 				RemoveAllPaths();
 				UpdateLayout();
 				ToggleFullScreenAction();
+			}
+
+			if (e.KeyboardDevice.Modifiers == (ModifierKeys.Control | ModifierKeys.Alt) && e.Key == Key.C) {
+				if (IsFullscreen && !ControlPanelHolderVisible) {
+					var (actualWidth, actualHeight) = GetActualScreenSize();
+					System.Drawing.Bitmap bitmap;
+					using (MemoryStream ms = CaptureScreenshot(actualWidth, actualHeight)) {
+						bitmap = (System.Drawing.Bitmap)System.Drawing.Image.FromStream(ms);
+					}
+					bitmap.Save(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "ScreenCapture.png"), System.Drawing.Imaging.ImageFormat.Png);
+				}
 			}
 		}
 
@@ -613,10 +625,11 @@ namespace TurtleGraphics {
 			if (ControlPanelHolderVisible) {
 				SplitterCol.Width = new GridLength(5, GridUnitType.Pixel);
 				ControlArea.Width = new GridLength(1, GridUnitType.Star);
+				DrawAreaX.Width = new GridLength(3, GridUnitType.Star);
 			}
 			else {
-				SplitterCol.Width = new GridLength(0);
-				ControlArea.Width = new GridLength(0, GridUnitType.Pixel);
+				SplitterCol.Width = new GridLength(0, GridUnitType.Pixel);
+				ControlArea.Width = new GridLength(0, GridUnitType.Star);
 			}
 			UpdateLayout();
 			DrawWidth = DrawAreaX.ActualWidth;
@@ -658,8 +671,7 @@ namespace TurtleGraphics {
 				return;
 			SaveDialogActive = true;
 			SaveDialog d = new SaveDialog();
-			Grid.SetColumn(d, PAGES_COLUMN_INDEX-1);
-			Grid.SetColumnSpan(d, 2);
+			Grid.SetColumn(d, PAGES_COLUMN_INDEX);
 			Paths.Children.Add(d);
 		}
 

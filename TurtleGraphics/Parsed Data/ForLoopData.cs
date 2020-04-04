@@ -70,7 +70,7 @@ namespace TurtleGraphics {
 					}
 					else {
 						bool cached = cache.ContainsKey(current.LineHash);
-						if (cached && !cache[current.LineHash].ContainsVariable) {
+						if (cached && !cache[current.LineHash].ContainsVariable && cache[current.LineHash].ParsingInfo.Parameters[0].ToLower() != "random") {
 							interData.Add(cache[current.LineHash].CompiledData);
 						}
 						else {

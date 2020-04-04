@@ -64,18 +64,21 @@ namespace TurtleGraphics {
 				token.ThrowIfCancellationRequested();
 				current = data.Dequeue();
 				counter++;
+				UpdateVars(current);
 				if (current.IsBlock) {
 					interData.AddRange(current.CompileBlock(token, cache));
 				}
 				else {
-					if (cache.ContainsKey(current.LineHash)) {
-						if (!cache[current.LineHash].ContainsVariable) {
-							interData.Add(cache[current.LineHash].CompiledData);
-						}
+					bool cached = cache.ContainsKey(current.LineHash);
+					if (cached && !cache[current.LineHash].ContainsVariable &&
+						cache[current.LineHash].ParsingInfo.Parameters[0].ToLower() != "random") {
+						interData.Add(cache[current.LineHash].CompiledData);
 					}
 					else {
 						TurtleData compiled = current.Compile(token);
-						cache.Add(current.LineHash, new LineCacheData(current, compiled));
+						if (!cached) {
+							cache.Add(current.LineHash, new LineCacheData(current, compiled));
+						}
 						interData.Add(compiled);
 					}
 					//interData.Add(current.Compile(token));

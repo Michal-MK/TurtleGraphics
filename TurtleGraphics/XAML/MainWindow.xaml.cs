@@ -1,21 +1,21 @@
-﻿using System;
+﻿using Igor.Localization;
+using Igor.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Igor.Models;
-using System.IO;
 using System.Windows.Media.Imaging;
 using static TurtleGraphics.Helpers;
 using Path = System.Windows.Shapes.Path;
-using Igor.Localization;
-using System.Windows.Interop;
 
 namespace TurtleGraphics {
 	/// <summary>
@@ -394,7 +394,7 @@ namespace TurtleGraphics {
 			return ((int)actualWidth, (int)actualHeight);
 		}
 
-
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Rotate(double angle, bool setRotation) {
 			if (double.IsNaN(angle)) {
 				Angle = 0;

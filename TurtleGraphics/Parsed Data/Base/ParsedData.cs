@@ -52,5 +52,11 @@ namespace TurtleGraphics {
 				exp.Variables[item.Key] = item.Value;
 			}
 		}
+
+		internal void UpdateVars(ParsedData current) {
+			foreach (var item in Variables) {
+				current.Variables[item.Key] = item.Value;
+			}
+		}
 	}
 }

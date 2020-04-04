@@ -13,6 +13,8 @@ namespace TurtleGraphics {
 
 		public override ParsedAction Action => ParsedAction.Capping;
 
+		public override bool Cacheable => true;
+
 		public override TurtleData Compile(CancellationToken token) {
 			token.ThrowIfCancellationRequested();
 

@@ -28,6 +28,8 @@ namespace TurtleGraphics {
 		public string Arg3 => Parameters.Length > 2 ? Parameters[2] : null;
 		public string Arg4 => Parameters.Length > 3 ? Parameters[3] : null;
 
+		public virtual bool Cacheable { get; set; } = false;
+
 		public abstract ParsedAction Action { get; }
 
 		public abstract TurtleData Compile(CancellationToken token);

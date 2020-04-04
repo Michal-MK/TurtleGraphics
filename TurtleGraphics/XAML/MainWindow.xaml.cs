@@ -602,13 +602,14 @@ namespace TurtleGraphics {
 					}
 					else {
 						if (compCache.ContainsKey(current.LineHash)) {
-							if (!compCache[current.LineHash].ContainsVariable) {
-								ret.Add(compCache[current.LineHash].CompiledData);
-							}
+							ret.Add(compCache[current.LineHash].CompiledData);
 						}
 						else {
 							TurtleData compiled = current.Compile(token);
-							compCache.Add(current.LineHash, new LineCacheData(current, compiled));
+							if(current.Cacheable || CacheHelper.IsCacheable(current)) {
+								current.Cacheable = true;
+								compCache.Add(current.LineHash, new LineCacheData(current, compiled));
+							}
 							ret.Add(compiled);
 						}
 					}

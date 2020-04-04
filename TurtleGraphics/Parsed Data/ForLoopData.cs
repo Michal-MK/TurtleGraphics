@@ -57,9 +57,7 @@ namespace TurtleGraphics {
 					current = data[counter];
 
 					current.Variables[LoopVariable] = i;
-					foreach (var item in Variables) {
-						current.Variables[item.Key] = item.Value;
-					}
+					UpdateVars(current);
 
 					if (current.IsBlock) {
 						interData.AddRange(current.CompileBlock(token, cache));
@@ -69,18 +67,17 @@ namespace TurtleGraphics {
 						Variables[variableChange.VariableName] = variableChange.Value.Evaluate();
 					}
 					else {
-						bool cached = cache.ContainsKey(current.LineHash);
-						if (cached && !cache[current.LineHash].ContainsVariable && cache[current.LineHash].ParsingInfo.Parameters[0].ToLower() != "random") {
+						if (cache.ContainsKey(current.LineHash)) {
 							interData.Add(cache[current.LineHash].CompiledData);
 						}
 						else {
 							TurtleData compiled = current.Compile(token);
-							if (!cached) {
+							if (current.Cacheable || CacheHelper.IsCacheable(current)) {
+								current.Cacheable = true;
 								cache.Add(current.LineHash, new LineCacheData(current, compiled));
 							}
 							interData.Add(compiled);
 						}
-						//interData.Add(current.Compile(token));
 					}
 				}
 			}

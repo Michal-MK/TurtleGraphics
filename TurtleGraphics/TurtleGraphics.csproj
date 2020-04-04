@@ -99,6 +99,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Exceptions\ParsingException.cs" />
+    <Compile Include="Helpers\CacheHelper.cs" />
     <Compile Include="Helpers\FleeHelper.cs" />
     <Compile Include="locale\Locale.cs" />
     <Compile Include="Parsed Data\BrushCappingData.cs" />

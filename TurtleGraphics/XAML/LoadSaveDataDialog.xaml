@@ -7,19 +7,24 @@
              xmlns:local="clr-namespace:TurtleGraphics"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-	<Grid Name="Root" Background="SlateGray" Panel.ZIndex="2">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="auto"/>
-		</Grid.RowDefinitions>
-		<ListBox ItemsSource="{Binding Items}" HorizontalContentAlignment="Stretch" x:Name="ItemList" Background="Transparent"
-				 ItemContainerStyle="{StaticResource SeamlessNoHighlight}">
-			<ListBox.ItemTemplate>
-				<DataTemplate>
-					<local:LoadDialogItem/>
-				</DataTemplate>
-			</ListBox.ItemTemplate>
-		</ListBox>
-		<Button Content="{Binding GenericCancel, FallbackValue='Cancel'}" Command="{Binding CancelCommand}" Grid.Row="1"/>
+
+	<Grid Panel.ZIndex="2" Name="Root">
+		<Grid Background="SlateGray" Opacity="0.8" IsHitTestVisible="false"/>
+		<Grid Margin="5">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="auto"/>
+			</Grid.RowDefinitions>
+			<ListBox ItemsSource="{Binding Items}" HorizontalContentAlignment="Stretch" x:Name="ItemList" Background="Transparent"
+				 ItemContainerStyle="{StaticResource SeamlessNoHighlight}" BorderThickness="0">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<local:LoadDialogItem/>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+			<Button Content="{Binding GenericCancel, FallbackValue='Cancel'}" Command="{Binding CancelCommand}" Grid.Row="1"
+					Margin="0 5 0 0" Padding="0 4"/>
+		</Grid>
 	</Grid>
 </UserControl>

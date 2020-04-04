@@ -1,9 +1,11 @@
 ﻿using Igor.Localization;
+using Igor.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace TurtleGraphics {
@@ -27,7 +29,9 @@ namespace TurtleGraphics {
 
 		private ObservableCollection<LanguageButtonModel> _languages = new ObservableCollection<LanguageButtonModel>();
 		private GridLength _languageColumnWidth;
+		private ICommand _closeCommand;
 
+		public ICommand CloseCommand { get => _closeCommand; set { _closeCommand = value; Notify(nameof(CloseCommand)); } }
 		public GridLength LanguageColumnWidth { get => _languageColumnWidth; set { _languageColumnWidth = value; Notify(nameof(LanguageColumnWidth)); } }
 		public ObservableCollection<LanguageButtonModel> Languages { get => _languages; set { _languages = value; Notify(nameof(Languages)); } }
 
@@ -37,6 +41,7 @@ namespace TurtleGraphics {
 
 		public class Lang {
 			public string Sett_AvailableLanguages => LocaleProvider.Instance.Get(Locale.SETT__AVAILABLE_LANGUAGES);
+			public string GenericBack => LocaleProvider.Instance.Get(Locale.GENERIC_BACK);
 		};
 
 		public Lang L { get; } = new Lang();
@@ -46,6 +51,9 @@ namespace TurtleGraphics {
 		public Settings() {
 			DataContext = this;
 			InitializeComponent();
+
+			CloseCommand = new Command(Close);
+
 			LocaleProvider.Instance.OnLanguageChanged += (s, e) => { Notify(nameof(L)); };
 
 			double largestWidth = 0;

@@ -7,21 +7,24 @@
              mc:Ignorable="d" KeyboardNavigation.TabNavigation="Cycle">
 
 	<Grid>
-		<Grid Background="SlateGray" Opacity="0.8"/>
-		<Grid VerticalAlignment="Center" HorizontalAlignment="Center" Background="SlateGray">
+		<Grid Background="SlateGray" Opacity="0.8" IsHitTestVisible="False"/>
+		<Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5">
+		<Grid>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="auto"/>
 				<RowDefinition/>
 			</Grid.RowDefinitions>
-			<StackPanel MinWidth="200">
+			
+			<StackPanel MinWidth="200" Margin="5">
 				<TextBlock Text="{Binding Save_Name, FallbackValue='Name'}" FontSize="16" FontWeight="DemiBold"/>
-				<TextBox Text="{Binding SaveFileName, UpdateSourceTrigger=PropertyChanged}" x:Name="SaveNameInput" Margin="0 5 0 0"/>
-
+				<TextBox Text="{Binding SaveFileName, UpdateSourceTrigger=PropertyChanged}" x:Name="_focus" Margin="0 5 0 0"/>
 			</StackPanel>
-			<StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-				<Button Content="{Binding GenericCancel, FallbackValue='Cancel'}" Command="{Binding CancelCommand}" Margin="5" Padding="2" IsCancel="True"/>
-				<Button Content="{Binding GenericSave, FallbackValue='Save'}" Command="{Binding SaveCommand}" Margin="0 5" Padding="2" IsDefault="True"/>
+
+			<StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+				<Button Content="{Binding GenericCancel, FallbackValue='Cancel'}" Command="{Binding CancelCommand}" Margin="0 5 5 0" Padding="2" IsCancel="True"/>
+				<Button Content="{Binding GenericSave, FallbackValue='Save'}" Command="{Binding SaveCommand}" Margin="0 5 0 0" Padding="2" IsDefault="True"/>
 			</StackPanel>
 		</Grid>
+		</Border>
 	</Grid>
 </UserControl>

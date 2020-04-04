@@ -71,9 +71,9 @@ namespace TurtleGraphics {
 		public bool AnimatePath { get => _animatePath; set { _animatePath = value; Notify(nameof(AnimatePath)); } }
 		public ICommand ControlsVisibleCommand { get => _controlsVisibleCommand; set { _controlsVisibleCommand = value; Notify(nameof(ControlsVisibleCommand)); } }
 		public bool ControlsVisible { get => _controlsVisible; set { _controlsVisible = value; Notify(nameof(ControlsVisible)); } }
-		public string AngleStr { get => $"{Math.Floor(ContextExtensions.AsDeg(Angle))}°"; }
-		public string XStr { get => $"{Math.Round(X, 2)}"; }
-		public string YStr { get => $"{Math.Round(Y, 2)}"; }
+		public string AngleStr { get => $"\t{Math.Floor(ContextExtensions.AsDeg(Angle))}°"; }
+		public string XStr { get => $"\t{Math.Round(X, 2)}"; }
+		public string YStr { get => $"\t{Math.Round(Y, 2)}"; }
 		public PenLineCap LineCapping { get => _lineCapping; set { _lineCapping = value; Notify(nameof(LineCapping)); } }
 		public int CalculationFramesPreUIUpdate { get => _anotherDelay; set { _anotherDelay = value; Notify(nameof(CalculationFramesPreUIUpdate)); } }
 		public ICommand LoadCommand { get => _loadCommand; set { _loadCommand = value; Notify(nameof(LoadCommand)); } }
@@ -536,7 +536,7 @@ namespace TurtleGraphics {
 					break;
 				}
 				_currentSegment.Points[last] = new Point(Lerp(origin.X, _x, currentInterpolation), Lerp(origin.Y, _y, currentInterpolation));
-				TurtleTranslation.X = _currentSegment.Points[last].X;
+				TurtleTranslation.X = _currentSegment.Points[last].X + SplitterCol.ActualWidth;
 				TurtleTranslation.Y = _currentSegment.Points[last].Y;
 				currentInterpolation += increment;
 				if (AnimatePath) {
@@ -658,7 +658,8 @@ namespace TurtleGraphics {
 				return;
 			SaveDialogActive = true;
 			SaveDialog d = new SaveDialog();
-			Grid.SetColumn(d, PAGES_COLUMN_INDEX);
+			Grid.SetColumn(d, PAGES_COLUMN_INDEX-1);
+			Grid.SetColumnSpan(d, 2);
 			Paths.Children.Add(d);
 		}
 

@@ -37,7 +37,20 @@
 			</Grid>
 		</Border>
 		<Grid Grid.Column="1">
+			<Grid.RowDefinitions>
+				<RowDefinition/>
+				<RowDefinition Height="auto"/>
+			</Grid.RowDefinitions>
 			<TextBlock Text="WIP" FontSize="90" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Comic Sans MS"/>
+			<StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
+				<StackPanel.Resources>
+					<Style TargetType="Button">
+						<Setter Property="Padding" Value="8 4"/>
+						<Setter Property="Margin" Value="8 0 0 0"/>
+					</Style>
+				</StackPanel.Resources>
+				<Button Content="{Binding L.GenericBack, FallbackValue='Back'}" Command="{Binding CloseCommand}"/>
+			</StackPanel>
 		</Grid>
 	</Grid>
 </Window>

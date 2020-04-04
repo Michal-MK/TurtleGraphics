@@ -17,3 +17,8 @@
 80317709:Start
 59860665:Stop
 18137498:Jazyk
+53128316:Zpět
+93144682:Chyba čtení kódu!
+79452378:Zpráva:
+73815551:Stav zásobníku:
+51656026:Opravím to!

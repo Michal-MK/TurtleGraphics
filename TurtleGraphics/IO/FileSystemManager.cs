@@ -31,7 +31,8 @@ namespace TurtleGraphics {
 			LoadSaveDataDialog d = new LoadSaveDataDialog {
 				Path = SavedDataPath
 			};
-			Grid.SetColumn(d, MainWindow.PAGES_COLUMN_INDEX);
+			Grid.SetColumn(d, MainWindow.PAGES_COLUMN_INDEX-1);
+			Grid.SetColumnSpan(d, 2);
 			MainWindow.Instance.Paths.Children.Add(d);
 			return await d.Select();
 		}

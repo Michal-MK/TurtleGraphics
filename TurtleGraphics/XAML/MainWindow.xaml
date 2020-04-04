@@ -30,43 +30,45 @@
 					<RowDefinition Height="auto"/>
 					<RowDefinition Height="auto"/>
 				</Grid.RowDefinitions>
+
 				<TextBox Text="{Binding CommandsText, UpdateSourceTrigger=PropertyChanged}"
-					 AcceptsReturn="True" AcceptsTab="True"
-					 FontWeight="DemiBold" FontSize="16"
-					 x:Name="CommandsTextInput"
-					 ScrollViewer.ScrollChanged="CommandsTextInput_ScrollChanged"/>
+						 AcceptsReturn="True" AcceptsTab="True"
+						 FontWeight="DemiBold" FontSize="16"
+						 x:Name="CommandsTextInput"
+						 ScrollViewer.ScrollChanged="CommandsTextInput_ScrollChanged"/>
 
 				<TextBox Text="{Binding InteliCommandsText, UpdateSourceTrigger=PropertyChanged}"
-					 FontWeight="DemiBold"
-					 FontSize="16"
-					 IsHitTestVisible="False" Opacity="0.5" Background="Transparent"
-					 x:Name="InteliCommands">
-				</TextBox>
+						 FontWeight="DemiBold"
+						 FontSize="16"
+						 IsHitTestVisible="False" Opacity="0.5" Background="Transparent"
+						 x:Name="InteliCommands"/>
+				
 				<StackPanel Grid.Row="1" Visibility="{Binding ControlsVisible, Converter={StaticResource BoolToVis}}">
-					<StackPanel>
+					<Border BorderThickness="1" BorderBrush="Red"/>
+					<StackPanel Margin="5 0">
 						<TextBlock>
-					<Run Text="{Binding L.Main_Angle, Mode=OneWay, FallbackValue='Angle:'}"/>
-					<Run Text="{Binding AngleStr, Mode=OneWay}"/>
+							<Run Text="{Binding L.Main_Angle, Mode=OneWay, FallbackValue='Angle:'}"/>
+							<Run Text="{Binding AngleStr, Mode=OneWay}" FontWeight="Bold"/>
 						</TextBlock>
 						<TextBlock>
-					<Run Text="X:"/>
-					<Run Text="{Binding XStr, Mode=OneWay}"/>
+							<Run Text="X:"/>
+							<Run Text="{Binding XStr, Mode=OneWay}" FontWeight="Bold"/>
 						</TextBlock>
 						<TextBlock>
-					<Run Text="Y:"/>
-					<Run Text="{Binding YStr, Mode=OneWay}"/>
+							<Run Text="Y:"/>
+							<Run Text="{Binding YStr, Mode=OneWay}" FontWeight="Bold"/>
 						</TextBlock>
-						<TextBlock Text="{Binding L.Main_BackgroundCol, FallbackValue='Backgroud colour'}"/>
+						<TextBlock Text="{Binding L.Main_BackgroundCol, FallbackValue='Background color'}"/>
 						<TextBox Name="BackgroundColor" Text="Transparent"/>
 						<CheckBox Content="{Binding L.Main_ShowTurtle, FallbackValue='Show turtle'}" IsChecked="{Binding ShowTurtleCheckBox}"/>
 
 						<CheckBox Content="{Binding L.Main_AnimatePath, FallbackValue='Animate path'}" IsChecked="{Binding AnimatePath}"/>
 						<StackPanel Visibility="{Binding AnimatePath, Converter={StaticResource BoolToVis}}">
 							<TextBlock>
-						<Run Text="{Binding L.Main_PathAnimSpeed, Mode=OneWay, FallbackValue='Path anim. speed'}"/>
-						<Run Text="{Binding ElementName=AnimSpeed, Path=Value, Mode=OneWay}"/>
-						<Run Text="/"/>
-						<Run Text="{Binding ElementName=AnimSpeed, Path=Maximum, Mode=OneWay}"/>
+								<Run Text="{Binding L.Main_PathAnimSpeed, Mode=OneWay, FallbackValue='Path anim. speed'}"/>
+								<Run Text="{Binding ElementName=AnimSpeed, Path=Value, Mode=OneWay}"/>
+								<Run Text="/"/>
+								<Run Text="{Binding ElementName=AnimSpeed, Path=Maximum, Mode=OneWay}"/>
 							</TextBlock>
 							<Slider Visibility="{Binding AnimatePath, Converter={StaticResource BoolToVis}}"
 							Value="{Binding IterationCount, UpdateSourceTrigger=PropertyChanged}"
@@ -74,16 +76,16 @@
 						</StackPanel>
 
 						<TextBlock>
-						<Run Text="{Binding L.Main_TurtleSpeed, Mode=OneWay, FallbackValue='Turtle speed'}"/>
-						<Run Text="{Binding ElementName=TurtleSpeed, Path=Value, Mode=OneWay}"/>
-						<Run Text="/"/>
-						<Run Text="{Binding ElementName=TurtleSpeed, Path=Maximum, Mode=OneWay}"/>
+							<Run Text="{Binding L.Main_TurtleSpeed, Mode=OneWay, FallbackValue='Turtle speed'}"/>
+							<Run Text="{Binding ElementName=TurtleSpeed, Path=Value, Mode=OneWay}"/>
+							<Run Text="/"/>
+							<Run Text="{Binding ElementName=TurtleSpeed, Path=Maximum, Mode=OneWay}"/>
 						</TextBlock>
 						<Slider Value="{Binding CalculationFramesPreUIUpdate, UpdateSourceTrigger=PropertyChanged}" Minimum="1" Maximum="50" TickFrequency="1" Name="TurtleSpeed"/>
 					</StackPanel>
 					<StackPanel>
 						<Button Content="{Binding ButtonText, FallbackValue='Run/Stop'}" Command="{Binding ButtonCommand}"/>
-						<Button Content="{Binding L.Main_RunFullscreen, FallbackValue='Fullscreen'}" Command="{Binding RunFullscreenCommand}"/>
+						<Button Content="{Binding L.Main_RunFullscreen, FallbackValue='Full-screen'}" Command="{Binding RunFullscreenCommand}"/>
 						<Button Content="{Binding L.GenericSave, FallbackValue='Save...'}" Command="{Binding SaveCommand}"/>
 						<Button Content="{Binding L.GenericLoad, FallbackValue='Load...'}" Command="{Binding LoadCommand}"/>
 						<Button Content="{Binding L.Main_Settings, FallbackValue='Settings...'}" Command="{Binding SettingsCommand}"/>
@@ -100,9 +102,9 @@
 						  ResizeDirection="Columns"
 						  Background="Transparent"/>
 
-			<Image Grid.Column="2" Source="{Binding ImgSource}"/>
+			<Image Grid.Column="1" Grid.ColumnSpan="2" Source="{Binding ImgSource}"/>
 
-			<Grid Grid.Column="2" Panel.ZIndex="1" SizeChanged="Grid_SizeChanged">
+			<Grid Grid.Column="1" Grid.ColumnSpan="2" Panel.ZIndex="1" SizeChanged="Grid_SizeChanged">
 
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="auto"/>

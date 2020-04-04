@@ -9,6 +9,7 @@
 		public const int GENERIC_SAVE = 27899898;
 		public const int GENERIC_RUN = 80317709;
 		public const int GENERIC_STOP = 59860665;
+		public const int GENERIC_BACK = 53128316;
 
 		public const int MAIN__ANGLE = 97182944;
 		public const int MAIN__BACKGROUND_COL = 83399757;
@@ -23,5 +24,10 @@
 		public const int MAIN__SHOW_TURTLE = 36001163;
 
 		public const int SETT__AVAILABLE_LANGUAGES = 18137498;
+
+		public const int EXCEPT__HEADER = 93144682;
+		public const int EXCEPT__MESSAGE_LABEL = 79452378;
+		public const int EXCEPT__STACK_TRACE_LABEL = 73815551;
+		public const int EXCEPT__BUTTON_LABEL = 51656026;
 	}
 }

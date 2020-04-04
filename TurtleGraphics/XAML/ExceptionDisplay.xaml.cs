@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Igor.Localization;
 using Igor.Models;
 
 namespace TurtleGraphics {
@@ -37,6 +38,7 @@ namespace TurtleGraphics {
 			MainWindow.Instance.ExceptionDialogActive = true;
 			_turtleVisibilityBck = MainWindow.Instance.ShowTurtleCheckBox;
 			MainWindow.Instance.ShowTurtleCheckBox = false;
+			LocaleProvider.Instance.OnLanguageChanged += (s, ee) => { Notify(nameof(L)); };
 			FocusMe.Focus();
 		}
 
@@ -57,6 +59,15 @@ namespace TurtleGraphics {
 				Notify(nameof(ExceptionMessage));
 			}
 		}
+
+		public class Lang {
+			public string Except_Header => LocaleProvider.Instance.Get(Locale.EXCEPT__HEADER);
+			public string Except_MessageLabel => LocaleProvider.Instance.Get(Locale.EXCEPT__MESSAGE_LABEL);
+			public string Except_StackTraceLabel => LocaleProvider.Instance.Get(Locale.EXCEPT__STACK_TRACE_LABEL);
+			public string Except_ButtonLabel => LocaleProvider.Instance.Get(Locale.EXCEPT__BUTTON_LABEL);
+		}
+
+		public Lang L { get; } = new Lang();
 
 		public ParsingException Exception {
 			get => _exception;

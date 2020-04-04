@@ -5,8 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TurtleGraphics"
              mc:Ignorable="d">
-	
-	<Grid Background="Transparent" Margin="0 0 0 -2">
+
+	<Border BorderBrush="Red" BorderThickness="0 0 0 1" Margin="0 0 2 0">
+	<Grid Background="Transparent">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"/>
 			<ColumnDefinition Width="auto"/>
@@ -30,6 +31,8 @@
 		<TextBlock Margin="5 0 0 0" Text="{Binding Name}" FontSize="16" FontWeight="DemiBold" VerticalAlignment="Center"/>
 		<Button Padding="20 5" Grid.Column="1" Content="{Binding ElementName=Root, Path=DataContext.GenericLoad, FallbackValue='Load'}"
 				Command="{Binding ElementName=Root, Path=DataContext.LoadCommand}"
-				CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, Path=DataContext}"/>
+				CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, Path=DataContext}"
+				Margin="-1"/>
 	</Grid>
+	</Border>
 </UserControl>

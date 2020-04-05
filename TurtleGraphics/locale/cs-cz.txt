@@ -1,4 +1,5 @@
-﻿41051367:Sestavuji...
+﻿/Čeština
+41051367:Sestavuji...
 5665650:Zrušit
 70725580:Načíst
 84416465:Jméno skeče:
@@ -6,13 +7,21 @@
 97182944:Úhel:
 83399757:Barva Pozadí:
 82349694:Animovat Cestu
-80543611:Rychlost animace cesty:
+80543611:Délka animace:
 62062242:Rychlost Želvy:
 77918172:Zobraz/Skryj ovládání
 47297997:Želví Grafika
 36001163:Zobrazovat Želvu
 2417883:Spustit na celé obrazovce
-30044441:Nastavení WIP
+30044441:Nastavení
 80317709:Start
 59860665:Stop
 30163776:Čtu příkazy...
+18137498:Jazyk
+53128316:Zpět
+93144682:Chyba čtení kódu!
+79452378:Zpráva:
+73815551:Stav zásobníku:
+51656026:Opravím to!
+35119719:Tipy:
+68529572:pouze v režimu celé obrazovky

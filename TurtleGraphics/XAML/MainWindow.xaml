@@ -4,15 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TurtleGraphics"
+        xmlns:controls="clr-namespace:Igor.Controls;assembly=Igor.Controls"
         mc:Ignorable="d"
-        Title="{Binding Main_WindowName}">
+        Title="{Binding L.Main_WindowName}">
 	<d:Window.DataContext>
 		<local:MainWindow/>
 	</d:Window.DataContext>
 
 	<Window.Resources>
 		<BooleanToVisibilityConverter x:Key="BoolToVis"/>
+		<controls:BoolInvertConv x:Key="BoolInvert"/>
 	</Window.Resources>
+	
 	<Grid>
 		<Grid x:Name="Paths" Background="{Binding ElementName=BackgroundColor, Path=Text}">
 			<Grid.ColumnDefinitions>
@@ -24,89 +27,86 @@
 				<RowDefinition x:Name="DrawAreaY"/>
 			</Grid.RowDefinitions>
 
-			<Grid Grid.Column="0" Background="#c9c9c9">
+			<Grid Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource mainColor}" Panel.ZIndex="2">
 				<Grid.RowDefinitions>
 					<RowDefinition/>
 					<RowDefinition Height="auto"/>
 					<RowDefinition Height="auto"/>
 				</Grid.RowDefinitions>
+
 				<TextBox Text="{Binding CommandsText, UpdateSourceTrigger=PropertyChanged}"
-					 AcceptsReturn="True" AcceptsTab="True"
-					 FontWeight="DemiBold" FontSize="16"
-					 x:Name="CommandsTextInput"
-					 ScrollViewer.ScrollChanged="CommandsTextInput_ScrollChanged"/>
+						 AcceptsReturn="True" AcceptsTab="True"
+						 FontWeight="DemiBold" FontSize="16"
+						 x:Name="CommandsTextInput"
+						 ScrollViewer.ScrollChanged="CommandsTextInput_ScrollChanged"/>
 
 				<TextBox Text="{Binding InteliCommandsText, UpdateSourceTrigger=PropertyChanged}"
-					 FontWeight="DemiBold"
-					 FontSize="16"
-					 IsHitTestVisible="False" Opacity="0.5" Background="Transparent"
-					 x:Name="InteliCommands">
-				</TextBox>
+						 FontWeight="DemiBold"
+						 FontSize="16"
+						 IsHitTestVisible="False" Opacity="0.5" Background="Transparent"
+						 x:Name="InteliCommands"/>
+				
 				<StackPanel Grid.Row="1" Visibility="{Binding ControlsVisible, Converter={StaticResource BoolToVis}}">
-					<StackPanel>
+					<Border BorderThickness="0 5 0 0" BorderBrush="Firebrick" Margin="0 0 0 2"/>
+					<StackPanel Margin="5 0 10 0">
 						<TextBlock>
-					<Run Text="{Binding Main_Angle, Mode=OneWay}"/>
-					<Run Text="{Binding AngleStr, Mode=OneWay}"/>
+							<Run Text="{Binding L.Main_Angle, Mode=OneWay, FallbackValue='Angle:'}"/>
+							<Run Text="{Binding AngleStr, Mode=OneWay}" FontWeight="Bold"/>
 						</TextBlock>
 						<TextBlock>
-					<Run Text="X:"/>
-					<Run Text="{Binding XStr, Mode=OneWay}"/>
+							<Run Text="X:"/>
+							<Run Text="{Binding XStr, Mode=OneWay}" FontWeight="Bold"/>
 						</TextBlock>
 						<TextBlock>
-					<Run Text="Y:"/>
-					<Run Text="{Binding YStr, Mode=OneWay}"/>
+							<Run Text="Y:"/>
+							<Run Text="{Binding YStr, Mode=OneWay}" FontWeight="Bold"/>
 						</TextBlock>
-						<TextBlock Text="{Binding Main_BackgroundCol}"/>
+						<TextBlock Text="{Binding L.Main_BackgroundCol, FallbackValue='Background color'}"/>
 						<TextBox Name="BackgroundColor" Text="Transparent"/>
-						<CheckBox Content="{Binding Main_ShowTurtle}" IsChecked="{Binding ShowTurtleCheckBox}"/>
+						<CheckBox Content="{Binding L.Main_ShowTurtle, FallbackValue='Show turtle'}" IsChecked="{Binding ShowTurtleCheckBox}"/>
 
-						<CheckBox Content="{Binding Main_AnimatePath}" IsChecked="{Binding AnimatePath}"/>
+						<CheckBox Content="{Binding L.Main_AnimatePath, FallbackValue='Animate path'}" IsChecked="{Binding AnimatePath}"/>
 						<StackPanel Visibility="{Binding AnimatePath, Converter={StaticResource BoolToVis}}">
 							<TextBlock>
-						<Run Text="{Binding Main_PathAnimSpeed, Mode=OneWay}"/>
-						<Run Text="{Binding ElementName=AnimSpeed, Path=Value, Mode=OneWay}"/>
-						<Run Text="/"/>
-						<Run Text="{Binding ElementName=AnimSpeed, Path=Maximum, Mode=OneWay}"/>
+								<Run Text="{Binding L.Main_PathAnimSpeed, Mode=OneWay, FallbackValue='Path anim. length'}"/>
 							</TextBlock>
 							<Slider Visibility="{Binding AnimatePath, Converter={StaticResource BoolToVis}}"
-							Value="{Binding IterationCount, UpdateSourceTrigger=PropertyChanged}"
-							Minimum="1" Maximum="50" TickFrequency="1" Name="AnimSpeed"/>
+									Value="{Binding IterationCount, UpdateSourceTrigger=PropertyChanged}"
+									Minimum="1" Maximum="50" TickFrequency="1"/>
 						</StackPanel>
 
 						<TextBlock>
-						<Run Text="{Binding Main_TurtleSpeed, Mode=OneWay}"/>
-						<Run Text="{Binding ElementName=TurtleSpeed, Path=Value, Mode=OneWay}"/>
-						<Run Text="/"/>
-						<Run Text="{Binding ElementName=TurtleSpeed, Path=Maximum, Mode=OneWay}"/>
+							<Run Text="{Binding L.Main_TurtleSpeed, Mode=OneWay, FallbackValue='Turtle speed'}"/>
+							<Run Text="{Binding ElementName=TurtleSpeed, Path=Value, Mode=OneWay}"/>
+							<Run Text="/"/>
+							<Run Text="{Binding ElementName=TurtleSpeed, Path=Maximum, Mode=OneWay}"/>
 						</TextBlock>
-						<Slider Value="{Binding CalculationFramesPreUIUpdate, UpdateSourceTrigger=PropertyChanged}" Minimum="1" Maximum="50" TickFrequency="1" Name="TurtleSpeed"/>
+						<Slider Value="{Binding CalculationFramesPreUIUpdate, UpdateSourceTrigger=PropertyChanged}"
+								Minimum="1" Maximum="50" TickFrequency="1" Name="TurtleSpeed"
+								IsEnabled="{Binding AnimatePath, Converter={StaticResource BoolInvert}}"/>
 					</StackPanel>
-					<StackPanel>
+					<StackPanel Margin="0 0 5 0">
 						<Button Content="{Binding ButtonText, FallbackValue='Run/Stop'}" Command="{Binding ButtonCommand}"/>
-						<!-- Old way of doing things
-						<Button Content="{Binding ButtonTextFullSize, FallbackValue='Run Full-size'}" Command="{Binding ButtonFullSizeCommand}"/>
-						<Button Content="{Binding Main_ToggleFullscreen, FallbackValue='TODO Toggle Fullscreen'}" Command="{Binding ToggleFullScreenCommand}" IsEnabled="{Binding ToggleFullscreenEnabled}"/>
-						-->
-						<Button Content="{Binding Main_RunFullscreen}" Command="{Binding RunFullscreenCommand}"/>
-						<Button Content="{Binding GenericSave}" Command="{Binding SaveCommand}"/>
-						<Button Content="{Binding GenericLoad}" Command="{Binding LoadCommand}"/>
-						<Button Content="{Binding Main_Settings}" Command="{Binding SettingsCommand}"/>
+						<Button Content="{Binding L.Main_RunFullscreen, FallbackValue='Full-screen'}" Command="{Binding RunFullscreenCommand}"/>
+						<Button Content="{Binding L.GenericSave, FallbackValue='Save...'}" Command="{Binding SaveCommand}"/>
+						<Button Content="{Binding L.GenericLoad, FallbackValue='Load...'}" Command="{Binding LoadCommand}"/>
+						<Button Content="{Binding L.Main_Settings, FallbackValue='Settings...'}" Command="{Binding SettingsCommand}"/>
 					</StackPanel>
 				</StackPanel>
-				<StackPanel Grid.Row="2">
-					<Button Content="{Binding Main_ToggleControlPanel}" Command="{Binding ControlsVisibleCommand}"/>
+				<StackPanel Grid.Row="2" Margin="0 0 5 0">
+					<Button Content="{Binding L.Main_ToggleControlPanel}" Command="{Binding ControlsVisibleCommand}"/>
 				</StackPanel>
 			</Grid>
 
-			<GridSplitter Grid.Column="1"
+			<GridSplitter Grid.Column="1" Panel.ZIndex="2"
 						  Width="{Binding ElementName=SplitterCol, Path=Width}" 
 						  HorizontalAlignment="Stretch"
 						  ResizeDirection="Columns"
-						  Background="Transparent"/>
+						  Background="Firebrick"/>
 
-			<Image Grid.Column="2" Source="{Binding ImgSource}"/>
+			<Image Grid.Column="1" Source="{Binding ImgSource}"/>
 
-			<Grid Grid.Column="2" Panel.ZIndex="1" SizeChanged="Grid_SizeChanged">
+			<Grid Grid.Column="1" SizeChanged="Grid_SizeChanged" Panel.ZIndex="1">
 
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="auto"/>
@@ -114,7 +114,9 @@
 				<Grid.RowDefinitions>
 					<RowDefinition Height="auto"/>
 				</Grid.RowDefinitions>
-				<Image Width="24" Height="24" Margin="-12,-12" Visibility="{Binding ShowTurtleCheckBox, Converter={StaticResource BoolToVis}}" Source="/TurtleGraphics;component/Resources/turtle.png">
+				<Image Width="24" Height="24" Margin="-12,-12" 
+					   Visibility="{Binding ShowTurtleCheckBox, Converter={StaticResource BoolToVis}}"
+					   Source="/TurtleGraphics;component/Resources/turtle.png">
 					<Image.RenderTransform>
 						<TransformGroup>
 							<RotateTransform x:Name="TurtleRotation" CenterX="12" CenterY="12"/>

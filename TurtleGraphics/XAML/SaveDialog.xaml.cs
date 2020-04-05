@@ -27,8 +27,6 @@ namespace TurtleGraphics {
 		public SaveDialog() {
 			InitializeComponent();
 			DataContext = this;
-			_showTurtleBck = MainWindow.Instance.ShowTurtleCheckBox;
-			MainWindow.Instance.ShowTurtleCheckBox = false;
 			SaveCommand = new Command(() => {
 				if (string.IsNullOrWhiteSpace(SaveFileName)) {
 					return;
@@ -39,16 +37,12 @@ namespace TurtleGraphics {
 			CancelCommand = new Command(() => {
 				Common();
 			});
-			SaveNameInput.Loaded += SaveNameInput_Loaded;
-		}
 
-		private void SaveNameInput_Loaded(object sender, System.Windows.RoutedEventArgs e) {
-			SaveNameInput.Focus();
+			_focus.Loaded += (s,e) => _focus.Focus();
 		}
 
 		private void Common() {
 			MainWindow.Instance.Paths.Children.Remove(this);
-			MainWindow.Instance.ShowTurtleCheckBox = _showTurtleBck;
 			MainWindow.Instance.SaveDialogActive = false;
 		}
 

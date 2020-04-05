@@ -1,4 +1,5 @@
-﻿41051367:Compiling...
+﻿/English
+41051367:Compiling...
 5665650:Cancel
 70725580:Load
 84416465:Sketch name:
@@ -6,13 +7,21 @@
 97182944:Angle:
 83399757:Background Color:
 82349694:Animate Path
-80543611:Path animation speed:
+80543611:Animation length:
 62062242:Turtle Speed:
 77918172:Toggle Control panel
 47297997:Turtle Graphics
 36001163:Show Turtle
 2417883:Run in fullscreen mode
-30044441:Settings WIP
-80317709:Run
+30044441:Settings
+80317709:Start
 59860665:Stop
 30163776:Parsing...
+18137498:Language
+53128316:Back
+93144682:An exception occured!
+79452378:Message:
+73815551:Stack trace:
+51656026:I'll do better!
+35119719:Tips:
+68529572:only in full-screen mode

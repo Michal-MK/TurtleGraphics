@@ -63,14 +63,16 @@ namespace TurtleGraphics {
 		private ICommand _controlsVisibleCommand;
 		private bool _animatePath;
 		private ImageSource _imgSource;
+		private ICommand _settingsCommand;
 
+		public ICommand SettingsCommand { get => _settingsCommand; set { _settingsCommand = value; Notify(nameof(SettingsCommand)); } }
 		public ImageSource ImgSource { get => _imgSource; set { _imgSource = value; Notify(nameof(ImgSource)); } }
-		public bool AnimatePath { get => _animatePath; set { _animatePath = value; Notify(nameof(AnimatePath)); } }
+		public bool AnimatePath { get => _animatePath; set { _animatePath = value; Notify(nameof(AnimatePath)); CalculationFramesPreUIUpdate = 1; } }
 		public ICommand ControlsVisibleCommand { get => _controlsVisibleCommand; set { _controlsVisibleCommand = value; Notify(nameof(ControlsVisibleCommand)); } }
 		public bool ControlsVisible { get => _controlsVisible; set { _controlsVisible = value; Notify(nameof(ControlsVisible)); } }
-		public string AngleStr { get => $"{Math.Floor(ContextExtensions.AsDeg(Angle))}°"; }
-		public string XStr { get => $"{Math.Round(X, 2)}"; }
-		public string YStr { get => $"{Math.Round(Y, 2)}"; }
+		public string AngleStr { get => $"\t{Math.Floor(ContextExtensions.AsDeg(Angle))}°"; }
+		public string XStr { get => $"\t{Math.Round(X, 2)}"; }
+		public string YStr { get => $"\t{Math.Round(Y, 2)}"; }
 		public PenLineCap LineCapping { get => _lineCapping; set { _lineCapping = value; Notify(nameof(LineCapping)); } }
 		public int CalculationFramesPreUIUpdate { get => _anotherDelay; set { _anotherDelay = value; Notify(nameof(CalculationFramesPreUIUpdate)); } }
 		public ICommand LoadCommand { get => _loadCommand; set { _loadCommand = value; Notify(nameof(LoadCommand)); } }
@@ -99,20 +101,24 @@ namespace TurtleGraphics {
 
 		#region Language
 
-		public string Main_WindowName => LocaleProvider.Instance.Get(Locale.MAIN__WINDOW_NAME);
-		public string Main_Angle => LocaleProvider.Instance.Get(Locale.MAIN__ANGLE);
-		public string Main_AnimatePath => LocaleProvider.Instance.Get(Locale.MAIN__ANIMATE_PATH);
-		public string Main_BackgroundCol => LocaleProvider.Instance.Get(Locale.MAIN__BACKGROUND_COL);
-		public string Main_PathAnimSpeed => LocaleProvider.Instance.Get(Locale.MAIN__PATH_ANIM_SPEED);
-		public string Main_ToggleControlPanel => LocaleProvider.Instance.Get(Locale.MAIN__TOGGLE_CONTROL_PANEL);
-		public string Main_TurtleSpeed => LocaleProvider.Instance.Get(Locale.MAIN__TURTLE_SPEED);
-		public string Main_ShowTurtle => LocaleProvider.Instance.Get(Locale.MAIN__SHOW_TURTLE);
-		public string GenericLoad => LocaleProvider.Instance.Get(Locale.GENERIC_LOAD);
-		public string GenericSave => LocaleProvider.Instance.Get(Locale.GENERIC_SAVE);
-		public string Main_RunFullscreen => LocaleProvider.Instance.Get(Locale.MAIN__RUN_FULLSCREEN) + " (Ctrl + F5)";
-		public string Main_Settings => LocaleProvider.Instance.Get(Locale.MAIN__SETTINGS);
-		public string GenericRun => LocaleProvider.Instance.Get(Locale.GENERIC_RUN) + " (F5)";
-		public string GenericStop => LocaleProvider.Instance.Get(Locale.GENERIC_STOP) + " (F5)";
+		public class Lang {
+			public string Main_WindowName => LocaleProvider.Instance.Get(Locale.MAIN__WINDOW_NAME);
+			public string Main_Angle => LocaleProvider.Instance.Get(Locale.MAIN__ANGLE);
+			public string Main_AnimatePath => LocaleProvider.Instance.Get(Locale.MAIN__ANIMATE_PATH);
+			public string Main_BackgroundCol => LocaleProvider.Instance.Get(Locale.MAIN__BACKGROUND_COL);
+			public string Main_PathAnimSpeed => LocaleProvider.Instance.Get(Locale.MAIN__PATH_ANIM_SPEED);
+			public string Main_ToggleControlPanel => LocaleProvider.Instance.Get(Locale.MAIN__TOGGLE_CONTROL_PANEL);
+			public string Main_TurtleSpeed => LocaleProvider.Instance.Get(Locale.MAIN__TURTLE_SPEED);
+			public string Main_ShowTurtle => LocaleProvider.Instance.Get(Locale.MAIN__SHOW_TURTLE);
+			public string GenericLoad => LocaleProvider.Instance.Get(Locale.GENERIC_LOAD);
+			public string GenericSave => LocaleProvider.Instance.Get(Locale.GENERIC_SAVE);
+			public string Main_RunFullscreen => LocaleProvider.Instance.Get(Locale.MAIN__RUN_FULLSCREEN) + " (Ctrl + F5)";
+			public string Main_Settings => LocaleProvider.Instance.Get(Locale.MAIN__SETTINGS);
+			public string GenericRun => LocaleProvider.Instance.Get(Locale.GENERIC_RUN) + " (F5)";
+			public string GenericStop => LocaleProvider.Instance.Get(Locale.GENERIC_STOP) + " (F5)";
+		}
+
+		public Lang L { get; } = new Lang();
 
 		#endregion
 
@@ -149,9 +155,11 @@ namespace TurtleGraphics {
 			LoadCommand = new AsyncCommand(LoadCommandAction);
 			ControlsVisibleCommand = new Command(() => ControlsVisible ^= true);
 			RunFullscreenCommand = new AsyncCommand(RunFullscreenCommandAction);
+			SettingsCommand = new Command(OpenSettingsAction);
+			LocaleProvider.Instance.OnLanguageChanged += (s, e) => { Notify(nameof(L)); };
 
 			ButtonCommand = RunCommand;
-			ButtonText = GenericRun;
+			ButtonText = L.GenericRun;
 
 			FSSManager = new FileSystemManager();
 
@@ -190,8 +198,8 @@ namespace TurtleGraphics {
 			_currentFigure = null;
 			_currentPath = null;
 
-			Color = "Blue";
-			PenDown = true;
+			_color = "Blue";
+			_penDown = true;
 			X = DrawWidth / 2;
 			Y = DrawHeight / 2;
 			TurtleTranslation.X = X;
@@ -201,7 +209,7 @@ namespace TurtleGraphics {
 			TurtleScale.ScaleY = 1;
 			StartPoint = new Point(X, Y);
 			Angle = 0;
-			BrushSize = 4;
+			_brushSize = 4;
 			PathAnimationFrames = 5;
 			LineCapping = PenLineCap.Round;
 
@@ -252,9 +260,21 @@ namespace TurtleGraphics {
 					ToggleControlPanel();
 				}
 				ImgSource = null;
+				StopCommand.Execute(null);
 				RemoveAllPaths();
 				UpdateLayout();
 				ToggleFullScreenAction();
+			}
+
+			if (e.KeyboardDevice.Modifiers == (ModifierKeys.Control | ModifierKeys.Alt) && e.Key == Key.C) {
+				if (IsFullscreen && !ControlPanelHolderVisible) {
+					var (actualWidth, actualHeight) = GetActualScreenSize();
+					System.Drawing.Bitmap bitmap;
+					using (MemoryStream ms = CaptureScreenshot(actualWidth, actualHeight)) {
+						bitmap = (System.Drawing.Bitmap)System.Drawing.Image.FromStream(ms);
+					}
+					bitmap.Save(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "ScreenCapture.png"), System.Drawing.Imaging.ImageFormat.Png);
+				}
 			}
 		}
 
@@ -527,7 +547,7 @@ namespace TurtleGraphics {
 					break;
 				}
 				_currentSegment.Points[last] = new Point(Lerp(origin.X, _x, currentInterpolation), Lerp(origin.Y, _y, currentInterpolation));
-				TurtleTranslation.X = _currentSegment.Points[last].X;
+				TurtleTranslation.X = _currentSegment.Points[last].X + SplitterCol.ActualWidth;
 				TurtleTranslation.Y = _currentSegment.Points[last].Y;
 				currentInterpolation += increment;
 				if (AnimatePath) {
@@ -547,7 +567,7 @@ namespace TurtleGraphics {
 			Init();
 			cancellationTokenSource = new CancellationTokenSource();
 			ButtonCommand = StopCommand;
-			ButtonText = GenericStop;
+			ButtonText = L.GenericStop;
 			try {
 				FSSManager.CreateCodeBackup(CommandsText);
 				_compilationStatus.Status = LocaleProvider.Instance.Get(Locale.COMP_STATUS__PARSING);
@@ -580,7 +600,7 @@ namespace TurtleGraphics {
 			}
 			finally {
 				ButtonCommand = RunCommand;
-				ButtonText = GenericRun;
+				ButtonText = L.GenericRun;
 				ToggleFullscreenEnabled = true;
 			}
 		}
@@ -628,10 +648,11 @@ namespace TurtleGraphics {
 			if (ControlPanelHolderVisible) {
 				SplitterCol.Width = new GridLength(5, GridUnitType.Pixel);
 				ControlArea.Width = new GridLength(1, GridUnitType.Star);
+				DrawAreaX.Width = new GridLength(3, GridUnitType.Star);
 			}
 			else {
-				SplitterCol.Width = new GridLength(0);
-				ControlArea.Width = new GridLength(0, GridUnitType.Pixel);
+				SplitterCol.Width = new GridLength(0, GridUnitType.Pixel);
+				ControlArea.Width = new GridLength(0, GridUnitType.Star);
 			}
 			UpdateLayout();
 			DrawWidth = DrawAreaX.ActualWidth;
@@ -643,7 +664,7 @@ namespace TurtleGraphics {
 			if (isFullscreen) {
 				WindowStyle = WindowStyle.None;
 				// When the window is maximized, fullscreen toggle fails to cover the taskbar, this hack fixes it
-				if (WindowState == WindowState.Minimized) {
+				if (WindowState == WindowState.Maximized) {
 					WindowState = WindowState.Normal;
 				}
 				WindowState = WindowState.Maximized;
@@ -658,6 +679,11 @@ namespace TurtleGraphics {
 		}
 
 		public async Task LoadCommandAction() {
+			if (LoadDialogActive) {
+				FSSManager.AbortLoad();
+				LoadDialogActive = false;
+				return;
+			}
 			if (!NoWindowsActive)
 				return;
 			LoadDialogActive = true;
@@ -668,19 +694,26 @@ namespace TurtleGraphics {
 			}
 		}
 
+		private SaveDialog saveDialog;
 		public void SaveCommandAction() {
+			if (SaveDialogActive) {
+				saveDialog.CancelCommand.Execute(null);
+				saveDialog = null;
+				return;
+			}
 			if (!NoWindowsActive)
 				return;
 			SaveDialogActive = true;
-			SaveDialog d = new SaveDialog();
-			Grid.SetColumn(d, PAGES_COLUMN_INDEX);
-			Paths.Children.Add(d);
+			saveDialog = new SaveDialog();
+			Grid.SetColumn(saveDialog, PAGES_COLUMN_INDEX);
+			Panel.SetZIndex(saveDialog, 2);
+			Paths.Children.Add(saveDialog);
 		}
 
 		public void StopCommandAction() {
 			cancellationTokenSource.Cancel();
 			ButtonCommand = RunCommand;
-			ButtonText = GenericRun;
+			ButtonText = L.GenericRun;
 		}
 
 		public async Task RunFullscreenCommandAction() {
@@ -692,6 +725,20 @@ namespace TurtleGraphics {
 			}
 			await RunCommandAction();
 		}
+
+		private void OpenSettingsAction() {
+			Settings s = new Settings();
+			IsEnabled = false;
+			s.Closed += SettingsClosed;
+			s.Show();
+			void SettingsClosed(object sender, EventArgs e) {
+				s.Closed -= SettingsClosed;
+				IsEnabled = true;
+				BringIntoView();
+				App.Instance.Cfg.Save();
+			}
+		}
+
 
 		public bool NoWindowsActive => !(SaveDialogActive || LoadDialogActive || ExceptionDialogActive);
 

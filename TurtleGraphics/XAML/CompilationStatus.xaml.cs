@@ -28,6 +28,7 @@ namespace TurtleGraphics {
 
 			Loaded += CompilationStatus_Loaded;
 			Grid.SetColumn(this, MainWindow.PAGES_COLUMN_INDEX);
+			Panel.SetZIndex(this, 2);
 		}
 
 
@@ -36,12 +37,8 @@ namespace TurtleGraphics {
 		public string Status { get => _status; set { _status = value; Notify(nameof(Status)); } }
 
 		public bool Rotate { get; set; } = true;
-		private bool _turtleVisibleBck;
 
 		private void CompilationStatus_Loaded(object sender, System.Windows.RoutedEventArgs e) {
-			_turtleVisibleBck = MainWindow.Instance.ShowTurtleCheckBox;
-			MainWindow.Instance.ShowTurtleCheckBox = false;
-
 			Task.Run(async () => {
 				while (Rotate) {
 					Dispatcher.Invoke(() => {
@@ -60,7 +57,6 @@ namespace TurtleGraphics {
 		public void Stop() {
 			Rotate = false;
 			MainWindow.Instance.Paths.Children.Remove(this);
-			MainWindow.Instance.ShowTurtleCheckBox = _turtleVisibleBck;
 		}
 	}
 }

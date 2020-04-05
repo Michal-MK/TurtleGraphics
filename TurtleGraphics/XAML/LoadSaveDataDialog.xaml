@@ -7,42 +7,24 @@
              xmlns:local="clr-namespace:TurtleGraphics"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-	<Grid Name="Root" Background="SlateGray" Panel.ZIndex="2">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="auto"/>
-		</Grid.RowDefinitions>
-		<ListBox ItemsSource="{Binding Items}" HorizontalContentAlignment="Stretch" x:Name="ItemList" Background="Transparent"
-				 ItemContainerStyle="{StaticResource SeamlessNoHighlight}">
-			<ListBox.ItemTemplate>
-				<DataTemplate>
-					<Grid Background="Transparent" Margin="0 0 0 -2">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="*"/>
-							<ColumnDefinition Width="auto"/>
-						</Grid.ColumnDefinitions>
-						<Grid.Triggers>
-							<EventTrigger RoutedEvent="MouseEnter">
-								<BeginStoryboard>
-									<Storyboard Storyboard.TargetProperty="(Grid.Background).(SolidColorBrush.Color)">
-										<ColorAnimation To="White" Duration="0:0:0.1"/>
-									</Storyboard>
-								</BeginStoryboard>
-							</EventTrigger>
-							<EventTrigger RoutedEvent="MouseLeave">
-								<BeginStoryboard>
-									<Storyboard Storyboard.TargetProperty="(Grid.Background).(SolidColorBrush.Color)">
-										<ColorAnimation To="Transparent" Duration="0:0:0.2"/>
-									</Storyboard>
-								</BeginStoryboard>
-							</EventTrigger>
-						</Grid.Triggers>
-						<TextBlock Margin="5 0 0 0" Text="{Binding Name}" FontSize="16" FontWeight="DemiBold" VerticalAlignment="Center"/>
-						<Button Padding="20 5" Grid.Column="1" Content="{Binding ElementName=Root, Path=DataContext.GenericLoad, FallbackValue='Load'}" Command="{Binding ElementName=Root, Path=DataContext.LoadCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}, Path=DataContext}"/>
-					</Grid>
-				</DataTemplate>
-			</ListBox.ItemTemplate>
-		</ListBox>
-		<Button Content="{Binding GenericCancel, FallbackValue='Cancel'}" Command="{Binding CancelCommand}" Grid.Row="1"/>
+
+	<Grid Panel.ZIndex="2" Name="Root">
+		<Grid Background="{StaticResource mainColor}" Opacity="0.8" IsHitTestVisible="false"/>
+		<Grid Margin="5">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="auto"/>
+			</Grid.RowDefinitions>
+			<ListBox ItemsSource="{Binding Items}" HorizontalContentAlignment="Stretch" x:Name="ItemList" Background="Transparent"
+				 ItemContainerStyle="{StaticResource SeamlessNoHighlight}" BorderThickness="0">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<local:LoadDialogItem/>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+			<Button Content="{Binding GenericCancel, FallbackValue='Cancel'}" Command="{Binding CancelCommand}" Grid.Row="1"
+					Margin="0 5 0 0" Padding="0 4"/>
+		</Grid>
 	</Grid>
 </UserControl>

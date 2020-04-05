@@ -12,3 +12,8 @@ packages/*Fody*
 Bezanyi*
 TurtleGraphicsCode/Rules/*.cs
 *Ignored*
+/packages/Igor.Configuration*
+/packages/Igor.Controls*
+/packages/Igor.Models*
+/packages/Igor.Localization*
+/packages/Microsoft.CSharp*

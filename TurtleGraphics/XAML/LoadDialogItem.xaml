@@ -6,7 +6,14 @@
              xmlns:local="clr-namespace:TurtleGraphics"
              mc:Ignorable="d">
 
-	<Border BorderBrush="Red" BorderThickness="0 0 0 1" Margin="0 0 2 0">
+	<Border BorderThickness="0 0 0 1" Margin="0 0 2 0">
+		<Border.BorderBrush>
+			<LinearGradientBrush>
+				<GradientStop Color="Firebrick" Offset="0"/>
+				<GradientStop Color="Red" Offset="0.5"/>
+				<GradientStop Color="DarkOrange" Offset="1"/>
+			</LinearGradientBrush>
+		</Border.BorderBrush>
 	<Grid Background="Transparent">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"/>
@@ -23,7 +30,8 @@
 			<EventTrigger RoutedEvent="MouseLeave">
 				<BeginStoryboard>
 					<Storyboard Storyboard.TargetProperty="(Grid.Background).(SolidColorBrush.Color)">
-						<ColorAnimation To="Transparent" Duration="0:0:0.2"/>
+							<ColorAnimation To="White" Duration="0:0:0.1"/>
+							<ColorAnimation To="Transparent" Duration="0:0:0.2"/>
 					</Storyboard>
 				</BeginStoryboard>
 			</EventTrigger>

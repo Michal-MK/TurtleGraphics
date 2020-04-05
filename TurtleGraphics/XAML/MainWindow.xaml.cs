@@ -68,7 +68,7 @@ namespace TurtleGraphics {
 
 		public ICommand SettingsCommand { get => _settingsCommand; set { _settingsCommand = value; Notify(nameof(SettingsCommand)); } }
 		public ImageSource ImgSource { get => _imgSource; set { _imgSource = value; Notify(nameof(ImgSource)); } }
-		public bool AnimatePath { get => _animatePath; set { _animatePath = value; Notify(nameof(AnimatePath)); } }
+		public bool AnimatePath { get => _animatePath; set { _animatePath = value; Notify(nameof(AnimatePath)); CalculationFramesPreUIUpdate = 1; } }
 		public ICommand ControlsVisibleCommand { get => _controlsVisibleCommand; set { _controlsVisibleCommand = value; Notify(nameof(ControlsVisibleCommand)); } }
 		public bool ControlsVisible { get => _controlsVisible; set { _controlsVisible = value; Notify(nameof(ControlsVisible)); } }
 		public string AngleStr { get => $"\t{Math.Floor(ContextExtensions.AsDeg(Angle))}°"; }
@@ -214,7 +214,7 @@ namespace TurtleGraphics {
 			PathAnimationFrames = 5;
 			LineCapping = PenLineCap.Round;
 
-			//NewPath();
+			NewPath();
 		}
 
 		#region Events
@@ -656,6 +656,11 @@ namespace TurtleGraphics {
 		}
 
 		public async Task LoadCommandAction() {
+			if (LoadDialogActive) {
+				FSSManager.AbortLoad();
+				LoadDialogActive = false;
+				return;
+			}
 			if (!NoWindowsActive)
 				return;
 			LoadDialogActive = true;
@@ -666,13 +671,20 @@ namespace TurtleGraphics {
 			}
 		}
 
+		private SaveDialog saveDialog;
 		public void SaveCommandAction() {
+			if (SaveDialogActive) {
+				saveDialog.CancelCommand.Execute(null);
+				saveDialog = null;
+				return;
+			}
 			if (!NoWindowsActive)
 				return;
 			SaveDialogActive = true;
-			SaveDialog d = new SaveDialog();
-			Grid.SetColumn(d, PAGES_COLUMN_INDEX);
-			Paths.Children.Add(d);
+			saveDialog = new SaveDialog();
+			Grid.SetColumn(saveDialog, PAGES_COLUMN_INDEX);
+			Panel.SetZIndex(saveDialog, 2);
+			Paths.Children.Add(saveDialog);
 		}
 
 		public void StopCommandAction() {

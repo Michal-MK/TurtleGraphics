@@ -7,7 +7,7 @@
 97182944:Angle:
 83399757:Background Color:
 82349694:Animate Path
-80543611:Path animation speed:
+80543611:Animation length:
 62062242:Turtle Speed:
 77918172:Toggle Control panel
 47297997:Turtle Graphics
@@ -22,3 +22,5 @@
 79452378:Message:
 73815551:Stack trace:
 51656026:I'll do better!
+35119719:Tips:
+68529572:only in full-screen mode

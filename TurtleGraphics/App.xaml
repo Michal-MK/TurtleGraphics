@@ -3,17 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:TurtleGraphics"
              StartupUri="XAML/MainWindow.xaml">
-    <Application.Resources>
-		<Style TargetType="ListBoxItem" x:Key="SeamlessNoHighlight">
-			<Setter Property="Padding" Value="0,1"/>
-			<Setter Property="Margin" Value="0,2"/>
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="ListBoxItem">
-						<ContentPresenter/>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
+	<Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="StylesDict.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+			<Style TargetType="ListBoxItem" x:Key="SeamlessNoHighlight">
+				<Setter Property="Padding" Value="0,1"/>
+				<Setter Property="Margin" Value="0,2"/>
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="ListBoxItem">
+							<ContentPresenter/>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+
+			<SolidColorBrush x:Key="mainColor" Color="#ffaaaab0"/>
+		</ResourceDictionary>
 	</Application.Resources>
 </Application>

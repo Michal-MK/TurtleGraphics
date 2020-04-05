@@ -68,14 +68,14 @@
     <Reference Include="Igor.Configuration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Igor.Configuration.1.0.0\lib\netstandard2.0\Igor.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Igor.Controls">
-      <HintPath>..\packages\Igor.WPF\Igor.Controls.dll</HintPath>
+    <Reference Include="Igor.Controls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Igor.Controls.1.0.6\lib\Igor.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="Igor.Localization">
-      <HintPath>..\packages\Igor.WPF\Igor.Localization.dll</HintPath>
+    <Reference Include="Igor.Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Igor.Localization.1.0.0\lib\netstandard2.0\Igor.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="Igor.Models">
-      <HintPath>..\packages\Igor.WPF\Igor.Models.dll</HintPath>
+    <Reference Include="Igor.Models, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Igor.Models.1.0.1\lib\netstandard2.0\Igor.Models.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -157,6 +157,10 @@
     <Compile Include="XAML\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
+    <Page Include="StylesDict.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="XAML\LoadDialogItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

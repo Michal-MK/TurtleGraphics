@@ -24,6 +24,8 @@
 		public const int MAIN__SHOW_TURTLE = 36001163;
 
 		public const int SETT__AVAILABLE_LANGUAGES = 18137498;
+		public const int SETT__TIPS_LABEL = 35119719;
+		public const int SETT__SCREENSHOT_NOTE = 68529572;
 
 		public const int EXCEPT__HEADER = 93144682;
 		public const int EXCEPT__MESSAGE_LABEL = 79452378;

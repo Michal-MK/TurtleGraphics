@@ -9,6 +9,7 @@ namespace TurtleGraphics {
 		public const string EXTENSION = ".tgs";
 		public const string CRASH_BCK = ".crash_bck";
 		public string SavedDataPath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SavedData");
+		private LoadSaveDataDialog loadDialog;
 
 		public FileSystemManager() {
 			if (!Directory.Exists(SavedDataPath)) {
@@ -27,13 +28,22 @@ namespace TurtleGraphics {
 		}
 
 
+		public void AbortLoad() {
+			if(loadDialog != null) {
+				loadDialog.CancelCommand.Execute(null);
+			}
+		}
+
 		public async Task<SavedData> Load() {
-			LoadSaveDataDialog d = new LoadSaveDataDialog {
+			loadDialog = new LoadSaveDataDialog {
 				Path = SavedDataPath
 			};
-			Grid.SetColumn(d, MainWindow.PAGES_COLUMN_INDEX);
-			MainWindow.Instance.Paths.Children.Add(d);
-			return await d.Select();
+			Grid.SetColumn(loadDialog, MainWindow.PAGES_COLUMN_INDEX);
+			Panel.SetZIndex(loadDialog, 2);
+			MainWindow.Instance.Paths.Children.Add(loadDialog);
+			SavedData selected = await loadDialog.Select();
+			loadDialog = null;
+			return selected;
 		}
 
 		public void CreateCodeBackup(string commandsText) {

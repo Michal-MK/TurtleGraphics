@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TurtleGraphics"
+        xmlns:controls="clr-namespace:Igor.Controls;assembly=Igor.Controls"
         mc:Ignorable="d"
         Title="{Binding L.Main_WindowName}">
 	<d:Window.DataContext>
@@ -12,7 +13,9 @@
 
 	<Window.Resources>
 		<BooleanToVisibilityConverter x:Key="BoolToVis"/>
+		<controls:BoolInvertConv x:Key="BoolInvert"/>
 	</Window.Resources>
+	
 	<Grid>
 		<Grid x:Name="Paths" Background="{Binding ElementName=BackgroundColor, Path=Text}">
 			<Grid.ColumnDefinitions>
@@ -24,7 +27,7 @@
 				<RowDefinition x:Name="DrawAreaY"/>
 			</Grid.RowDefinitions>
 
-			<Grid Grid.Column="0" Grid.ColumnSpan="2" Background="#c9c9c9" Panel.ZIndex="2">
+			<Grid Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource mainColor}" Panel.ZIndex="2">
 				<Grid.RowDefinitions>
 					<RowDefinition/>
 					<RowDefinition Height="auto"/>
@@ -44,7 +47,7 @@
 						 x:Name="InteliCommands"/>
 				
 				<StackPanel Grid.Row="1" Visibility="{Binding ControlsVisible, Converter={StaticResource BoolToVis}}">
-					<Border BorderThickness="0 5 0 0" BorderBrush="Red" Margin="0 0 0 2"/>
+					<Border BorderThickness="0 5 0 0" BorderBrush="Firebrick" Margin="0 0 0 2"/>
 					<StackPanel Margin="5 0 10 0">
 						<TextBlock>
 							<Run Text="{Binding L.Main_Angle, Mode=OneWay, FallbackValue='Angle:'}"/>
@@ -65,14 +68,11 @@
 						<CheckBox Content="{Binding L.Main_AnimatePath, FallbackValue='Animate path'}" IsChecked="{Binding AnimatePath}"/>
 						<StackPanel Visibility="{Binding AnimatePath, Converter={StaticResource BoolToVis}}">
 							<TextBlock>
-								<Run Text="{Binding L.Main_PathAnimSpeed, Mode=OneWay, FallbackValue='Path anim. speed'}"/>
-								<Run Text="{Binding ElementName=AnimSpeed, Path=Value, Mode=OneWay}"/>
-								<Run Text="/"/>
-								<Run Text="{Binding ElementName=AnimSpeed, Path=Maximum, Mode=OneWay}"/>
+								<Run Text="{Binding L.Main_PathAnimSpeed, Mode=OneWay, FallbackValue='Path anim. length'}"/>
 							</TextBlock>
 							<Slider Visibility="{Binding AnimatePath, Converter={StaticResource BoolToVis}}"
-							Value="{Binding IterationCount, UpdateSourceTrigger=PropertyChanged}"
-							Minimum="1" Maximum="50" TickFrequency="1" Name="AnimSpeed"/>
+									Value="{Binding IterationCount, UpdateSourceTrigger=PropertyChanged}"
+									Minimum="1" Maximum="50" TickFrequency="1"/>
 						</StackPanel>
 
 						<TextBlock>
@@ -81,7 +81,9 @@
 							<Run Text="/"/>
 							<Run Text="{Binding ElementName=TurtleSpeed, Path=Maximum, Mode=OneWay}"/>
 						</TextBlock>
-						<Slider Value="{Binding CalculationFramesPreUIUpdate, UpdateSourceTrigger=PropertyChanged}" Minimum="1" Maximum="50" TickFrequency="1" Name="TurtleSpeed"/>
+						<Slider Value="{Binding CalculationFramesPreUIUpdate, UpdateSourceTrigger=PropertyChanged}"
+								Minimum="1" Maximum="50" TickFrequency="1" Name="TurtleSpeed"
+								IsEnabled="{Binding AnimatePath, Converter={StaticResource BoolInvert}}"/>
 					</StackPanel>
 					<StackPanel Margin="0 0 5 0">
 						<Button Content="{Binding ButtonText, FallbackValue='Run/Stop'}" Command="{Binding ButtonCommand}"/>
@@ -100,7 +102,7 @@
 						  Width="{Binding ElementName=SplitterCol, Path=Width}" 
 						  HorizontalAlignment="Stretch"
 						  ResizeDirection="Columns"
-						  Background="Red"/>
+						  Background="Firebrick"/>
 
 			<Image Grid.Column="1" Source="{Binding ImgSource}"/>
 

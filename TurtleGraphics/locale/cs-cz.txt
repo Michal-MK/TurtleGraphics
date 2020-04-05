@@ -7,7 +7,7 @@
 97182944:Úhel:
 83399757:Barva Pozadí:
 82349694:Animovat Cestu
-80543611:Rychlost animace cesty:
+80543611:Délka animace:
 62062242:Rychlost Želvy:
 77918172:Zobraz/Skryj ovládání
 47297997:Želví Grafika
@@ -22,3 +22,5 @@
 79452378:Zpráva:
 73815551:Stav zásobníku:
 51656026:Opravím to!
+35119719:Tipy:
+68529572:pouze v režimu celé obrazovky

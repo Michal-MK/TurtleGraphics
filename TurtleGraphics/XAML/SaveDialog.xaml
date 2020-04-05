@@ -7,7 +7,7 @@
              mc:Ignorable="d" KeyboardNavigation.TabNavigation="Cycle">
 
 	<Grid>
-		<Grid Background="SlateGray" Opacity="0.8" IsHitTestVisible="False"/>
+		<Grid Background="{StaticResource mainColor}" Opacity="0.8" IsHitTestVisible="False"/>
 		<Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5">
 		<Grid>
 			<Grid.RowDefinitions>

@@ -49,10 +49,11 @@
 				<TextBlock Text="WIP" FontSize="90" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Comic Sans MS"/>
 
 				<StackPanel Grid.Row="1" Margin="5">
-					<Label Content="Tips:" FontFamily="Comic Sans MS" FontSize="20" />
+					<Label Content="{Binding L.Sett_TipsLabel, FallbackValue='Tips:'}" FontFamily="Comic Sans MS" FontSize="20" />
 					<TextBlock>
-						<Run Text="Screenshot:" FontWeight="Bold"/>
-						<Run Text="'Ctrl+Alt+C' when in full-screen mode TODO"/>
+						<Run Text="Screenshot:" FontWeight="Medium"/>
+						<Run Text="'Ctrl" FontWeight="Bold"/><Run Text="+"/><Run Text="Alt" FontWeight="Bold"/><Run Text="+"/><Run Text="C'" FontWeight="Bold"/>
+						<Run Text="{Binding L.Sett_ScreenshotNote, FallbackValue='note...', Mode=OneTime}"/>
 					</TextBlock>
 				</StackPanel>
 			</Grid>

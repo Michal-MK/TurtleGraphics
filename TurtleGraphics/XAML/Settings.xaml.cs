@@ -42,6 +42,8 @@ namespace TurtleGraphics {
 		public class Lang {
 			public string Sett_AvailableLanguages => LocaleProvider.Instance.Get(Locale.SETT__AVAILABLE_LANGUAGES);
 			public string GenericBack => LocaleProvider.Instance.Get(Locale.GENERIC_BACK);
+			public string Sett_TipsLabel => LocaleProvider.Instance.Get(Locale.SETT__TIPS_LABEL);
+			public string Sett_ScreenshotNote => LocaleProvider.Instance.Get(Locale.SETT__SCREENSHOT_NOTE);
 		};
 
 		public Lang L { get; } = new Lang();

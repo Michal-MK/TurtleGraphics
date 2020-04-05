@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
 	<Grid Panel.ZIndex="2" Name="Root">
-		<Grid Background="SlateGray" Opacity="0.8" IsHitTestVisible="false"/>
+		<Grid Background="{StaticResource mainColor}" Opacity="0.8" IsHitTestVisible="false"/>
 		<Grid Margin="5">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="*"/>

@@ -106,6 +106,7 @@
     </ApplicationDefinition>
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Exceptions\ParsingException.cs" />
+    <Compile Include="Helpers\CacheHelper.cs" />
     <Compile Include="Helpers\FleeHelper.cs" />
     <Compile Include="Models\LanguageButtonModel.cs" />
     <Compile Include="XAML\LoadDialogItem.xaml.cs">
@@ -117,6 +118,7 @@
     <Compile Include="IO\FileSystemManager.cs" />
     <Compile Include="InteliCommands\InteliCommandsHandler.cs" />
     <Compile Include="InteliCommands\InteliCommandsState.cs" />
+    <Compile Include="Parsed Data\LineCacheData.cs" />
     <Compile Include="Parsed Data\RestorePositionData.cs" />
     <Compile Include="Parsed Data\ScreenCaptureData.cs" />
     <Compile Include="Parsed Data\StoredPositionData.cs" />

@@ -21,6 +21,12 @@ namespace TurtleGraphics {
 
 		public override string Line { get; set; }
 
+		private ExpressionContext contextCache;
+		private IGenericExpression<double> aCache;
+		private IGenericExpression<double> rCache;
+		private IGenericExpression<double> gCache;
+		private IGenericExpression<double> bCache;
+
 		public override TurtleData Compile(CancellationToken token) {
 			token.ThrowIfCancellationRequested();
 			Brush brush;
@@ -41,11 +47,21 @@ namespace TurtleGraphics {
 				}
 			}
 			else if (Parameters.Length == 3) {
-				ExpressionContext c = FleeHelper.GetExpression(Variables);
+				ExpressionContext c = contextCache ?? (contextCache = FleeHelper.GetExpression(Variables));
+
+				UpdateVars(c);
+
 				try {
-					byte r = Convert.ToByte(c.CompileGeneric<double>(Arg1).Evaluate());
-					byte g = Convert.ToByte(c.CompileGeneric<double>(Arg2).Evaluate());
-					byte b = Convert.ToByte(c.CompileGeneric<double>(Arg3).Evaluate());
+					if (rCache == null) {
+						rCache = c.CompileGeneric<double>(Arg1);
+						gCache = c.CompileGeneric<double>(Arg2);
+						bCache = c.CompileGeneric<double>(Arg3);
+					}
+
+					byte r = Convert.ToByte(rCache.Evaluate());
+					byte g = Convert.ToByte(gCache.Evaluate());
+					byte b = Convert.ToByte(bCache.Evaluate());
+
 					brush = new SolidColorBrush(new Color() { A = byte.MaxValue, R = r, G = g, B = b });
 				}
 				catch (Exception e) {
@@ -53,7 +69,8 @@ namespace TurtleGraphics {
 				}
 			}
 			else if (Parameters.Length == 4) {
-				ExpressionContext c = FleeHelper.GetExpression(Variables);
+				ExpressionContext c = contextCache ?? (contextCache = FleeHelper.GetExpression(Variables));
+
 				try {
 					byte a = Convert.ToByte(c.CompileGeneric<double>(Arg1).Evaluate());
 					byte r = Convert.ToByte(c.CompileGeneric<double>(Arg2).Evaluate());
@@ -78,7 +95,7 @@ namespace TurtleGraphics {
 			};
 		}
 
-		public override IList<TurtleData> CompileBlock(CancellationToken token) {
+		public override IList<TurtleData> CompileBlock(CancellationToken token, Dictionary<int, LineCacheData> cache) {
 			throw new NotImplementedException();
 		}
 

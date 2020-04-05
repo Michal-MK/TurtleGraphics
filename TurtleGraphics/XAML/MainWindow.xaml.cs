@@ -1,22 +1,21 @@
-﻿using System;
+﻿using Igor.Localization;
+using Igor.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Igor.Models;
-using System.IO;
 using System.Windows.Media.Imaging;
 using static TurtleGraphics.Helpers;
 using Path = System.Windows.Shapes.Path;
-using Igor.Localization;
-using System.Windows.Interop;
-using Igor.Configuration;
 
 namespace TurtleGraphics {
 	/// <summary>
@@ -415,7 +414,7 @@ namespace TurtleGraphics {
 			return ((int)actualWidth, (int)actualHeight);
 		}
 
-
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Rotate(double angle, bool setRotation) {
 			if (double.IsNaN(angle)) {
 				Angle = 0;
@@ -571,8 +570,10 @@ namespace TurtleGraphics {
 			ButtonText = L.GenericStop;
 			try {
 				FSSManager.CreateCodeBackup(CommandsText);
-				Queue<ParsedData> tasks = CommandParser.ParseCommands(CommandsText, this);
-				List<TurtleData> compiledTasks = await CompileTasks(tasks, cancellationTokenSource.Token);
+				_compilationStatus.Status = LocaleProvider.Instance.Get(Locale.COMP_STATUS__PARSING);
+				Queue<ParsedData> tasks = await CommandParser.ParseCommandsAsync(CommandsText, this);
+				_compilationStatus.Status = LocaleProvider.Instance.Get(Locale.COMP_STATUS__COMPILING);
+				List<TurtleData> compiledTasks = await CompileTasksAsync(tasks, cancellationTokenSource.Token);
 				_compilationStatus.Stop();
 				Stopwatch s = new Stopwatch();
 				s.Start();
@@ -582,6 +583,14 @@ namespace TurtleGraphics {
 			catch (OperationCanceledException) {
 				//Operation was canceled
 				_compilationStatus.Stop();
+			}
+			catch (AggregateException e) {
+				if (e.InnerException is ParsingException pe) {
+					_compilationStatus.Stop();
+					_exceptionDisplay.Exception = pe;
+					_exceptionDisplay.ExceptionMessage = pe.Message;
+					_exceptionDisplay.Show();
+				}
 			}
 			catch (ParsingException e) {
 				_compilationStatus.Stop();
@@ -596,19 +605,33 @@ namespace TurtleGraphics {
 			}
 		}
 
-		private Task<List<TurtleData>> CompileTasks(Queue<ParsedData> tasks, CancellationToken token) {
+		private Task<List<TurtleData>> CompileTasksAsync(Queue<ParsedData> tasks, CancellationToken token) {
 			return Task.Run(() => {
-				List<TurtleData> ret = new List<TurtleData>(8192) {
+
+				Dictionary<int, LineCacheData> compCache = new Dictionary<int, LineCacheData>();
+
+				List<TurtleData> ret = new List<TurtleData>(64) {
 					new TurtleData() { Angle = Angle, Brush = Brushes.Blue, BrushThickness = BrushSize, MoveTo = new Point(X, Y), PenDown = true }
 				};
 
 				while (tasks.Count > 0) {
 					ParsedData current = tasks.Dequeue();
 					if (current.IsBlock) {
-						ret.AddRange(current.CompileBlock(token));
+						IList<TurtleData> data = current.CompileBlock(token, compCache);
+						ret.AddRange(data);
 					}
 					else {
-						ret.Add(current.Compile(token));
+						if (compCache.ContainsKey(current.LineHash)) {
+							ret.Add(compCache[current.LineHash].CompiledData);
+						}
+						else {
+							TurtleData compiled = current.Compile(token);
+							if(current.Cacheable || CacheHelper.IsCacheable(current)) {
+								current.Cacheable = true;
+								compCache.Add(current.LineHash, new LineCacheData(current, compiled));
+							}
+							ret.Add(compiled);
+						}
 					}
 				}
 				return ret;

@@ -16,6 +16,7 @@
 30044441:Nastavení
 80317709:Start
 59860665:Stop
+30163776:Čtu příkazy...
 18137498:Jazyk
 53128316:Zpět
 93144682:Chyba čtení kódu!

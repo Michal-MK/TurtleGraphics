@@ -16,6 +16,7 @@
 30044441:Settings
 80317709:Start
 59860665:Stop
+30163776:Parsing...
 18137498:Language
 53128316:Back
 93144682:An exception occured!

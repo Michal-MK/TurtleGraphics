@@ -1,5 +1,6 @@
 ﻿using Igor.Localization;
 using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
@@ -31,7 +32,9 @@ namespace TurtleGraphics {
 		}
 
 
-		public string Status => LocaleProvider.Instance.Get(Locale.COMP_STATUS__COMPILING);
+		private string _status;
+
+		public string Status { get => _status; set { _status = value; Notify(nameof(Status)); } }
 
 		public bool Rotate { get; set; } = true;
 

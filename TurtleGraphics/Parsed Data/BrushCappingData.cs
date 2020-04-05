@@ -13,6 +13,8 @@ namespace TurtleGraphics {
 
 		public override ParsedAction Action => ParsedAction.Capping;
 
+		public override bool Cacheable => true;
+
 		public override TurtleData Compile(CancellationToken token) {
 			token.ThrowIfCancellationRequested();
 
@@ -22,7 +24,7 @@ namespace TurtleGraphics {
 			};
 		}
 
-		public override IList<TurtleData> CompileBlock(CancellationToken token) {
+		public override IList<TurtleData> CompileBlock(CancellationToken token, Dictionary<int, LineCacheData> cache) {
 			throw new NotImplementedException();
 		}
 	}

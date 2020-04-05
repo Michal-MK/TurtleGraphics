@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Flee.PublicTypes;
 
 namespace TurtleGraphics {
@@ -27,15 +28,15 @@ namespace TurtleGraphics {
 			throw new NotImplementedException();
 		}
 
-		public override IList<TurtleData> CompileBlock(CancellationToken token) {
-			List<TurtleData> ret = new List<TurtleData>(4096);
-			List<ParsedData> loopContents = CompileLoop();
+		public override IList<TurtleData> CompileBlock(CancellationToken token, Dictionary<int, LineCacheData> cache) {
+			List<TurtleData> ret = new List<TurtleData>();
+			List<ParsedData> loopContents = CompileLoop().Result;
 
-			ret.AddRange(CompileQueue(loopContents, token));
+			ret.AddRange(CompileQueue(loopContents, token, cache));
 			return ret;
 		}
 
-		private IEnumerable<TurtleData> CompileQueue(List<ParsedData> data, CancellationToken token) {
+		private IEnumerable<TurtleData> CompileQueue(List<ParsedData> data, CancellationToken token, Dictionary<int, LineCacheData> cache) {
 			List<TurtleData> interData = new List<TurtleData>();
 			ParsedData current;
 
@@ -56,19 +57,27 @@ namespace TurtleGraphics {
 					current = data[counter];
 
 					current.Variables[LoopVariable] = i;
-					foreach (var item in Variables) {
-						current.Variables[item.Key] = item.Value;
-					}
+					UpdateVars(current);
 
 					if (current.IsBlock) {
-						interData.AddRange(current.CompileBlock(token));
+						interData.AddRange(current.CompileBlock(token, cache));
 					}
 					else if (current is VariableData variableChange) {
 						current.UpdateVars(variableChange.Value);
 						Variables[variableChange.VariableName] = variableChange.Value.Evaluate();
 					}
 					else {
-						interData.Add(current.Compile(token));
+						if (cache.ContainsKey(current.LineHash)) {
+							interData.Add(cache[current.LineHash].CompiledData);
+						}
+						else {
+							TurtleData compiled = current.Compile(token);
+							if (current.Cacheable || CacheHelper.IsCacheable(current)) {
+								current.Cacheable = true;
+								cache.Add(current.LineHash, new LineCacheData(current, compiled));
+							}
+							interData.Add(compiled);
+						}
 					}
 				}
 			}
@@ -170,17 +179,22 @@ namespace TurtleGraphics {
 			return interData;
 		}
 
-		private List<ParsedData> CompileLoop() {
-			List<ParsedData> singleIteration = new List<ParsedData>();
 
-			Queue<ParsedData> data = CommandParser.Parse(
+		private List<ParsedData> parsedDataC;
+		private async Task<List<ParsedData>> CompileLoop() {
+			if (parsedDataC != null)
+				return parsedDataC;
+
+			parsedDataC = new List<ParsedData>();
+
+			Queue<ParsedData> data = await CommandParser.ParseAsync(
 				string.Join(Environment.NewLine, Lines),
 				CommandParser.Window,
 				Helpers.Join(Variables, new Dictionary<string, object> { { LoopVariable, 0 } }));
 
-			singleIteration.AddRange(data);
+			parsedDataC.AddRange(data);
 
-			return singleIteration;
+			return parsedDataC;
 		}
 	}
 }

@@ -71,6 +71,8 @@ namespace TurtleGraphics {
 			else if (Parameters.Length == 4) {
 				ExpressionContext c = contextCache ?? (contextCache = FleeHelper.GetExpression(Variables));
 
+				UpdateVars(c);
+
 				try {
 					byte a = Convert.ToByte(c.CompileGeneric<double>(Arg1).Evaluate());
 					byte r = Convert.ToByte(c.CompileGeneric<double>(Arg2).Evaluate());

@@ -261,9 +261,10 @@ namespace TurtleGraphics {
 				}
 				ImgSource = null;
 				StopCommand.Execute(null);
-				RemoveAllPaths();
+				Init();
 				UpdateLayout();
 				ToggleFullScreenAction();
+				
 			}
 
 			if (e.KeyboardDevice.Modifiers == (ModifierKeys.Control | ModifierKeys.Alt) && e.Key == Key.C) {
@@ -562,6 +563,7 @@ namespace TurtleGraphics {
 		#region Actions
 
 		private async Task RunCommandAction() {
+			if (!NoWindowsActive) return;
 			_compilationStatus.Start();
 			ToggleFullscreenEnabled = false;
 			Init();

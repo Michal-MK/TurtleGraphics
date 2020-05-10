@@ -18,6 +18,10 @@ namespace TurtleGraphics {
 		public override TurtleData Compile(CancellationToken token) {
 			token.ThrowIfCancellationRequested();
 
+			if (!new List<string>(Enum.GetNames(typeof(PenLineCap))).Contains(Arg1)) {
+				throw new ParsingException("Invalid Brush cap, Expected one of: " + string.Join(", ", Enum.GetNames(typeof(PenLineCap))), Line);
+			}
+
 			return new TurtleData {
 				Action = Action,
 				LineCap = (PenLineCap)Enum.Parse(typeof(PenLineCap), Arg1),

@@ -33,6 +33,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Igor.Controls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Igor.Controls.1.0.6\lib\Igor.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Igor.Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Igor.Localization.1.0.0\lib\netstandard2.0\Igor.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Igor.Models, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Igor.Models.1.0.1\lib\netstandard2.0\Igor.Models.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -57,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TurtleGraphics\TurtleGraphics.csproj">

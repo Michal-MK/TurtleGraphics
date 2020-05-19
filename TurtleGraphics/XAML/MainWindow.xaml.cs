@@ -103,20 +103,20 @@ namespace TurtleGraphics {
 		#region Language
 
 		public class Lang {
-			public string Main_WindowName => LocaleProvider.Instance.Get(Locale.MAIN__WINDOW_NAME);
-			public string Main_Angle => LocaleProvider.Instance.Get(Locale.MAIN__ANGLE);
-			public string Main_AnimatePath => LocaleProvider.Instance.Get(Locale.MAIN__ANIMATE_PATH);
-			public string Main_BackgroundCol => LocaleProvider.Instance.Get(Locale.MAIN__BACKGROUND_COL);
-			public string Main_PathAnimSpeed => LocaleProvider.Instance.Get(Locale.MAIN__PATH_ANIM_SPEED);
-			public string Main_ToggleControlPanel => LocaleProvider.Instance.Get(Locale.MAIN__TOGGLE_CONTROL_PANEL);
-			public string Main_TurtleSpeed => LocaleProvider.Instance.Get(Locale.MAIN__TURTLE_SPEED);
-			public string Main_ShowTurtle => LocaleProvider.Instance.Get(Locale.MAIN__SHOW_TURTLE);
-			public string GenericLoad => LocaleProvider.Instance.Get(Locale.GENERIC_LOAD);
-			public string GenericSave => LocaleProvider.Instance.Get(Locale.GENERIC_SAVE);
-			public string Main_RunFullscreen => LocaleProvider.Instance.Get(Locale.MAIN__RUN_FULLSCREEN) + " (Ctrl + F5)";
-			public string Main_Settings => LocaleProvider.Instance.Get(Locale.MAIN__SETTINGS);
-			public string GenericRun => LocaleProvider.Instance.Get(Locale.GENERIC_RUN) + " (F5)";
-			public string GenericStop => LocaleProvider.Instance.Get(Locale.GENERIC_STOP) + " (F5)";
+			public string Main_WindowName => LocaleProvider.Instance.Get(Locale.Main.WINDOW_NAME);
+			public string Main_Angle => LocaleProvider.Instance.Get(Locale.Main.ANGLE);
+			public string Main_AnimatePath => LocaleProvider.Instance.Get(Locale.Main.ANIMATE_PATH);
+			public string Main_BackgroundCol => LocaleProvider.Instance.Get(Locale.Main.BACKGROUND_COL);
+			public string Main_PathAnimSpeed => LocaleProvider.Instance.Get(Locale.Main.PATH_ANIM_SPEED);
+			public string Main_ToggleControlPanel => LocaleProvider.Instance.Get(Locale.Main.TOGGLE_CONTROL_PANEL);
+			public string Main_TurtleSpeed => LocaleProvider.Instance.Get(Locale.Main.TURTLE_SPEED);
+			public string Main_ShowTurtle => LocaleProvider.Instance.Get(Locale.Main.SHOW_TURTLE);
+			public string GenericLoad => LocaleProvider.Instance.Get(Locale.Base.GENERIC_LOAD);
+			public string GenericSave => LocaleProvider.Instance.Get(Locale.Base.GENERIC_SAVE);
+			public string Main_RunFullscreen => LocaleProvider.Instance.Get(Locale.Main.RUN_FULLSCREEN) + " (Ctrl + F5)";
+			public string Main_Settings => LocaleProvider.Instance.Get(Locale.Main.SETTINGS);
+			public string GenericRun => LocaleProvider.Instance.Get(Locale.Base.GENERIC_RUN) + " (F5)";
+			public string GenericStop => LocaleProvider.Instance.Get(Locale.Base.GENERIC_STOP) + " (F5)";
 		}
 
 		public Lang L { get; } = new Lang();
@@ -274,7 +274,9 @@ namespace TurtleGraphics {
 					using (MemoryStream ms = CaptureScreenshot(actualWidth, actualHeight)) {
 						bitmap = (System.Drawing.Bitmap)System.Drawing.Image.FromStream(ms);
 					}
-					bitmap.Save(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "ScreenCapture.png"), System.Drawing.Imaging.ImageFormat.Png);
+					string fileName = $"ScreenCapture {DateTime.Now.ToString("dd-MM-yyyy hh_mm_ss")}.png";
+					string path = System.IO.Path.Combine(App.Instance.Cfg.CurrentSettings.ScreenshotSaveLocation, fileName);
+					bitmap.Save(path, System.Drawing.Imaging.ImageFormat.Png);
 				}
 			}
 		}
@@ -515,7 +517,9 @@ namespace TurtleGraphics {
 					}
 					case ParsedAction.ScreenCapture: {
 						if (IsFullscreen && !ControlPanelHolderVisible) {
+							await Task.Delay(10);
 							Capture();
+							await Task.Delay(10);
 						}
 						break;
 					}
@@ -709,7 +713,7 @@ namespace TurtleGraphics {
 			void SettingsClosed(object sender, EventArgs e) {
 				s.Closed -= SettingsClosed;
 				IsEnabled = true;
-				BringIntoView();
+				Focus();
 				App.Instance.Cfg.Save();
 			}
 		}

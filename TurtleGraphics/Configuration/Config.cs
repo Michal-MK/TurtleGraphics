@@ -1,4 +1,5 @@
 ﻿using Igor.Configuration;
+using System;
 
 namespace TurtleGraphics {
 	public class Config : IConfiguration {
@@ -6,5 +7,7 @@ namespace TurtleGraphics {
 
 		[Comment("Selected UI language")]
 		public string ActiveLanguage { get; set; } = "en-us";
+
+		public string ScreenshotSaveLocation { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 	}
 }

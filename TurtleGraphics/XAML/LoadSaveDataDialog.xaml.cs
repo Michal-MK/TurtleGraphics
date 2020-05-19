@@ -24,8 +24,8 @@ namespace TurtleGraphics {
 
 		#endregion
 
-		public string GenericCancel => LocaleProvider.Instance.Get(Locale.GENERIC_CANCEL);
-		public string GenericLoad => LocaleProvider.Instance.Get(Locale.GENERIC_LOAD);
+		public string GenericCancel => LocaleProvider.Instance.Get(Locale.Base.GENERIC_CANCEL);
+		public string GenericLoad => LocaleProvider.Instance.Get(Locale.Base.GENERIC_LOAD);
 
 		public LoadSaveDataDialog() {
 			InitializeComponent();

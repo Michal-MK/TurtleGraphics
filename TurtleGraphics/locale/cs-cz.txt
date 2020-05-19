@@ -1,9 +1,19 @@
 ﻿/Čeština
-41051367:Sestavuji...
-5665650:Zrušit
+
+#Generic
+-1:Zpět
+-6:Zrušit
+
+#Base
 70725580:Načíst
-84416465:Jméno skeče:
 27899898:Uložit
+80317709:Start
+59860665:Stop
+53628749:Zvolit
+
+#Main
+30044441:Nastavení
+41051367:Sestavuji...
 97182944:Úhel:
 83399757:Barva Pozadí:
 82349694:Animovat Cestu
@@ -13,14 +23,18 @@
 47297997:Želví Grafika
 36001163:Zobrazovat Želvu
 2417883:Spustit na celé obrazovce
-30044441:Nastavení
-80317709:Start
-59860665:Stop
+
+#Saves
+84416465:Jméno skeče:
+
+#Settings
 18137498:Jazyk
-53128316:Zpět
+68529572:pouze v režimu celé obrazovky
+35119719:Tipy:
+66335844:Ukládat obrázky do:
+
+#Exception
 93144682:Chyba čtení kódu!
 79452378:Zpráva:
 73815551:Stav zásobníku:
 51656026:Opravím to!
-35119719:Tipy:
-68529572:pouze v režimu celé obrazovky

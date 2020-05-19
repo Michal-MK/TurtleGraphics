@@ -31,7 +31,7 @@ namespace TurtleGraphics {
 		}
 
 
-		public string Status => LocaleProvider.Instance.Get(Locale.COMP_STATUS__COMPILING);
+		public string Status => LocaleProvider.Instance.Get(Locale.Main.COMPILING);
 
 		public bool Rotate { get; set; } = true;
 

@@ -1,9 +1,19 @@
 ﻿/English
-41051367:Compiling...
-5665650:Cancel
+
+#Generic
+-1:Back
+-6:Cancel
+
+#Base
 70725580:Load
-84416465:Sketch name:
 27899898:Save
+80317709:Start
+59860665:Stop
+53628749:Select
+
+#Main
+30044441:Settings
+41051367:Compiling...
 97182944:Angle:
 83399757:Background Color:
 82349694:Animate Path
@@ -13,14 +23,18 @@
 47297997:Turtle Graphics
 36001163:Show Turtle
 2417883:Run in fullscreen mode
-30044441:Settings
-80317709:Start
-59860665:Stop
+
+#Saves
+84416465:Sketch name:
+
+#Settings
 18137498:Language
-53128316:Back
+68529572:only in full-screen mode
+35119719:Tips:
+66335844:Save screenshots to:
+
+#Exception
 93144682:An exception occured!
 79452378:Message:
 73815551:Stack trace:
 51656026:I'll do better!
-35119719:Tips:
-68529572:only in full-screen mode

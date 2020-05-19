@@ -5,10 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TurtleGraphics"
         mc:Ignorable="d"
+		d:DataContext="{d:DesignInstance Type=local:Settings}"
         Title="Settings" MinHeight="450" Height="450" MinWidth="800" Width="800">
-	<d:Window.DataContext>
-		<local:Settings/>
-	</d:Window.DataContext>
 
 	<Grid Margin="5">
 		<Grid.ColumnDefinitions>
@@ -24,7 +22,7 @@
 					<RowDefinition/>
 				</Grid.RowDefinitions>
 
-				<TextBlock Text="{Binding L.Sett_AvailableLanguages, FallbackValue='Language'}" HorizontalAlignment="Center"/>
+				<TextBlock Text="{Binding L.AvailableLanguages, FallbackValue='Language'}" HorizontalAlignment="Center"/>
 				<ListBox ItemsSource="{Binding Languages}"
 				 BorderThickness="0"
 				 ItemContainerStyle="{StaticResource SeamlessNoHighlight}" Grid.Row="1">
@@ -46,14 +44,26 @@
 					<RowDefinition Height="8*"/>
 					<RowDefinition Height="2*"/>
 				</Grid.RowDefinitions>
-				<TextBlock Text="WIP" FontSize="90" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Comic Sans MS"/>
+				<StackPanel Margin="5">
+					<DockPanel LastChildFill="true">
+						<TextBlock Text="{Binding L.ScreenshotSaveLocation, FallbackValue='Screenshot save location'}"
+								   FontFamily="Comic Sans MS" FontWeight="Bold" DockPanel.Dock="Left" Margin="0 0 5 0"
+								   VerticalAlignment="Center"/>
+						<Button Content="{Binding L.GenericSelect, FallbackValue='Select'}"
+								Command="{Binding SelectScreenshotLocationCommand}" Padding="4 2" DockPanel.Dock="Right"/>
+						<Border DockPanel.Dock="Left" BorderThickness="0 0 0 2" BorderBrush="Gray" Margin="0 0 5 0">
+							<TextBlock Text="{Binding ScreenshotSaveLocation, FallbackValue='C:\\Users\\TestUser\\TurtleGraphicsImages'}"
+									   TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+						</Border>
+					</DockPanel>
+				</StackPanel>
 
 				<StackPanel Grid.Row="1" Margin="5">
-					<Label Content="{Binding L.Sett_TipsLabel, FallbackValue='Tips:'}" FontFamily="Comic Sans MS" FontSize="20" />
+					<Label Content="{Binding L.TipsLabel, FallbackValue='Tips:'}" FontFamily="Comic Sans MS" FontSize="20" />
 					<TextBlock>
 						<Run Text="Screenshot:" FontWeight="Medium"/>
 						<Run Text="'Ctrl" FontWeight="Bold"/><Run Text="+"/><Run Text="Alt" FontWeight="Bold"/><Run Text="+"/><Run Text="C'" FontWeight="Bold"/>
-						<Run Text="{Binding L.Sett_ScreenshotNote, FallbackValue='note...', Mode=OneTime}"/>
+						<Run Text="{Binding L.ScreenshotNote, FallbackValue='note...', Mode=OneTime}"/>
 					</TextBlock>
 				</StackPanel>
 			</Grid>

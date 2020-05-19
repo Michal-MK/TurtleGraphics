@@ -61,10 +61,10 @@ namespace TurtleGraphics {
 		}
 
 		public class Lang {
-			public string Except_Header => LocaleProvider.Instance.Get(Locale.EXCEPT__HEADER);
-			public string Except_MessageLabel => LocaleProvider.Instance.Get(Locale.EXCEPT__MESSAGE_LABEL);
-			public string Except_StackTraceLabel => LocaleProvider.Instance.Get(Locale.EXCEPT__STACK_TRACE_LABEL);
-			public string Except_ButtonLabel => LocaleProvider.Instance.Get(Locale.EXCEPT__BUTTON_LABEL);
+			public string Except_Header => LocaleProvider.Instance.Get(Locale.ExceptionDisplay.HEADER);
+			public string Except_MessageLabel => LocaleProvider.Instance.Get(Locale.ExceptionDisplay.MESSAGE_LABEL);
+			public string Except_StackTraceLabel => LocaleProvider.Instance.Get(Locale.ExceptionDisplay.STACK_TRACE_LABEL);
+			public string Except_ButtonLabel => LocaleProvider.Instance.Get(Locale.ExceptionDisplay.BUTTON_LABEL);
 		}
 
 		public Lang L { get; } = new Lang();

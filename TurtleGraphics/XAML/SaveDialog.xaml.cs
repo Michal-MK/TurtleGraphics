@@ -20,9 +20,9 @@ namespace TurtleGraphics {
 
 		#endregion
 
-		public string Save_Name => LocaleProvider.Instance.Get(Locale.SAVE__NAME);
-		public string GenericSave => LocaleProvider.Instance.Get(Locale.GENERIC_SAVE);
-		public string GenericCancel => LocaleProvider.Instance.Get(Locale.GENERIC_CANCEL);
+		public string Save_Name => LocaleProvider.Instance.Get(Locale.Saves.NAME);
+		public string GenericSave => LocaleProvider.Instance.Get(Locale.Base.GENERIC_SAVE);
+		public string GenericCancel => LocaleProvider.Instance.Get(Locale.Base.GENERIC_CANCEL);
 
 		public SaveDialog() {
 			InitializeComponent();
@@ -45,8 +45,6 @@ namespace TurtleGraphics {
 			MainWindow.Instance.Paths.Children.Remove(this);
 			MainWindow.Instance.SaveDialogActive = false;
 		}
-
-		private bool _showTurtleBck;
 
 		private ICommand _saveCommand;
 		private string _saveFileName;

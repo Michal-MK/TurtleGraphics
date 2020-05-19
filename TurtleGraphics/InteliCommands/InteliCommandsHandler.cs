@@ -112,6 +112,10 @@ namespace TurtleGraphics {
 								inputControl.CaretIndex = carret - difference;
 							}
 						}
+						else {
+							window.InteliCommandsText = newText;
+							window.CommandsText = newText;
+						}
 					}
 					else {
 						window.InteliCommandsText = newText;

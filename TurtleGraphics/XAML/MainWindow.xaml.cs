@@ -265,7 +265,6 @@ namespace TurtleGraphics {
 				Init();
 				UpdateLayout();
 				ToggleFullScreenAction();
-				
 			}
 
 			if (e.KeyboardDevice.Modifiers == (ModifierKeys.Control | ModifierKeys.Alt) && e.Key == Key.C) {
@@ -375,24 +374,18 @@ namespace TurtleGraphics {
 			Paths.Children.Add(_currentPath);
 		}
 
-		private async Task Capture() {
+		private void Capture() {
 			var (actualWidth, actualHeight) = GetActualScreenSize();
-
-			await Task.Run(() => {
-				using (MemoryStream ms = CaptureScreenshot(actualWidth, actualHeight)) {
-					var i = new BitmapImage();
-					i.BeginInit();
-					i.CacheOption = BitmapCacheOption.OnLoad;
-					i.StreamSource = ms;
-					i.EndInit();
-					i.Freeze();
-					Dispatcher.Invoke(() => {
-						ImgSource = i;
-						const int OFFSET = 3;
-						Paths.Children.RemoveRange(OFFSET, Paths.Children.Count - OFFSET - 80);
-					});
-				}
-			});
+			using (MemoryStream ms = CaptureScreenshot(actualWidth, actualHeight)) {
+				BitmapImage i = new BitmapImage();
+				i.BeginInit();
+				i.CacheOption = BitmapCacheOption.OnLoad;
+				i.StreamSource = ms;
+				i.EndInit();
+				i.Freeze();
+				ImgSource = i;
+				Paths.Children.RemoveRange(4, Paths.Children.Count - 5);
+			}
 		}
 
 		private MemoryStream CaptureScreenshot(int width, int height) {
@@ -522,7 +515,7 @@ namespace TurtleGraphics {
 					}
 					case ParsedAction.ScreenCapture: {
 						if (IsFullscreen && !ControlPanelHolderVisible) {
-							await Capture();
+							Capture();
 						}
 						break;
 					}
@@ -575,6 +568,9 @@ namespace TurtleGraphics {
 				FSSManager.CreateCodeBackup(CommandsText);
 				Queue<ParsedData> tasks = CommandParser.ParseCommands(CommandsText, this);
 				List<TurtleData> compiledTasks = await CompileTasks(tasks, cancellationTokenSource.Token);
+				if (ShowTurtleCheckBox) {
+					ShowTurtleCheckBox = compiledTasks.Where(w => w.Action == ParsedAction.ScreenCapture).Count() == 0;
+				}
 				_compilationStatus.Stop();
 				Stopwatch s = new Stopwatch();
 				s.Start();

@@ -104,7 +104,7 @@
 						  ResizeDirection="Columns"
 						  Background="Firebrick"/>
 
-			<Image Grid.Column="1" Source="{Binding ImgSource}"/>
+			<Image Grid.Column="2" Source="{Binding ImgSource}"/>
 
 			<Grid Grid.Column="1" SizeChanged="Grid_SizeChanged" Panel.ZIndex="1">
 

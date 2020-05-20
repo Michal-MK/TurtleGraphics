@@ -1,8 +1,8 @@
 ﻿HowTo
 
-The symbol '_' means the value is optional!
-Text inside '[]' means 'one of'!
-Text inside '{}' means replace with the requested value (including the brackets)
+//The symbol '_' means the value is optional!
+//Text inside '[]' means 'one of'!
+//Text inside '{}' means replace with the requested value (including the brackets)
 
 // Moves the turtle forward by p pixels {int}
 //Forward(p);

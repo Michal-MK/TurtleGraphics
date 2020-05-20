@@ -56,7 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code.cs" />
-    <Compile Include="LSystem2.cs" />
     <Compile Include="Rules\Base\IRule.cs" />
     <Compile Include="LSystem.cs" />
     <Compile Include="Program.cs" />

@@ -38,3 +38,6 @@
 79452378:Zpráva:
 73815551:Stav zásobníku:
 51656026:Opravím to!
+
+#ForLoop
+47184795:Pojmenujte proměnnou...

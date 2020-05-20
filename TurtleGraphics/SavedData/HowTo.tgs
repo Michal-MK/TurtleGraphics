@@ -1,37 +1,40 @@
 ﻿HowTo
-// Moves the turtle forward by p pixels
-//Forward(int p);
 
-// Rotates the turtle by 'a' degrees, optionally a boolean value can be provided to snap to the angle instead of an addition
-//Rotate(int{deg} a, bool _);
+The symbol '_' means the value is optional!
+Text inside '[]' means 'one of'!
+Text inside '{}' means replace with the requested value (including the brackets)
 
-// Moves the turtle to specified 'x','y' coordinates
-//MoveTo(int x, int y);
+// Moves the turtle forward by p pixels {int}
+//Forward(p);
 
-// Draws while moving the turtle to the provided 'x' and 'y' coordinates
-//DrawTo(int x, int y);
+// Rotates the turtle by 'a' degrees, optionally a boolean value can be provided to snap to the angle instead of an addition {int(Degrees), bool}
+//Rotate(a, _);
+
+// Moves the turtle to specified 'x','y' coordinates {int, int}
+//MoveTo(x, y);
 
 // Sets pen color
-// 1) a string formatted as "#xxxxxx" where each pair of x-es represents a hex value
-// 2) a byte value for each color channel
+// 1) a string formatted as "#xxxxxx" where each pair of x-es represents a hex value {string(Hexadeciaml)}
+// 2) a byte value for each color channel {byte, byte, byte}
 // 3) a literal color name, see https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.brushes?view=netframework-4.8
-// 4) a byte value for each color channel where the first one represents alpha/transparency
-//SetColor(string{hex} c);
-//SetColor(byte r, byte g, byte b);
-//SetColor(string{literal} c);
-//SetColor(byte a, byte r, byte g, byte b);
+// 4) a byte value for each color channel where the first one represents alpha/transparency {byte, byte, byte, byte}
+//SetColor(c);
+//SetColor(r, g, b);
+//SetColor(c);
+//SetColor(a, r, g, b);
 
-// Sets pen size in 's' pixels
-//SetBrushSize(int s);
+// Sets pen size in 's' pixels {int}
+//SetBrushSize(s);
 
-// Sets the line ending style to one of listed below
-//SetLineCapping(Capping{Flat|Round|Triangle|Square} c);
+// Sets the line ending style to one of listed below [Flat, Round, Triangle, Square]
+//SetLineCapping(capping);
 
 // Stores turtle's position and angle into memory
 //StoreTurtlePosition();
 
 // Non-destructively restores turtle's position and angle, optionally a boolean value can be provided so that the operation becomes destructive ie. forgets the stored information
-//RestoreTurtlePosition(bool _);
+// Is such case restoring while no history exists is destructive to the application ;) {bool}
+//RestoreTurtlePosition(_);
 
 // Makes the turtle stop drawing when moving
 //PenUp();
@@ -40,23 +43,23 @@
 //PenDown();
 
 // Captures the screen and removes all drawn lines, then applies the screenshot as a background.
-// This is meant for optimization
+// This is meant for optimization, abusing this function may create drawing artifacts.
 //CaptureScreenshot();
 
 // Cycles
 //  For Loop:
-//    for([int,long] {var_n} = {initial_value}; {var_n} [<,>,<=,>=] {some_value_of_equal_type}; {var_n}[++,--,+={some_value_of_equal_type},-={some_value_of_equal_type}]) {
+//    for([int,long] {var_name} = {initial_value}; {var_name} [<,>,<=,>=] {some_value_of_equal_type}; {var_name}[++,--,+={some_value_of_equal_type},-={some_value_of_equal_type}]) {
 //        Code to repeat here.
 //    }
 
 
 // Conditions
 //  If:
-//   if([true,false]) {
+//   if({condition_evaluating_to_boolean}) {
 //       Code to execute.
 //   }
 //  If/else:
-//   if([true,false]) {
+//   if({condition_evaluating_to_boolean}) {
 //       Code to execute.
 //   }
 //   else {
@@ -65,12 +68,12 @@
 
 // Variables:
 //  Global - readonly:
-//    Height = {Height of the drawing canvas}
-//    Width = {Width of the drawing canvas}
+//    Height = Height of the drawing canvas {int/double}
+//    Width = Width of the drawing canvas {int/double}
 //  Local:
 //    The for loop iteration variable - read only
 //  Custom:
-//    {variable_type} {variable_name} = {variable_value};
+//    [variable_type] {variable_name} = {variable_value_of_variable_type};
 //
 //    Supported Types: int, long (but work the same)
 //  Non-read only:

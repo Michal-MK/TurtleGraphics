@@ -263,4 +263,11 @@
 			</Trigger>
 		</Style.Triggers>
 	</Style>
+
+	<Style TargetType="Window" x:Key="BorderLess">
+		<Setter Property="WindowStyle" Value="None"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="BorderBrush" Value="DarkGray"/>
+	</Style>
+	
 </ResourceDictionary>

@@ -9,7 +9,7 @@ namespace TurtleGraphics {
 
 		#region InteliCommands
 		private readonly Dictionary<string, string> _inteliCommands = new Dictionary<string, string> {
-			{ "for", " (int i = 0; i < ; i++) {" + Environment.NewLine + "{0}" + Environment.NewLine + "{1}" + "}" },
+			{ "for", " (int _ = 0; _ < ; _++) {" + Environment.NewLine + "{0}" + Environment.NewLine + "{1}" + "}" },
 			{ "if", " () {" + Environment.NewLine + "{0}" +  Environment.NewLine + "{1}" + "}" },
 			{ "R", "otate();" },
 			{ "M", "oveTo();" },
@@ -40,23 +40,29 @@ namespace TurtleGraphics {
 			{ "Ca", 18 }
 		};
 
+		private readonly Dictionary<string, Func<string, int, int, ModificationData>> _inteliCommandModifications;
+
+
+		public InteliCommandsHandler() {
+			_inteliCommandModifications = new Dictionary<string, Func<string, int, int, ModificationData>> {
+				{ "for", ForLoopVariableName }
+			};
+		}
+
 		public string GetInteliCommand(string value) {
-			foreach (string key in _inteliCommands.Keys) {
-				if (value == key) {
-					return value + _inteliCommands[key];
-				}
+			if (_inteliCommands.ContainsKey(value)) {
+				return value + _inteliCommands[value];
 			}
 			return value;
 		}
 
 		public int GetIndexForCaret(string value) {
-			foreach (string key in _inteliCommands.Keys) {
-				if (value == key) {
-					return value.Length + _inteliCommandsIndexes[key];
-				}
+			if (_inteliCommands.ContainsKey(value)) {
+				return value.Length + _inteliCommandsIndexes[value];
 			}
 			throw new NotImplementedException();
 		}
+
 		#endregion
 
 		public InteliCommandsState State { get; set; } = InteliCommandsState.Normal;
@@ -130,10 +136,20 @@ namespace TurtleGraphics {
 
 				if (lastChar > 0 && inputControl.SelectionLength == 0 && newText[lastChar] == '\t' && carret == _addedLinesIndex + 1) {
 					_ignoreEvent = true;
-					window.CommandsText = window.InteliCommandsText;
-					_ignoreEvent = true;
-					int carretIndexOffset = GetIndexForCaret(_triggerCommand);
-					inputControl.CaretIndex = lastChar - _triggerCommand.Length + carretIndexOffset;
+
+					if (_inteliCommandModifications.ContainsKey(_triggerCommand)) {
+						ModificationData data = _inteliCommandModifications[_triggerCommand](window.InteliCommandsText, carret, window.InteliCommandsText.Length - window.CommandsText.Length);
+						window.CommandsText = data.Text;
+						_ignoreEvent = true;
+						int carretIndexOffset = GetIndexForCaret(_triggerCommand) + (-1 + data.InputLength);
+						inputControl.CaretIndex = lastChar - _triggerCommand.Length + carretIndexOffset;
+					}
+					else {
+						window.CommandsText = window.InteliCommandsText;
+						_ignoreEvent = true;
+						int carretIndexOffset = GetIndexForCaret(_triggerCommand);
+						inputControl.CaretIndex = lastChar - _triggerCommand.Length + carretIndexOffset;
+					}
 				}
 				else {
 					if (lastChar < 0) {
@@ -228,6 +244,22 @@ namespace TurtleGraphics {
 				return true;
 			}
 			return false;
+		}
+
+		public ModificationData ForLoopVariableName(string str, int start, int count) {
+			ForLoopVarNameDialog d = new ForLoopVarNameDialog();
+			d.Owner = MainWindow.Instance;
+			d.VarName = "i";
+			bool? res = d.ShowDialog();
+
+			string s = str.Substring(0, start);
+			string m = str.Substring(start, count);
+			string l = str.Substring(start + count);
+
+			if (!res.HasValue || !res.Value) {
+				return new ModificationData(s + m.Replace("_", "i") + l, 1);
+			}
+			return new ModificationData(s + m.Replace("_", d.VarName) + l, d.VarName.Length == 1 ? 1 : (d.VarName.Length * 2) - 1);
 		}
 	}
 }

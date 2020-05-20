@@ -118,6 +118,10 @@
     <Compile Include="Exceptions\ParsingException.cs" />
     <Compile Include="Helpers\FleeHelper.cs" />
     <Compile Include="Models\LanguageButtonModel.cs" />
+    <Compile Include="Structs\ModificationData.cs" />
+    <Compile Include="XAML\ForLoopVarNameDialog.xaml.cs">
+      <DependentUpon>ForLoopVarNameDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="XAML\LoadDialogItem.xaml.cs">
       <DependentUpon>LoadDialogItem.xaml</DependentUpon>
     </Compile>
@@ -168,6 +172,10 @@
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
     <Page Include="StylesDict.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="XAML\ForLoopVarNameDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

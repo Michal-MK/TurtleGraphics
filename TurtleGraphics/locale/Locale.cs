@@ -41,5 +41,9 @@
 			public const int STACK_TRACE_LABEL = 73815551;
 			public const int BUTTON_LABEL = 51656026;
 		}
+
+		public class ForLoopVarName {
+			public const int HEADER = 47184795;
+		}
 	}
 }

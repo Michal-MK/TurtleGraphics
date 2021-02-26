@@ -69,13 +69,13 @@
       <HintPath>..\packages\Igor.Configuration.1.0.0\lib\netstandard2.0\Igor.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Igor.Controls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Igor.Controls.1.0.6\lib\Igor.Controls.dll</HintPath>
+      <HintPath>..\packages\Igor.Controls.1.0.9\lib\Igor.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="Igor.Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Igor.Localization.1.0.0\lib\netstandard2.0\Igor.Localization.dll</HintPath>
+    <Reference Include="Igor.Localization, Version=1.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Igor.Localization.1.2.3\lib\netstandard2.0\Igor.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="Igor.Models, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Igor.Models.1.0.1\lib\netstandard2.0\Igor.Models.dll</HintPath>
+    <Reference Include="Igor.Models, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Igor.Models.1.0.3\lib\netstandard2.0\Igor.Models.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAPICodePack-Core.1.1.0.0\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
@@ -117,10 +117,16 @@
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Exceptions\ParsingException.cs" />
     <Compile Include="Helpers\FleeHelper.cs" />
+    <Compile Include="Models\BaseViewModel.cs" />
+    <Compile Include="Models\InteliCommandData.cs" />
+    <Compile Include="Models\InteliCommandDialogViewModel.cs" />
     <Compile Include="Models\LanguageButtonModel.cs" />
     <Compile Include="Structs\ModificationData.cs" />
     <Compile Include="XAML\ForLoopVarNameDialog.xaml.cs">
       <DependentUpon>ForLoopVarNameDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="XAML\InteliCommandsDialog.xaml.cs">
+      <DependentUpon>InteliCommandsDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="XAML\LoadDialogItem.xaml.cs">
       <DependentUpon>LoadDialogItem.xaml</DependentUpon>
@@ -176,6 +182,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="XAML\ForLoopVarNameDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="XAML\InteliCommandsDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

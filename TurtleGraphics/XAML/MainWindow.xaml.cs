@@ -17,6 +17,7 @@ using Path = System.Windows.Shapes.Path;
 using Igor.Localization;
 using System.Windows.Interop;
 using Igor.Configuration;
+using TurtleGraphics.Models;
 
 namespace TurtleGraphics {
 	/// <summary>
@@ -65,7 +66,9 @@ namespace TurtleGraphics {
 		private bool _animatePath;
 		private ImageSource _imgSource;
 		private ICommand _settingsCommand;
+		private InteliCommandDialogViewModel _inteliCommandModel = new InteliCommandDialogViewModel();
 
+		public InteliCommandDialogViewModel InteliCommandModel { get => _inteliCommandModel; set { _inteliCommandModel = value; Notify(nameof(InteliCommandModel)); } }
 		public ICommand SettingsCommand { get => _settingsCommand; set { _settingsCommand = value; Notify(nameof(SettingsCommand)); } }
 		public ImageSource ImgSource { get => _imgSource; set { _imgSource = value; Notify(nameof(ImgSource)); } }
 		public bool AnimatePath { get => _animatePath; set { _animatePath = value; Notify(nameof(AnimatePath)); CalculationFramesPreUIUpdate = 1; } }
@@ -91,7 +94,7 @@ namespace TurtleGraphics {
 		public double Y { get => _y; set { _y = value; Notify(nameof(Y)); Notify(nameof(YStr)); } }
 		public double X { get => _x; set { _x = value; Notify(nameof(X)); Notify(nameof(XStr)); } }
 		public double Angle { get => _angle; set { _angle = value; Notify(nameof(Angle)); Notify(nameof(AngleStr)); } }
-		public string CommandsText { get => _commandsText; set { _commandsText = value; Notify(nameof(CommandsText)); } }
+		public string CommandsText { get => _commandsText; set { _commandsText = value; Notify(nameof(CommandsText)); InteliCommandModel.Handle(value, CommandsTextInput.CaretIndex); } }
 		public ICommand RunCommand { get => _runCommand; set { _runCommand = value; Notify(nameof(RunCommand)); } }
 		public Point StartPoint { get => _startPoint; set { _startPoint = value; Notify(nameof(StartPoint)); } }
 		public double BrushSize { get => _brushSize; set { if (value == _brushSize) return; _brushSize = value; NewPath(); Notify(nameof(BrushSize)); } }
@@ -169,6 +172,7 @@ namespace TurtleGraphics {
 
 			SizeChanged += MainWindow_SizeChanged;
 			CommandsTextInput.SelectionChanged += CommandsTextInput_SelectionChanged;
+			CommandsTextInput.PreviewKeyDown += InteliCommandModel.TextEvents;
 			CommandsTextInput.TextChanged += CommandsTextInput_TextChanged;
 
 			SetWindowState(App.Instance.LaunchFullScreen);

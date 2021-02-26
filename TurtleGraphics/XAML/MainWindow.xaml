@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TurtleGraphics"
+		xmlns:xaml="clr-namespace:TurtleGraphics.XAML"
         xmlns:controls="clr-namespace:Igor.Controls;assembly=Igor.Controls"
         mc:Ignorable="d"
         Title="{Binding L.Main_WindowName}">
@@ -17,6 +18,8 @@
 	</Window.Resources>
 	
 	<Grid>
+		<xaml:InteliCommandsDialog DataContext="{Binding InteliCommandModel}" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="200" MinHeight="200"/>
+
 		<Grid x:Name="Paths" Background="{Binding ElementName=BackgroundColor, Path=Text}">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*" x:Name="ControlArea"/>
@@ -99,7 +102,7 @@
 			</Grid>
 
 			<GridSplitter Grid.Column="1" Panel.ZIndex="2"
-						  Width="{Binding ElementName=SplitterCol, Path=Width}" 
+						  Width="{Binding ElementName=SplitterCol, Path=Width.Value}" 
 						  HorizontalAlignment="Stretch"
 						  ResizeDirection="Columns"
 						  Background="Firebrick"/>

@@ -18,8 +18,6 @@
 	</Window.Resources>
 	
 	<Grid>
-		<xaml:InteliCommandsDialog DataContext="{Binding InteliCommandModel}" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="200" MinHeight="200"/>
-
 		<Grid x:Name="Paths" Background="{Binding ElementName=BackgroundColor, Path=Text}">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*" x:Name="ControlArea"/>
@@ -30,7 +28,7 @@
 				<RowDefinition x:Name="DrawAreaY"/>
 			</Grid.RowDefinitions>
 
-			<Grid Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource mainColor}" Panel.ZIndex="2">
+			<Grid Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource mainColor}" Panel.ZIndex="2" SizeChanged="Control_SizeChanged">
 				<Grid.RowDefinitions>
 					<RowDefinition/>
 					<RowDefinition Height="auto"/>
@@ -130,5 +128,9 @@
 				</Image>
 			</Grid>
 		</Grid>
+
+		<Canvas>
+			<xaml:InteliCommandsDialog x:Name="CommandsView" DataContext="{Binding InteliCommandModel}"/>
+		</Canvas>
 	</Grid>
 </Window>

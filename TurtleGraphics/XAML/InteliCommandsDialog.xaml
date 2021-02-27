@@ -11,16 +11,27 @@
 	<UserControl.DataContext>
 		<local:InteliCommandDialogViewModel/>
 	</UserControl.DataContext>
-    <Grid>
+	<Grid>
 		<ListBox ItemsSource="{Binding Source}">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
-					<StackPanel Background="Beige" Orientation="Horizontal">
-						<TextBlock Text="{Binding Selected}" Margin="0 0 5 0"/>
+					<StackPanel Orientation="Horizontal">
 						<TextBlock Text="{Binding HintText}"/>
+						<StackPanel.Style>
+							<Style TargetType="StackPanel">
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding Selected}" Value="True">
+										<Setter Property="Background" Value="Yellow"/>
+									</DataTrigger>
+									<DataTrigger Binding="{Binding Selected}" Value="False">
+										<Setter Property="Background" Value="Beige"/>
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</StackPanel.Style>
 					</StackPanel>
 				</DataTemplate>
 			</ListBox.ItemTemplate>
 		</ListBox>
-    </Grid>
+	</Grid>
 </UserControl>

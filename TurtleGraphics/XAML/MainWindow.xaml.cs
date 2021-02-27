@@ -94,7 +94,21 @@ namespace TurtleGraphics {
 		public double Y { get => _y; set { _y = value; Notify(nameof(Y)); Notify(nameof(YStr)); } }
 		public double X { get => _x; set { _x = value; Notify(nameof(X)); Notify(nameof(XStr)); } }
 		public double Angle { get => _angle; set { _angle = value; Notify(nameof(Angle)); Notify(nameof(AngleStr)); } }
-		public string CommandsText { get => _commandsText; set { _commandsText = value; Notify(nameof(CommandsText)); InteliCommandModel.Handle(value, CommandsTextInput.CaretIndex); } }
+		public string CommandsText {
+			get => _commandsText;
+			set {
+				_commandsText = value; Notify(nameof(CommandsText));
+				InteliCommandModel.Handle(value, CommandsTextInput.CaretIndex);
+				if (CommandsTextInput.CaretIndex > 0 && CommandsTextInput.Text.Length >= CommandsTextInput.CaretIndex) {
+					Rect r = CommandsTextInput.GetRectFromCharacterIndex(CommandsTextInput.CaretIndex - 1);
+					Canvas.SetTop(CommandsView, r.Top + r.Height);
+					Canvas.SetLeft(CommandsView, 0);
+
+					CommandsView.Width = ControlArea.ActualWidth;
+					CommandsView.Height = 60;
+				}
+			}
+		}
 		public ICommand RunCommand { get => _runCommand; set { _runCommand = value; Notify(nameof(RunCommand)); } }
 		public Point StartPoint { get => _startPoint; set { _startPoint = value; Notify(nameof(StartPoint)); } }
 		public double BrushSize { get => _brushSize; set { if (value == _brushSize) return; _brushSize = value; NewPath(); Notify(nameof(BrushSize)); } }
@@ -257,6 +271,12 @@ namespace TurtleGraphics {
 			DrawHeight = DrawAreaY.ActualHeight;
 			TurtleTranslation.X = DrawWidth / 2;
 			TurtleTranslation.Y = DrawHeight / 2;
+		}
+
+		private void Control_SizeChanged(object sender, SizeChangedEventArgs e) {
+			if(InteliCommandModel.Visible == Visibility.Visible) {
+				CommandsView.Width = ControlArea.ActualWidth;
+			}
 		}
 
 		private void MainWindow_KeyDown(object sender, KeyEventArgs e) {

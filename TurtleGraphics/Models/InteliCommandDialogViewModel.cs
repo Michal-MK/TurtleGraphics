@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows;
@@ -17,13 +18,22 @@ namespace TurtleGraphics.Models {
 		public ObservableCollection<InteliCommandData> Source { get => _source; set { _source = value; Notify(nameof(Source)); } }
 
 
+		private readonly string[] _inteliCommands = new string[] {
+			"Rotate();" ,
+			"MoveTo();" ,
+			"Forward();" ,
+			"PenUp();" ,
+			"PenDown();" ,
+			"SetBrushSize();" ,
+			"SetColor();" ,
+			"SetLineCapping();" ,
+			"StoreTurtlePosition();" ,
+			"RestoreTurtlePosition();" ,
+			"CaptureScreenshot();" ,
+		};
+
 		public InteliCommandDialogViewModel() {
-			Source = new ObservableCollection<InteliCommandData> {
-				new InteliCommandData("Hello World", "!"),
-				new InteliCommandData("Some text", " I want to add"),
-				new InteliCommandData("Hi!", " How are You?"),
-				new InteliCommandData("The Last Prism", " is a Weapon!")
-			};
+			Source = new ObservableCollection<InteliCommandData>();
 		}
 
 		Random tmp = new Random();
@@ -43,16 +53,17 @@ namespace TurtleGraphics.Models {
 				}
 				string fullWord = GetFullWord(value, caretPos - 1);
 				Source.Clear();
-				Visible = Visibility.Visible;
-				for (int i = 0; i < tmp.Next(2, 6); i++) {
-					StringBuilder suffix = new StringBuilder();
-					for (int j = 0; j < tmp.Next(5, 10); j++) {
-						suffix.Append((char)tmp.Next(65, 80));
+				for (int i = 0; i < _inteliCommands.Length; i++) {
+					if (_inteliCommands[i].StartsWith(fullWord) && _inteliCommands[i].Length != fullWord.Length) {
+						string suffix = _inteliCommands[i].Remove(0, fullWord.Length);
+						Source.Add(new InteliCommandData(fullWord + suffix.ToString(), suffix.ToString()));
 					}
-					Source.Add(new InteliCommandData(fullWord + suffix.ToString(), suffix.ToString()));
 				}
-				SelectedIndex = 0;
-				Source[SelectedIndex].Selected = true;
+				if (Source.Count > 0) {
+					Visible = Visibility.Visible;
+					SelectedIndex = 0;
+					Source[SelectedIndex].Selected = true;
+				}
 			}
 			else {
 				Source.Clear();
@@ -75,21 +86,21 @@ namespace TurtleGraphics.Models {
 					e.Handled = true;
 					Visible = Visibility.Collapsed;
 				}
-				if(e.Key == Key.Up) {
+				if (e.Key == Key.Up) {
 					e.Handled = true;
 					Source[SelectedIndex].Selected = false;
 					SelectedIndex--;
 					SelectedIndex = Mod(SelectedIndex, Source.Count);
 					Source[SelectedIndex].Selected = true;
 				}
-				if(e.Key == Key.Down) {
+				if (e.Key == Key.Down) {
 					e.Handled = true;
 					Source[SelectedIndex].Selected = false;
 					SelectedIndex++;
 					SelectedIndex = Mod(SelectedIndex, Source.Count);
 					Source[SelectedIndex].Selected = true;
 				}
-				if(e.Key == Key.Enter || e.Key == Key.Return || e.Key == Key.Tab) {
+				if (e.Key == Key.Enter || e.Key == Key.Return || e.Key == Key.Tab) {
 					e.Handled = true;
 					TextBox t = (sender as TextBox);
 					int carret = t.CaretIndex;

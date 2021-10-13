@@ -1,4 +1,5 @@
 .vs
+.idea
 *.user
 Library
 obj
@@ -8,6 +9,7 @@ packages/Flee*
 packages/System.*
 packages/*Fody*
 packages/Microsoft*
+packages/Aspect*
 
 #Implementations
 Bezanyi*

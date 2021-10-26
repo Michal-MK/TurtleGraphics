@@ -1,7 +1,9 @@
 ﻿namespace TurtleGraphics {
 	public class Locale {
 
-		public class Base : Igor.Localization.Locale {
+		public class Base {
+			public const int GENERIC_BACK = -1;
+			public const int GENERIC_CANCEL = -6;
 			public const int GENERIC_LOAD = 70725580;
 			public const int GENERIC_SAVE = 27899898;
 			public const int GENERIC_RUN = 80317709;

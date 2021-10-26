@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,35 +6,27 @@ using System.Windows.Input;
 
 namespace TurtleGraphics.Models {
 	public class InteliCommandDialogViewModel : BaseViewModel {
-
-		private ObservableCollection<InteliCommandData> _source;
-		private Visibility _visible;
-		private int _selectedIndex;
-
-		public int SelectedIndex { get => _selectedIndex; set { _selectedIndex = value; Notify(nameof(SelectedIndex)); } }
-		public Visibility Visible { get => _visible; set { _visible = value; Notify(nameof(Visible)); } }
-		public ObservableCollection<InteliCommandData> Source { get => _source; set { _source = value; Notify(nameof(Source)); } }
-
+		[Notify] public int SelectedIndex { get; set; }
+		[Notify] public Visibility Visible { get; set; }
+		[Notify] public ObservableCollection<InteliCommandData> Source { get; set; }
 
 		private readonly string[] _inteliCommands = new string[] {
-			"Rotate();" ,
-			"MoveTo();" ,
-			"Forward();" ,
-			"PenUp();" ,
-			"PenDown();" ,
-			"SetBrushSize();" ,
-			"SetColor();" ,
-			"SetLineCapping();" ,
-			"StoreTurtlePosition();" ,
-			"RestoreTurtlePosition();" ,
-			"CaptureScreenshot();" ,
+			"Rotate({0:double});",
+			"MoveTo({0:double}, {1:double});",
+			"Forward({0:double});",
+			"PenUp();",
+			"PenDown();",
+			"SetBrushSize({0:double});",
+			"SetColor({0:double});",
+			"SetLineCapping({0:LineCapping});",
+			"StoreTurtlePosition();",
+			"RestoreTurtlePosition({0:bool});",
+			"CaptureScreenshot();",
 		};
 
 		public InteliCommandDialogViewModel() {
 			Source = new ObservableCollection<InteliCommandData>();
 		}
-
-		Random tmp = new Random();
 
 		public void Handle(string value, int caretPos) {
 			if (value.Length > 0 && caretPos > 0 && caretPos <= value.Length) {
@@ -53,10 +43,10 @@ namespace TurtleGraphics.Models {
 				}
 				string fullWord = GetFullWord(value, caretPos - 1);
 				Source.Clear();
-				for (int i = 0; i < _inteliCommands.Length; i++) {
-					if (_inteliCommands[i].StartsWith(fullWord) && _inteliCommands[i].Length != fullWord.Length) {
-						string suffix = _inteliCommands[i].Remove(0, fullWord.Length);
-						Source.Add(new InteliCommandData(fullWord + suffix.ToString(), suffix.ToString()));
+				foreach (string cmd in _inteliCommands) {
+					if (cmd.StartsWith(fullWord) && cmd.Length != fullWord.Length) {
+						string suffix = cmd.Remove(0, fullWord.Length);
+						Source.Add(new InteliCommandData(cmd, fullWord + suffix, suffix));
 					}
 				}
 				if (Source.Count > 0) {
@@ -80,37 +70,44 @@ namespace TurtleGraphics.Models {
 			return sb.ToString();
 		}
 
-		public void TextEvents(object sender, KeyEventArgs e) {
+		public void TextEvents(object _, KeyEventArgs e) {
 			if (Visible == Visibility.Visible) {
 				if (e.Key == Key.Escape) {
 					e.Handled = true;
 					Visible = Visibility.Collapsed;
 				}
 				if (e.Key == Key.Up) {
+					SetSelected(SelectedIndex - 1);
 					e.Handled = true;
-					Source[SelectedIndex].Selected = false;
-					SelectedIndex--;
-					SelectedIndex = Mod(SelectedIndex, Source.Count);
-					Source[SelectedIndex].Selected = true;
 				}
 				if (e.Key == Key.Down) {
+					SetSelected(SelectedIndex + 1);
 					e.Handled = true;
-					Source[SelectedIndex].Selected = false;
-					SelectedIndex++;
-					SelectedIndex = Mod(SelectedIndex, Source.Count);
-					Source[SelectedIndex].Selected = true;
 				}
 				if (e.Key == Key.Enter || e.Key == Key.Return || e.Key == Key.Tab) {
+					InsertInteliCommand();
 					e.Handled = true;
-					TextBox t = (sender as TextBox);
-					int carret = t.CaretIndex;
-					InteliCommandData data = Source[SelectedIndex];
-					t.Text = t.Text.Insert(carret, data.ToComplete);
-					t.CaretIndex = carret + data.ToComplete.Length;
 				}
 			}
 		}
 
-		private int Mod(int k, int n) { return ((k %= n) < 0) ? k + n : k; }
+		public void InsertInteliCommand() {
+			TextBox textBox = MainWindow.Instance.CommandsTextInput;
+			int caret = textBox.CaretIndex;
+			InteliCommandData data = Source[SelectedIndex];
+			textBox.Text = textBox.Text.Insert(caret, data.ToComplete);
+			textBox.CaretIndex = caret + data.CaretPosition;
+		}
+
+		public void SetSelected(int index) {
+			Source[SelectedIndex].Selected = false;
+			SelectedIndex = index;
+			SelectedIndex = Mod(SelectedIndex, Source.Count);
+			Source[SelectedIndex].Selected = true;
+		}
+
+		private int Mod(int k, int n) {
+			return ((k %= n) < 0) ? k + n : k;
+		}
 	}
 }

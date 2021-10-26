@@ -1,16 +1,20 @@
-﻿namespace TurtleGraphics.Models {
+﻿using System;
+
+namespace TurtleGraphics.Models {
 	public class InteliCommandData : BaseViewModel {
-		private string _hintText;
-		private bool _selected;
-		private string _toComplete;
+		[Notify] public string ToComplete { get; }
+		[Notify] public bool Selected { get; set; }
+		[Notify] public string HintText { get; }
 
-		public string ToComplete { get => _toComplete; set { _toComplete = value; Notify(nameof(ToComplete)); } }
-		public bool Selected { get => _selected; set { _selected = value; Notify(nameof(Selected)); } }
-		public string HintText { get => _hintText; set { _hintText = value; Notify(nameof(HintText)); } }
+		public string FullCommand { get; }
+		public int CaretPosition => TakesParameters ? ToComplete.IndexOf("(", StringComparison.Ordinal) + 1 : ToComplete.Length;
+		public bool TakesParameters => FullCommand.IndexOf(")", StringComparison.Ordinal) - 1 > FullCommand.IndexOf("(", StringComparison.Ordinal);
 
-		public InteliCommandData(string hintText, string toComplete) {
+		public InteliCommandData(string fullCommand, string hintText, string toComplete) {
+			FullCommand = fullCommand;
 			HintText = hintText;
-			ToComplete = toComplete;
+			int start = toComplete.IndexOf("(", StringComparison.Ordinal);
+			ToComplete = toComplete.Remove(start + 1, toComplete.IndexOf(")", StringComparison.Ordinal) - 1 - start);
 		}
 	}
 }

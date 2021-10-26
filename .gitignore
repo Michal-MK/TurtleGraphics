@@ -20,3 +20,4 @@ TurtleGraphicsCode/Rules/*.cs
 /packages/Igor.Models*
 /packages/Igor.Localization*
 /packages/Microsoft.CSharp*
+/packages/NETStandard*

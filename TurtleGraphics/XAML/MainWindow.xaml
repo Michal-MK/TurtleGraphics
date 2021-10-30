@@ -38,15 +38,8 @@
 				<TextBox Text="{Binding CommandsText, UpdateSourceTrigger=PropertyChanged}"
 						 AcceptsReturn="True" AcceptsTab="True"
 						 FontWeight="DemiBold" FontSize="16"
-						 x:Name="CommandsTextInput"
-						 ScrollViewer.ScrollChanged="CommandsTextInput_ScrollChanged"/>
+						 x:Name="CommandsTextInput"/>
 
-				<TextBox Text="{Binding InteliCommandsText, UpdateSourceTrigger=PropertyChanged}"
-						 FontWeight="DemiBold"
-						 FontSize="16"
-						 IsHitTestVisible="False" Opacity="0.5" Background="Transparent"
-						 x:Name="InteliCommands"/>
-				
 				<StackPanel Grid.Row="1" Visibility="{Binding ControlsVisible, Converter={StaticResource BoolToVis}}">
 					<Border BorderThickness="0 5 0 0" BorderBrush="Firebrick" Margin="0 0 0 2"/>
 					<StackPanel Margin="5 0 10 0">

@@ -1,6 +1,7 @@
 ﻿using System;
+using TurtleGraphics.Models;
 
-namespace TurtleGraphics.Models {
+namespace TurtleGraphics.InteliCmmands {
 	public class InteliCommandData : BaseViewModel {
 		[Notify] public string ToComplete { get; }
 		[Notify] public bool Selected { get; set; }

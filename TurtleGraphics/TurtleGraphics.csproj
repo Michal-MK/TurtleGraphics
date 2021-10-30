@@ -237,11 +237,11 @@
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Exceptions\ParsingException.cs" />
     <Compile Include="Helpers\FleeHelper.cs" />
-    <Compile Include="Models\BaseViewModel.cs" />
-    <Compile Include="Models\InteliCommandData.cs" />
+    <Compile Include="Models\Base\BaseViewModel.cs" />
+    <Compile Include="InteliCommands\InteliCommandData.cs" />
     <Compile Include="Models\InteliCommandDialogViewModel.cs" />
     <Compile Include="Models\LanguageButtonModel.cs" />
-    <Compile Include="Models\NotifyAspect.cs" />
+    <Compile Include="Models\Base\NotifyAspect.cs" />
     <Compile Include="Structs\ModificationData.cs" />
     <Compile Include="XAML\ForLoopVarNameDialog.xaml.cs">
       <DependentUpon>ForLoopVarNameDialog.xaml</DependentUpon>
@@ -256,8 +256,6 @@
     <Compile Include="Parsed Data\BrushCappingData.cs" />
     <Compile Include="Parsed Data\ContextExtensions.cs" />
     <Compile Include="IO\FileSystemManager.cs" />
-    <Compile Include="InteliCommands\InteliCommandsHandler.cs" />
-    <Compile Include="InteliCommands\InteliCommandsState.cs" />
     <Compile Include="Parsed Data\RestorePositionData.cs" />
     <Compile Include="Parsed Data\ScreenCaptureData.cs" />
     <Compile Include="Parsed Data\StoredPositionData.cs" />

@@ -15,8 +15,6 @@ using System.Windows.Media.Imaging;
 using static TurtleGraphics.Helpers;
 using Path = System.Windows.Shapes.Path;
 using Igor.Localization;
-using System.Windows.Interop;
-using Igor.Configuration;
 using TurtleGraphics.Models;
 
 namespace TurtleGraphics {
@@ -39,61 +37,62 @@ namespace TurtleGraphics {
 
 		#region Bindings
 
-		private string _color;
-		private double _brushSize;
-		private Point _startPoint;
-		private ICommand _runCommand;
-		private string _commandsText = "";
+
+		[Notify]
+		public InteliCommandDialogViewModel InteliCommandModel { get; set; } = new InteliCommandDialogViewModel();
+		[Notify]
+		public ICommand SettingsCommand { get; set; }
+		[Notify]
+		public ImageSource ImgSource { get; set; }
+
+		private bool _animatePath;
+		public bool AnimatePath { get => _animatePath; set { _animatePath = value; Notify(nameof(AnimatePath)); CalculationFramesPreUIUpdate = 1; } }
+		[Notify]
+		public ICommand ControlsVisibleCommand { get; set; }
+		[Notify]
+		public bool ControlsVisible { get; set; } = true;
+
 		private double _angle;
 		private double _x;
 		private double _y;
-		private int _delay = 0;
-		private bool _penDown;
-		private int _iterationCount = 1;
-		private ICommand _buttonCommand;
-		private ICommand _stopCommand;
-		private string _buttonText;
-		private ICommand _runFullscreenCommand;
-		private bool _toggleFullscreenEnabled = true;
-		private bool _showTurtleCheckBox = true;
-		private string _inteliCommandsText;
-		private ICommand _saveCommand;
-		private ICommand _loadCommand;
-		private int _anotherDelay = 1;
-		private PenLineCap _lineCapping;
-		private bool _controlsVisible = true;
-		private ICommand _controlsVisibleCommand;
-		private bool _animatePath;
-		private ImageSource _imgSource;
-		private ICommand _settingsCommand;
-		private InteliCommandDialogViewModel _inteliCommandModel = new InteliCommandDialogViewModel();
 
-		public InteliCommandDialogViewModel InteliCommandModel { get => _inteliCommandModel; set { _inteliCommandModel = value; Notify(nameof(InteliCommandModel)); } }
-		public ICommand SettingsCommand { get => _settingsCommand; set { _settingsCommand = value; Notify(nameof(SettingsCommand)); } }
-		public ImageSource ImgSource { get => _imgSource; set { _imgSource = value; Notify(nameof(ImgSource)); } }
-		public bool AnimatePath { get => _animatePath; set { _animatePath = value; Notify(nameof(AnimatePath)); CalculationFramesPreUIUpdate = 1; } }
-		public ICommand ControlsVisibleCommand { get => _controlsVisibleCommand; set { _controlsVisibleCommand = value; Notify(nameof(ControlsVisibleCommand)); } }
-		public bool ControlsVisible { get => _controlsVisible; set { _controlsVisible = value; Notify(nameof(ControlsVisible)); } }
-		public string AngleStr { get => $"\t{Math.Floor(ContextExtensions.AsDeg(Angle))}°"; }
-		public string XStr { get => $"\t{Math.Round(X, 2)}"; }
-		public string YStr { get => $"\t{Math.Round(Y, 2)}"; }
-		public PenLineCap LineCapping { get => _lineCapping; set { _lineCapping = value; Notify(nameof(LineCapping)); } }
-		public int CalculationFramesPreUIUpdate { get => _anotherDelay; set { _anotherDelay = value; Notify(nameof(CalculationFramesPreUIUpdate)); } }
-		public ICommand LoadCommand { get => _loadCommand; set { _loadCommand = value; Notify(nameof(LoadCommand)); } }
-		public ICommand SaveCommand { get => _saveCommand; set { _saveCommand = value; Notify(nameof(SaveCommand)); } }
-		public string InteliCommandsText { get => _inteliCommandsText; set { _inteliCommandsText = value; Notify(nameof(InteliCommandsText)); } }
-		public bool ShowTurtleCheckBox { get => _showTurtleCheckBox; set { _showTurtleCheckBox = value; Notify(nameof(ShowTurtleCheckBox)); } }
-		public bool ToggleFullscreenEnabled { get => _toggleFullscreenEnabled; set { _toggleFullscreenEnabled = value; Notify(nameof(ToggleFullscreenEnabled)); } }
-		public ICommand RunFullscreenCommand { get => _runFullscreenCommand; set { _runFullscreenCommand = value; Notify(nameof(ToggleFullScreenAction)); } }
-		public string ButtonText { get => _buttonText; set { _buttonText = value; Notify(nameof(ButtonText)); } }
-		public ICommand StopCommand { get => _stopCommand; set { _stopCommand = value; Notify(nameof(StopCommand)); } }
-		public ICommand ButtonCommand { get => _buttonCommand; set { _buttonCommand = value; Notify(nameof(ButtonCommand)); } }
-		public int IterationCount { get => _iterationCount; set { _iterationCount = value; Notify(nameof(IterationCount)); } }
-		public bool PenDown { get => _penDown; set { if (value == _penDown) return; _penDown = value; NewPath(); Notify(nameof(PenDown)); } }
-		public int PathAnimationFrames { get => _delay; set { _delay = value; Notify(nameof(PathAnimationFrames)); } }
 		public double Y { get => _y; set { _y = value; Notify(nameof(Y)); Notify(nameof(YStr)); } }
 		public double X { get => _x; set { _x = value; Notify(nameof(X)); Notify(nameof(XStr)); } }
 		public double Angle { get => _angle; set { _angle = value; Notify(nameof(Angle)); Notify(nameof(AngleStr)); } }
+
+
+		public string AngleStr { get => $"\t{Math.Floor(ContextExtensions.AsDeg(Angle))}°"; }
+		public string XStr { get => $"\t{Math.Round(X, 2)}"; }
+		public string YStr { get => $"\t{Math.Round(Y, 2)}"; }
+		[Notify]
+		public PenLineCap LineCapping { get; set; }
+		[Notify]
+		public int CalculationFramesPreUIUpdate { get; set; } = 1;
+		[Notify]
+		public ICommand LoadCommand { get; set; }
+		[Notify]
+		public ICommand SaveCommand { get; set; }
+		[Notify]
+		public bool ShowTurtleCheckBox { get; set; } = true;
+		[Notify]
+		public bool ToggleFullscreenEnabled { get; set; }
+		[Notify]
+		public ICommand RunFullscreenCommand { get; set; }
+		[Notify]
+		public string ButtonText { get; set; }
+		[Notify]
+		public ICommand StopCommand { get; set; }
+		[Notify]
+		public ICommand ButtonCommand { get; set; }
+		[Notify]
+		public int IterationCount { get; set; } = 1;
+		private bool _penDown;
+
+		public bool PenDown { get => _penDown; set { if (value == _penDown) return; _penDown = value; NewPath(); Notify(nameof(PenDown)); } }
+		[Notify]
+		public int PathAnimationFrames { get; set; }
+		private string _commandsText = "";
+
 		public string CommandsText {
 			get => _commandsText;
 			set {
@@ -109,9 +108,16 @@ namespace TurtleGraphics {
 				}
 			}
 		}
-		public ICommand RunCommand { get => _runCommand; set { _runCommand = value; Notify(nameof(RunCommand)); } }
-		public Point StartPoint { get => _startPoint; set { _startPoint = value; Notify(nameof(StartPoint)); } }
+		[Notify]
+		public ICommand RunCommand { get; set; }
+		[Notify]
+		public Point StartPoint { get; set; }
+		private double _brushSize;
+
 		public double BrushSize { get => _brushSize; set { if (value == _brushSize) return; _brushSize = value; NewPath(); Notify(nameof(BrushSize)); } }
+		
+		private string _color;
+
 		public string Color { get => _color; set { if (value == _color) return; _color = value; NewPath(); Notify(nameof(Color)); } }
 
 
@@ -146,8 +152,6 @@ namespace TurtleGraphics {
 		private PathFigure _currentFigure;
 		private PolyLineSegment _currentSegment;
 		private CancellationTokenSource cancellationTokenSource;
-		private readonly InteliCommandsHandler _inteliCommands = new InteliCommandsHandler();
-		private ScrollViewer _inteliCommandsScroller;
 		private readonly CompilationStatus _compilationStatus = new CompilationStatus();
 		private readonly ExceptionDisplay _exceptionDisplay = new ExceptionDisplay();
 		private readonly BrushConverter _brushConverter = new BrushConverter();
@@ -185,7 +189,6 @@ namespace TurtleGraphics {
 			Closed += MainWindow_Closed;
 
 			SizeChanged += MainWindow_SizeChanged;
-			CommandsTextInput.SelectionChanged += CommandsTextInput_SelectionChanged;
 			CommandsTextInput.PreviewKeyDown += InteliCommandModel.TextEvents;
 			CommandsTextInput.TextChanged += CommandsTextInput_TextChanged;
 
@@ -240,7 +243,6 @@ namespace TurtleGraphics {
 		private void MainWindow_Loaded(object sender, RoutedEventArgs e) {
 			DrawWidth = DrawAreaX.ActualWidth;
 			DrawHeight = DrawAreaY.ActualHeight;
-			_inteliCommandsScroller = FindDescendant<ScrollViewer>(InteliCommands);
 			Init();
 			CommandsText = FSSManager.RestoreCodeIfExists();
 			if (App.Instance.Deserialized != null) {
@@ -274,7 +276,7 @@ namespace TurtleGraphics {
 		}
 
 		private void Control_SizeChanged(object sender, SizeChangedEventArgs e) {
-			if(InteliCommandModel.Visible == Visibility.Visible) {
+			if (InteliCommandModel.Visible == Visibility.Visible) {
 				CommandsView.Width = ControlArea.ActualWidth;
 			}
 		}
@@ -305,23 +307,6 @@ namespace TurtleGraphics {
 			}
 		}
 
-		private void CommandsTextInput_SelectionChanged(object sender, RoutedEventArgs e) {
-#if INTELI_COMMANDS
-			_inteliCommands.Handle(this, CommandsTextInput);
-			Notify(nameof(CommandsText));
-			Notify(nameof(InteliCommandsText));
-#endif
-		}
-
-		private void CommandsTextInput_ScrollChanged(object sender, ScrollChangedEventArgs e) {
-#if INTELI_COMMANDS
-			if (_inteliCommandsScroller != null) {
-				_inteliCommandsScroller.ScrollToVerticalOffset(e.VerticalOffset);
-				_inteliCommandsScroller.ScrollToHorizontalOffset(e.HorizontalOffset);
-			}
-#endif
-		}
-
 		private void CommandsTextInput_TextChanged(object sender, TextChangedEventArgs e) {
 			foreach (TextChange change in e.Changes) {
 				if (change.AddedLength == Environment.NewLine.Length) {
@@ -342,9 +327,6 @@ namespace TurtleGraphics {
 					.Insert(change.Offset + change.AddedLength, new string(' ', indentLevel <= 0 ? 0 : indentLevel));
 				CommandsTextInput.CaretIndex = carret + indentLevel;
 			}
-#if INTELI_COMMANDS
-			InteliCommandsText = CommandsTextInput.Text;
-#endif
 		}
 
 		protected override void OnKeyDown(KeyEventArgs e) {

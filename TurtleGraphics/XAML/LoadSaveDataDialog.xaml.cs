@@ -65,14 +65,15 @@ namespace TurtleGraphics {
 		public SavedData SelectedData { get; set; }
 
 		public string Path {
-			get => _path; set {
+			get => _path;
+			set {
 				_path = value;
 				DirectoryInfo info = new DirectoryInfo(value);
 				FileInfo[] files = info.GetFiles("*" + FileSystemManager.EXTENSION);
 				foreach (FileInfo finfo in files) {
 					string text = File.ReadAllText(finfo.FullName);
-					int lineIndex = text.IndexOf('\r');
-					Items.Add(new SavedData() { Name = text.Substring(0, lineIndex), Code = text.Substring(lineIndex + 2) });
+					string header = System.IO.Path.GetFileNameWithoutExtension(finfo.FullName);
+					Items.Add(new SavedData() { Name = header, Code = text });
 				}
 			}
 		}

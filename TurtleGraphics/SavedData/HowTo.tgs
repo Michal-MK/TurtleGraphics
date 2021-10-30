@@ -1,6 +1,4 @@
-﻿HowTo
-
-//The symbol '_' means the value is optional!
+﻿//The symbol '_' means the value is optional!
 //Text inside '[]' means 'one of'!
 //Text inside '{}' means replace with the requested value (including the brackets)
 

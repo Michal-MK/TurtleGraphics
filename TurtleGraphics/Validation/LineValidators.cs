@@ -37,7 +37,7 @@ namespace TurtleGraphics.Validation {
 			return false;
 		}
 
-		public static bool IsFunctionCall(string line, out FunctionCallInfo info) {
+		public static bool IsFunctionCall(string line, out FunctionCall info) {
 
 			//test (20);
 			//teset(ToDeg(Sin(PI))); 
@@ -60,7 +60,7 @@ namespace TurtleGraphics.Validation {
 
 			split[0] = split[0].TrimEnd();
 
-			if (FunctionNames.Fuctions.Contains(split[0]) && !split[1].EndsWith(";")) {
+			if (FunctionNames.Functions.Contains(split[0]) && !split[1].EndsWith(";")) {
 				throw new ParsingException("Missing semicolon after a function call!", line);
 			}
 
@@ -92,8 +92,8 @@ namespace TurtleGraphics.Validation {
 				return false;
 			}
 
-			FunctionCallInfo i = new FunctionCallInfo();
-			i.FunctionName = split[0].TrimEnd();
+			FunctionCall i = new FunctionCall();
+			i.FunctionDef = FunctionNames.Parse(split[0].TrimEnd());
 
 			i.Arguments = ArgParser.Parse(split[1].TrimEnd());
 

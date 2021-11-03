@@ -9,7 +9,7 @@ namespace TurtleGraphics {
 
 		public IGenericExpression<bool> IfCondition { get; set; }
 		public Queue<ParsedData> IfData { get; set; }
-		public Queue<ParsedData> ElseData { get; set; } = null;
+		public Queue<ParsedData> ElseData { get; set; }
 		public IList<(IGenericExpression<bool>, Queue<ParsedData>)> ElseIfs { get; set; }
 		public bool IsModifiable { get; set; } = true;
 		public int LineIndex { get; set; }
@@ -20,7 +20,7 @@ namespace TurtleGraphics {
 
 		public override string Line { get; set; }
 
-		public ConditionalData(string line, IGenericExpression<bool> ifCondition, Queue<ParsedData> data, Dictionary<string, object> variables) : base(variables, line, line) {
+		public ConditionalData(string line, IGenericExpression<bool> ifCondition, Queue<ParsedData> data, Dictionary<string, object> variables) : base(variables, line/*,line TODO*/) {
 			IfCondition = ifCondition;
 			IfData = data;
 			Line = line;
@@ -37,7 +37,7 @@ namespace TurtleGraphics {
 		}
 
 		public override IList<TurtleData> CompileBlock(CancellationToken token) {
-			List<TurtleData> ret = new List<TurtleData>(4096);
+			List<TurtleData> ret = new List<TurtleData>(128);
 			UpdateVars(IfCondition);
 
 			if (IfCondition.Evaluate()) {

@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
+using TurtleGraphics.Definition;
 
 namespace TurtleGraphics {
 	public class StoredPositionData : ParsedData {
 
-		public StoredPositionData(string[] args, Dictionary<string, object> variables, string line) : base(variables, line, args) { }
+		public StoredPositionData(ParameterValuation[] args, Dictionary<string, object> variables, string line) : base(variables, line, args) { }
 
 		public override bool IsBlock => false;
 

@@ -237,12 +237,21 @@
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Exceptions\ParsingException.cs" />
     <Compile Include="Helpers\FleeHelper.cs" />
+    <Compile Include="Language\Definition\FunctionDefinition.cs" />
+    <Compile Include="Language\Definition\Parameter.cs" />
+    <Compile Include="Language\FunctionCall.cs" />
+    <Compile Include="Language\Logic\AssignmentInfo.cs" />
+    <Compile Include="Language\Logic\Condition.cs" />
+    <Compile Include="Language\Logic\Operator.cs" />
+    <Compile Include="Language\Logic\ParameterValuation.cs" />
     <Compile Include="Models\Base\BaseViewModel.cs" />
     <Compile Include="InteliCommands\InteliCommandData.cs" />
     <Compile Include="Models\InteliCommandDialogViewModel.cs" />
     <Compile Include="Models\LanguageButtonModel.cs" />
     <Compile Include="Models\Base\NotifyAspect.cs" />
     <Compile Include="Structs\ModificationData.cs" />
+    <Compile Include="XAML\Converters\AngleConverter.cs" />
+    <Compile Include="XAML\Converters\CoordinateConverter.cs" />
     <Compile Include="XAML\ForLoopVarNameDialog.xaml.cs">
       <DependentUpon>ForLoopVarNameDialog.xaml</DependentUpon>
     </Compile>
@@ -273,18 +282,14 @@
     <Compile Include="XAML\LoadSaveDataDialog.xaml.cs">
       <DependentUpon>LoadSaveDataDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Logic\AssignmentInfo.cs" />
-    <Compile Include="Logic\Condition.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Parsed Data\BrushSizeData.cs" />
     <Compile Include="Parsed Data\ConditionalData.cs" />
     <Compile Include="Parsed Data\MoveData.cs" />
-    <Compile Include="Logic\Operator.cs" />
     <Compile Include="Parsed Data\ColorData.cs" />
     <Compile Include="Parsed Data\ForwardParseData.cs" />
     <Compile Include="Parsed Data\ParsedAction.cs" />
     <Compile Include="Parsed Data\RotateParseData.cs" />
-    <Compile Include="Logic\FunctionCallInfo.cs" />
     <Compile Include="Parsers\BlockParser.cs" />
     <Compile Include="Parsers\IfStatementParser.cs" />
     <Compile Include="IO\SavedData.cs" />

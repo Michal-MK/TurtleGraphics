@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 namespace TurtleGraphics {
 	public class ScreenCaptureData : ParsedData {
 
-		public ScreenCaptureData(string[] parameters, string originalLine, Dictionary<string, object> variables)
-			: base(variables, originalLine, parameters) {
+		public ScreenCaptureData(ParameterValuation[] args, string originalLine, Dictionary<string, object> variables) : base(variables, originalLine, args) {
 
 		}
 

@@ -7,7 +7,7 @@
 		xmlns:xaml="clr-namespace:TurtleGraphics.XAML"
         xmlns:controls="clr-namespace:Igor.Controls;assembly=Igor.Controls"
         mc:Ignorable="d"
-        Title="{Binding L.Main_WindowName}">
+        Title="{Binding L.WindowName}">
 	<d:Window.DataContext>
 		<local:MainWindow/>
 	</d:Window.DataContext>
@@ -44,25 +44,25 @@
 					<Border BorderThickness="0 5 0 0" BorderBrush="Firebrick" Margin="0 0 0 2"/>
 					<StackPanel Margin="5 0 10 0">
 						<TextBlock>
-							<Run Text="{Binding L.Main_Angle, Mode=OneWay, FallbackValue='Angle:'}"/>
-							<Run Text="{Binding AngleStr, Mode=OneWay}" FontWeight="Bold"/>
+							<Run Text="{Binding L.Angle, Mode=OneWay, FallbackValue='Angle:'}"/>
+							<Run Text="{Binding Angle, Mode=OneWay, Converter={StaticResource AngleConv}}" FontWeight="Bold"/>
 						</TextBlock>
 						<TextBlock>
 							<Run Text="X:"/>
-							<Run Text="{Binding XStr, Mode=OneWay}" FontWeight="Bold"/>
+							<Run Text="{Binding X, Mode=OneWay, Converter={StaticResource CoordConv}}" FontWeight="Bold"/>
 						</TextBlock>
 						<TextBlock>
 							<Run Text="Y:"/>
-							<Run Text="{Binding YStr, Mode=OneWay}" FontWeight="Bold"/>
+							<Run Text="{Binding Y, Mode=OneWay, Converter={StaticResource CoordConv}}" FontWeight="Bold"/>
 						</TextBlock>
-						<TextBlock Text="{Binding L.Main_BackgroundCol, FallbackValue='Background color'}"/>
+						<TextBlock Text="{Binding L.BackgroundCol, FallbackValue='Background color'}"/>
 						<TextBox Name="BackgroundColor" Text="Transparent"/>
-						<CheckBox Content="{Binding L.Main_ShowTurtle, FallbackValue='Show turtle'}" IsChecked="{Binding ShowTurtleCheckBox}"/>
+						<CheckBox Content="{Binding L.ShowTurtle, FallbackValue='Show turtle'}" IsChecked="{Binding ShowTurtleCheckBox}"/>
 
-						<CheckBox Content="{Binding L.Main_AnimatePath, FallbackValue='Animate path'}" IsChecked="{Binding AnimatePath}"/>
+						<CheckBox Content="{Binding L.AnimatePath, FallbackValue='Animate path'}" IsChecked="{Binding AnimatePath}"/>
 						<StackPanel Visibility="{Binding AnimatePath, Converter={StaticResource BoolToVis}}">
 							<TextBlock>
-								<Run Text="{Binding L.Main_PathAnimSpeed, Mode=OneWay, FallbackValue='Path anim. length'}"/>
+								<Run Text="{Binding L.PathAnimSpeed, Mode=OneWay, FallbackValue='Path anim. length'}"/>
 							</TextBlock>
 							<Slider Visibility="{Binding AnimatePath, Converter={StaticResource BoolToVis}}"
 									Value="{Binding IterationCount, UpdateSourceTrigger=PropertyChanged}"
@@ -70,7 +70,7 @@
 						</StackPanel>
 
 						<TextBlock>
-							<Run Text="{Binding L.Main_TurtleSpeed, Mode=OneWay, FallbackValue='Turtle speed'}"/>
+							<Run Text="{Binding L.TurtleSpeed, Mode=OneWay, FallbackValue='Turtle speed'}"/>
 							<Run Text="{Binding ElementName=TurtleSpeed, Path=Value, Mode=OneWay}"/>
 							<Run Text="/"/>
 							<Run Text="{Binding ElementName=TurtleSpeed, Path=Maximum, Mode=OneWay}"/>
@@ -81,14 +81,14 @@
 					</StackPanel>
 					<StackPanel Margin="0 0 5 0">
 						<Button Content="{Binding ButtonText, FallbackValue='Run/Stop'}" Command="{Binding ButtonCommand}"/>
-						<Button Content="{Binding L.Main_RunFullscreen, FallbackValue='Full-screen'}" Command="{Binding RunFullscreenCommand}"/>
+						<Button Content="{Binding L.RunFullscreen, FallbackValue='Full-screen'}" Command="{Binding RunFullscreenCommand}"/>
 						<Button Content="{Binding L.GenericSave, FallbackValue='Save...'}" Command="{Binding SaveCommand}"/>
 						<Button Content="{Binding L.GenericLoad, FallbackValue='Load...'}" Command="{Binding LoadCommand}"/>
-						<Button Content="{Binding L.Main_Settings, FallbackValue='Settings...'}" Command="{Binding SettingsCommand}"/>
+						<Button Content="{Binding L.Settings, FallbackValue='Settings...'}" Command="{Binding SettingsCommand}"/>
 					</StackPanel>
 				</StackPanel>
 				<StackPanel Grid.Row="2" Margin="0 0 5 0">
-					<Button Content="{Binding L.Main_ToggleControlPanel}" Command="{Binding ControlsVisibleCommand}"/>
+					<Button Content="{Binding L.ToggleControlPanel}" Command="{Binding ControlsVisibleCommand}"/>
 				</StackPanel>
 			</Grid>
 

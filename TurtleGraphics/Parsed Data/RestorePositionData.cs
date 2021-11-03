@@ -4,8 +4,7 @@ using System.Threading;
 namespace TurtleGraphics {
 	public class RestorePositionData : ParsedData {
 
-		public RestorePositionData(string[] args, Dictionary<string, object> variables, string line) : base(variables, line) {
-			Parameters = args;
+		public RestorePositionData(ParameterValuation[] args, Dictionary<string, object> variables, string line) : base(variables, line, args) {
 			if (Arg1 != null) {
 				IsPop = bool.Parse(Arg1);
 			}

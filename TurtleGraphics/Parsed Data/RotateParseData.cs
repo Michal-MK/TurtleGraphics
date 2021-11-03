@@ -8,7 +8,7 @@ namespace TurtleGraphics {
 
 		private readonly IGenericExpression<double> _expression;
 
-		public RotateParseData(IGenericExpression<double> expression, FunctionCallInfo info, Dictionary<string, object> variables, string line) : base(variables, line) {
+		public RotateParseData(IGenericExpression<double> expression, FunctionCall info, Dictionary<string, object> variables, string line) : base(variables, line) {
 			_expression = expression;
 			string exceptionMessage = "Invalid arguments for rotation";
 			if(info.Arguments.Length > 2) {

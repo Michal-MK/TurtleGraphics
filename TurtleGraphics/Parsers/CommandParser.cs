@@ -82,11 +82,11 @@ namespace TurtleGraphics {
 				return null;
 			}
 
-			if (LineValidators.IsFunctionCall(line, out FunctionCallInfo info)) {
+			if (LineValidators.IsFunctionCall(line, out FunctionCall info)) {
 				if (conditionals.Count > 0) {
 					conditionals.Peek().IsModifiable = false;
 				}
-				switch (info.FunctionName) {
+				switch (info.FunctionDef.Name) {
 					case "Rotate": {
 						return new RotateParseData(ParseGenericExpression<double>(info.GetArg(0, line), line, variables), info, variables.Copy(), original);
 					}

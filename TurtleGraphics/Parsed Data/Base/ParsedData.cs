@@ -6,7 +6,7 @@ namespace TurtleGraphics {
 
 	public abstract class ParsedData {
 
-		public ParsedData(Dictionary<string, object> variables, string originalLine, params string[] parameters) {
+		public ParsedData(Dictionary<string, object> variables, string originalLine, params ParameterValuation[] parameters) {
 			Parameters = parameters;
 			Variables = variables;
 			Line = originalLine;
@@ -16,16 +16,14 @@ namespace TurtleGraphics {
 
 		public abstract string Line { get; set; }
 
-		public int LineHash => Line.GetHashCode();
+		public Dictionary<string, object> Variables { get; }
 
-		public Dictionary<string, object> Variables { get; set; }
+		public ParameterValuation[] Parameters { get; set; }
 
-		public string[] Parameters { get; set; }
-
-		public string Arg1 => Parameters.Length > 0 ? Parameters[0] : null;
-		public string Arg2 => Parameters.Length > 1 ? Parameters[1] : null;
-		public string Arg3 => Parameters.Length > 2 ? Parameters[2] : null;
-		public string Arg4 => Parameters.Length > 3 ? Parameters[3] : null;
+		public string Arg1 => Parameters.Length > 0 ? Parameters[0].Value.ToString() : null;
+		public string Arg2 => Parameters.Length > 1 ? Parameters[1].Value.ToString() : null;
+		public string Arg3 => Parameters.Length > 2 ? Parameters[2].Value.ToString() : null;
+		public string Arg4 => Parameters.Length > 3 ? Parameters[3].Value.ToString() : null;
 
 		public abstract ParsedAction Action { get; }
 

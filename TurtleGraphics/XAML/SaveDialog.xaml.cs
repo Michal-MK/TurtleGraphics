@@ -31,12 +31,10 @@ namespace TurtleGraphics {
 				if (string.IsNullOrWhiteSpace(SaveFileName)) {
 					return;
 				}
-				MainWindow.Instance.FSSManager.Save(SaveFileName, MainWindow.Instance.CommandsText);
+				MainWindow.Instance.FSManager.Save(SaveFileName, MainWindow.Instance.CommandsText);
 				Common();
 			});
-			CancelCommand = new Command(() => {
-				Common();
-			});
+			CancelCommand = new Command(Common);
 
 			_focus.Loaded += (s,e) => _focus.Focus();
 		}

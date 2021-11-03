@@ -4,12 +4,18 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using TurtleGraphics.InteliCmmands;
+using TurtleGraphics.XAML;
 
 namespace TurtleGraphics.Models {
 	public class InteliCommandDialogViewModel : BaseViewModel {
-		[Notify] public int SelectedIndex { get; set; }
-		[Notify] public Visibility Visible { get; set; }
-		[Notify] public ObservableCollection<InteliCommandData> Source { get; set; }
+		[Notify]
+		public int SelectedIndex { get; set; }
+
+		[Notify]
+		public Visibility Visible { get; set; }
+
+		[Notify]
+		public ObservableCollection<InteliCommandData> Source { get; set; }
 
 		private readonly string[] _inteliCommands = new string[] {
 			"Rotate({0:double});",
@@ -29,20 +35,20 @@ namespace TurtleGraphics.Models {
 			Source = new ObservableCollection<InteliCommandData>();
 		}
 
-		public void Handle(string value, int caretPos) {
-			if (value.Length > 0 && caretPos > 0 && caretPos <= value.Length) {
-				char c = value[caretPos - 1];
+		public void Handle(string value, TextBox input, InteliCommandsDialog commandsView, double controlAreaWidth) {
+			if (value.Length > 0 && input.CaretIndex > 0 && input.CaretIndex <= value.Length) {
+				char c = value[input.CaretIndex - 1];
 				if (char.IsWhiteSpace(c)) {
 					Source.Clear();
 					Visible = Visibility.Collapsed;
 					return;
 				}
-				if (caretPos < value.Length && !char.IsWhiteSpace(value[caretPos])) {
+				if (input.CaretIndex < value.Length && !char.IsWhiteSpace(value[input.CaretIndex])) {
 					Source.Clear();
 					Visible = Visibility.Collapsed;
 					return;
 				}
-				string fullWord = GetFullWord(value, caretPos - 1);
+				string fullWord = GetFullWord(value, input.CaretIndex - 1);
 				Source.Clear();
 				foreach (string cmd in _inteliCommands) {
 					if (cmd.StartsWith(fullWord) && cmd.Length != fullWord.Length) {
@@ -52,6 +58,12 @@ namespace TurtleGraphics.Models {
 				}
 				if (Source.Count > 0) {
 					Visible = Visibility.Visible;
+					Rect r = input.GetRectFromCharacterIndex(input.CaretIndex - 1);
+					Canvas.SetTop(commandsView, r.Top + r.Height);
+					Canvas.SetLeft(commandsView, 0);
+
+					commandsView.Width = controlAreaWidth;
+					commandsView.Height = 60;
 					SelectedIndex = 0;
 					Source[SelectedIndex].Selected = true;
 				}

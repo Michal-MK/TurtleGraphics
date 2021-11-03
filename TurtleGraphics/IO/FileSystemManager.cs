@@ -18,13 +18,12 @@ namespace TurtleGraphics {
 		}
 
 		public void Save(string saveFileName, string code) {
-			string original = saveFileName;
 			if (saveFileName.IndexOfAny(Path.GetInvalidFileNameChars()) != -1) {
 				foreach (char c in Path.GetInvalidFileNameChars()) {
 					saveFileName = saveFileName.Replace(c, '_');
 				}
 			}
-			File.WriteAllText(Path.Combine(SavedDataPath, saveFileName + EXTENSION), string.Join(Environment.NewLine, original, code));
+			File.WriteAllText(Path.Combine(SavedDataPath, saveFileName + EXTENSION), string.Join(Environment.NewLine, code));
 		}
 
 

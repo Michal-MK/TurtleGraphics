@@ -10,7 +10,7 @@ namespace TurtleGraphics {
 		private readonly IGenericExpression<double> x;
 		private readonly IGenericExpression<double> y;
 
-		public MoveData(string[] args, Dictionary<string, object> variables, string line) : base(variables, line, args) {
+		public MoveData(ParameterValuation[] args, Dictionary<string, object> variables, string line) : base(variables, line, args) {
 			ExpressionContext expression = FleeHelper.GetExpression(variables);
 			string exceptionMessage = "";
 			if(args.Length > 2) {
@@ -18,9 +18,9 @@ namespace TurtleGraphics {
 			}
 			try {
 				exceptionMessage = "Invalid expression for X coordinate!";
-				x = expression.CompileGeneric<double>(args[0]);
+				x = expression.CompileGeneric<double>(args[0].Value.ToString());
 				exceptionMessage = "Invalid expression for Y coordinate!";
-				y = expression.CompileGeneric<double>(args[1]);
+				y = expression.CompileGeneric<double>(args[1].Value.ToString());
 			}
 			catch (Exception e) {
 				throw new ParsingException(exceptionMessage, line, e);

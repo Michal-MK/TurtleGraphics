@@ -1,21 +1,33 @@
-﻿using System;
+﻿using TurtleGraphics.Definition;
 using TurtleGraphics.Models;
 
 namespace TurtleGraphics.InteliCmmands {
 	public class InteliCommandData : BaseViewModel {
-		[Notify] public string ToComplete { get; }
-		[Notify] public bool Selected { get; set; }
-		[Notify] public string HintText { get; }
+		[Notify]
+		public string ToComplete { get; }
 
+		[Notify]
+		public bool Selected { get; set; }
+
+		[Notify]
+		public string HintText { get; }
+
+		public string FullInsertText => ToComplete + "();";
+
+		public FunctionDefinition Def { get; }
 		public string FullCommand { get; }
-		public int CaretPosition => TakesParameters ? ToComplete.IndexOf("(", StringComparison.Ordinal) + 1 : ToComplete.Length;
-		public bool TakesParameters => FullCommand.IndexOf(")", StringComparison.Ordinal) - 1 > FullCommand.IndexOf("(", StringComparison.Ordinal);
+		public int CaretPosition => Def.CaretIndex;
 
-		public InteliCommandData(string fullCommand, string hintText, string toComplete) {
-			FullCommand = fullCommand;
+
+		public InteliCommandData(FunctionDefinition def, string hintText, string toComplete) {
+			Def = def;
+			FullCommand = def.Name;
 			HintText = hintText;
-			int start = toComplete.IndexOf("(", StringComparison.Ordinal);
-			ToComplete = toComplete.Remove(start + 1, toComplete.IndexOf(")", StringComparison.Ordinal) - 1 - start);
+			ToComplete = toComplete;
+		}
+
+		public int GetCaretPos(int caret) {
+			return caret + CaretPosition - (FullCommand.Length - ToComplete.Length);
 		}
 	}
 }

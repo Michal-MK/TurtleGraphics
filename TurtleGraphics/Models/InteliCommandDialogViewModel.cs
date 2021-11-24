@@ -3,6 +3,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using TurtleGraphics.Definition;
 using TurtleGraphics.InteliCmmands;
 using TurtleGraphics.XAML;
 
@@ -17,18 +18,20 @@ namespace TurtleGraphics.Models {
 		[Notify]
 		public ObservableCollection<InteliCommandData> Source { get; set; }
 
-		private readonly string[] _inteliCommands = new string[] {
-			"Rotate({0:double});",
-			"MoveTo({0:double}, {1:double});",
-			"Forward({0:double});",
-			"PenUp();",
-			"PenDown();",
-			"SetBrushSize({0:double});",
-			"SetColor({0:double});",
-			"SetLineCapping({0:LineCapping});",
-			"StoreTurtlePosition();",
-			"RestoreTurtlePosition({0:bool});",
-			"CaptureScreenshot();",
+		private readonly FunctionDefinition[] _intelliCommands = {
+			new FunctionDefinition {Name = "Rotate", Parameters = {new Parameter{Description = "Angle in degrees", Name = "angle", Type = typeof(double)}}},
+			new FunctionDefinition {Name = "Forward", Parameters = {new Parameter{Description = "Number of pixels", Name = "distance", Type = typeof(double)}}},
+			new FunctionDefinition {Name = "MoveTo", Parameters = {
+				new Parameter{Description = "Absolute position on screen in pixels X coordinate", Name = "x_coord", Type = typeof(double)},
+				new Parameter{Description = "Absolute position on screen in pixels Y coordinate", Name = "y_coord", Type = typeof(double)}
+			}},
+			new FunctionDefinition {Name = "CaptureScreenshot", Parameters = {}},
+			new FunctionDefinition {Name = "PenUp", Parameters = {}},
+			new FunctionDefinition {Name = "PenDown", Parameters = {}},
+			new FunctionDefinition {Name = "StoreTurtlePosition", Parameters = {}},
+			new FunctionDefinition {Name = "RestoreTurtlePosition", Parameters = {new Parameter{Description = "Keep position in memory, able to return repeatedly", Name = "keepInMem", Type = typeof(bool)}}},
+			new FunctionDefinition {Name = "SetBrushSize", Parameters = {new Parameter{Description = "Pen radius in pixels", Name = "radius", Type = typeof(double)}}},
+			new FunctionDefinition {Name = "SetLineCapping", Parameters = {new Parameter{Description = "Pen capping style", Name = "capStyle", Type = typeof(string)}}},
 		};
 
 		public InteliCommandDialogViewModel() {
@@ -50,9 +53,9 @@ namespace TurtleGraphics.Models {
 				}
 				string fullWord = GetFullWord(value, input.CaretIndex - 1);
 				Source.Clear();
-				foreach (string cmd in _inteliCommands) {
-					if (cmd.StartsWith(fullWord) && cmd.Length != fullWord.Length) {
-						string suffix = cmd.Remove(0, fullWord.Length);
+				foreach (FunctionDefinition cmd in _intelliCommands) {
+					if (cmd.Name.StartsWith(fullWord) && cmd.Name.Length != fullWord.Length) {
+						string suffix = cmd.Name.Remove(0, fullWord.Length);
 						Source.Add(new InteliCommandData(cmd, fullWord + suffix, suffix));
 					}
 				}
@@ -108,8 +111,8 @@ namespace TurtleGraphics.Models {
 			TextBox textBox = MainWindow.Instance.CommandsTextInput;
 			int caret = textBox.CaretIndex;
 			InteliCommandData data = Source[SelectedIndex];
-			textBox.Text = textBox.Text.Insert(caret, data.ToComplete);
-			textBox.CaretIndex = caret + data.CaretPosition;
+			textBox.Text = textBox.Text.Insert(caret, data.FullInsertText);
+			textBox.CaretIndex = data.GetCaretPos(caret);
 		}
 
 		public void SetSelected(int index) {

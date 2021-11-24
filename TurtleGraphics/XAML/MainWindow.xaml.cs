@@ -173,7 +173,7 @@ namespace TurtleGraphics {
 			ControlsVisibleCommand = new Command(() => ControlsVisible ^= true);
 			RunFullscreenCommand = new AsyncCommand(RunFullscreenCommandAction);
 			SettingsCommand = new Command(OpenSettingsAction);
-			LocaleProvider.Instance.OnLanguageChanged += (s, e) => { Notify(nameof(L)); };
+			LocaleProvider.Instance.OnLanguageChanged += (s, e) => Notify(nameof(L));
 
 			ButtonCommand = RunCommand;
 			ButtonText = L.GenericRun;

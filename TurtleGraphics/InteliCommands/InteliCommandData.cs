@@ -1,4 +1,4 @@
-﻿using TurtleGraphics.Definition;
+﻿using TurtleGraphics.Language;
 using TurtleGraphics.Models;
 
 namespace TurtleGraphics.InteliCmmands {
@@ -14,12 +14,12 @@ namespace TurtleGraphics.InteliCmmands {
 
 		public string FullInsertText => ToComplete + "();";
 
-		public FunctionDefinition Def { get; }
+		public ILanguageElement Def { get; }
 		public string FullCommand { get; }
 		public int CaretPosition => Def.CaretIndex;
 
 
-		public InteliCommandData(FunctionDefinition def, string hintText, string toComplete) {
+		public InteliCommandData(ILanguageElement def, string hintText, string toComplete) {
 			Def = def;
 			FullCommand = def.Name;
 			HintText = hintText;

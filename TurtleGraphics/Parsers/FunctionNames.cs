@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TurtleGraphics.Definition;
+using TurtleGraphics.Language.Definition;
 
 namespace TurtleGraphics {
 	public static class FunctionNames {

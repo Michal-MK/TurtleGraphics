@@ -1,6 +1,6 @@
-﻿using TurtleGraphics.Definition;
+﻿using TurtleGraphics.Language.Definition;
 
-namespace TurtleGraphics {
+namespace TurtleGraphics.Language {
 	public class FunctionCall {
 		public FunctionDefinition FunctionDef { get; set; }
 		public ParameterValuation[] Arguments { get; set; }

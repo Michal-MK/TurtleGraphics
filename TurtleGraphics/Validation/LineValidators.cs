@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using TurtleGraphics.Language;
 using TurtleGraphics.Parsers;
 
 namespace TurtleGraphics.Validation {

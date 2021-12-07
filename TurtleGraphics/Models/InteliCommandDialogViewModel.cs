@@ -3,8 +3,10 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using TurtleGraphics.Definition;
 using TurtleGraphics.InteliCmmands;
+using TurtleGraphics.Language;
+using TurtleGraphics.Language.Definition;
+using TurtleGraphics.Language.Keywords;
 using TurtleGraphics.XAML;
 
 namespace TurtleGraphics.Models {
@@ -18,7 +20,7 @@ namespace TurtleGraphics.Models {
 		[Notify]
 		public ObservableCollection<InteliCommandData> Source { get; set; }
 
-		private readonly FunctionDefinition[] _intelliCommands = {
+		private readonly ILanguageElement[] _intelliCommands = {
 			new FunctionDefinition {Name = "Rotate", Parameters = {new Parameter{Description = "Angle in degrees", Name = "angle", Type = typeof(double)}}},
 			new FunctionDefinition {Name = "Forward", Parameters = {new Parameter{Description = "Number of pixels", Name = "distance", Type = typeof(double)}}},
 			new FunctionDefinition {Name = "MoveTo", Parameters = {
@@ -32,6 +34,7 @@ namespace TurtleGraphics.Models {
 			new FunctionDefinition {Name = "RestoreTurtlePosition", Parameters = {new Parameter{Description = "Keep position in memory, able to return repeatedly", Name = "keepInMem", Type = typeof(bool)}}},
 			new FunctionDefinition {Name = "SetBrushSize", Parameters = {new Parameter{Description = "Pen radius in pixels", Name = "radius", Type = typeof(double)}}},
 			new FunctionDefinition {Name = "SetLineCapping", Parameters = {new Parameter{Description = "Pen capping style", Name = "capStyle", Type = typeof(string)}}},
+			new ForLoop()
 		};
 
 		public InteliCommandDialogViewModel() {
@@ -53,8 +56,8 @@ namespace TurtleGraphics.Models {
 				}
 				string fullWord = GetFullWord(value, input.CaretIndex - 1);
 				Source.Clear();
-				foreach (FunctionDefinition cmd in _intelliCommands) {
-					if (cmd.Name.StartsWith(fullWord) && cmd.Name.Length != fullWord.Length) {
+				foreach (ILanguageElement cmd in _intelliCommands) {
+					if (cmd.Name.StartsWith(fullWord) && cmd.Name.Length != fullWord.Length) { // TODO the computation has to move to the classes
 						string suffix = cmd.Name.Remove(0, fullWord.Length);
 						Source.Add(new InteliCommandData(cmd, fullWord + suffix, suffix));
 					}

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
-using TurtleGraphics.Definition;
 
 namespace TurtleGraphics {
 	public class StoredPositionData : ParsedData {

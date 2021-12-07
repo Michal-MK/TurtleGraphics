@@ -1,5 +1,5 @@
 ﻿using System;
-using TurtleGraphics.Definition;
+using TurtleGraphics.Language.Definition;
 
 namespace TurtleGraphics {
 	public abstract class ParameterValuation {

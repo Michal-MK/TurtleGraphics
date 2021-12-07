@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Flee.PublicTypes;
+using TurtleGraphics.Language;
 using TurtleGraphics.Parsers;
 using TurtleGraphics.Validation;
 

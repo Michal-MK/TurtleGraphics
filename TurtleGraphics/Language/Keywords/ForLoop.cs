@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using TurtleGraphics.InteliCmmands;
 
 namespace TurtleGraphics.Language.Keywords {
 	public class ForLoop : ILanguageElement {
@@ -18,6 +19,20 @@ namespace TurtleGraphics.Language.Keywords {
 
 		public int CaretIndex { get; private set; }
 
-		public Func<Task<ILanguageElement>> PreInsertEvent => null; // TODO param name
+		public Func<Task<ILanguageElement>> PreInsertEvent => async () => {
+			ForLoopVarNameDialog dialog = new ForLoopVarNameDialog();
+			bool? result = dialog.ShowDialog();
+			if (result.HasValue && result.Value) {
+				Expand(dialog.VarName);
+			}
+			return await Task.FromResult(this);
+		};
+
+		public InteliCommandData Process(string wordArtifact) {
+			if (Name.StartsWith(wordArtifact) && Name.Length != wordArtifact.Length) {
+				return new InteliCommandData(this);
+			}
+			return null;
+		}
 	}
 }

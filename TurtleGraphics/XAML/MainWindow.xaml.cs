@@ -93,16 +93,8 @@ namespace TurtleGraphics {
 		[Notify]
 		public int IterationCount { get; set; } = 1;
 
-		private string _commandsText = "";
-
-		public string CommandsText {
-			get => _commandsText;
-			set {
-				_commandsText = value;
-				Notify(nameof(CommandsText));
-				InteliCommandModel.Handle(value, CommandsTextInput, CommandsView, ControlArea.ActualWidth);
-			}
-		}
+		[NotifyWithCallback(nameof(OnCommandTextAction))]
+		public string CommandsText { get; set; }
 
 		[NotifyWithCallback(nameof(ResetPathAnimationSlider))]
 		public bool AnimatePath { get; set; }
@@ -290,7 +282,7 @@ namespace TurtleGraphics {
 		private void CommandsTextInput_TextChanged(object sender, TextChangedEventArgs e) {
 			foreach (TextChange change in e.Changes) {
 				if (change.AddedLength == Environment.NewLine.Length) {
-					string changedText = _commandsText.Substring(change.Offset, change.AddedLength);
+					string changedText = CommandsText.Substring(change.Offset, change.AddedLength);
 					if (changedText == Environment.NewLine) {
 						HandleNewLineIndent(change);
 					}
@@ -299,7 +291,7 @@ namespace TurtleGraphics {
 		}
 
 		private void HandleNewLineIndent(TextChange change) {
-			string region = _commandsText.Substring(0, CommandsTextInput.CaretIndex);
+			string region = CommandsText.Substring(0, CommandsTextInput.CaretIndex);
 			int indentLevel = (region.Count(s => s == '{') - region.Count(s => s == '}')) * 3;
 			int carret = CommandsTextInput.CaretIndex;
 			if (!(carret < CommandsTextInput.Text.Length && CommandsTextInput.Text[carret] == '}')) {
@@ -440,76 +432,76 @@ namespace TurtleGraphics {
 				}
 				switch (data.Action) {
 					case ParsedAction.NONE: {
-						break;
-					}
-					case ParsedAction.Forward: {
-						await Forward(data.Distance);
-						break;
-					}
-					case ParsedAction.Rotate: {
-						Rotate(data.Angle, data.SetAngle);
-						break;
-					}
-					case ParsedAction.MoveTo: {
-						X = data.MoveTo.X;
-						Y = data.MoveTo.Y;
-						NewPath();
-						break;
-					}
-					case ParsedAction.Color: {
-						if (data.Brush == null) {
-							Color = data.SerializedBrush;
-							NewPath();
+							break;
 						}
-						else {
-							string newColor = ((SolidColorBrush)data.Brush).Color.ToString();
-							if (newColor != Color) {
-								Color = newColor;
+					case ParsedAction.Forward: {
+							await Forward(data.Distance);
+							break;
+						}
+					case ParsedAction.Rotate: {
+							Rotate(data.Angle, data.SetAngle);
+							break;
+						}
+					case ParsedAction.MoveTo: {
+							X = data.MoveTo.X;
+							Y = data.MoveTo.Y;
+							NewPath();
+							break;
+						}
+					case ParsedAction.Color: {
+							if (data.Brush == null) {
+								Color = data.SerializedBrush;
 								NewPath();
 							}
+							else {
+								string newColor = ((SolidColorBrush)data.Brush).Color.ToString();
+								if (newColor != Color) {
+									Color = newColor;
+									NewPath();
+								}
+							}
+							break;
 						}
-						break;
-					}
 					case ParsedAction.Thickness: {
-						BrushSize = data.BrushThickness;
-						double scale = BrushSize / 4;
-						TurtleScale.ScaleX = TurtleScale.ScaleY = scale;
-						NewPath();
-						break;
-					}
+							BrushSize = data.BrushThickness;
+							double scale = BrushSize / 4;
+							TurtleScale.ScaleX = TurtleScale.ScaleY = scale;
+							NewPath();
+							break;
+						}
 					case ParsedAction.PenState: {
-						PenDown = data.PenDown;
-						NewPath();
-						break;
-					}
+							PenDown = data.PenDown;
+							NewPath();
+							break;
+						}
 					case ParsedAction.Capping: {
-						LineCapping = data.LineCap;
-						NewPath();
-						break;
-					}
+							LineCapping = data.LineCap;
+							NewPath();
+							break;
+						}
 					case ParsedAction.StorePos: {
-						storedPositions.Push((new Point(X, Y), ContextExtensions.AsDeg(Angle)));
-						break;
-					}
+							storedPositions.Push((new Point(X, Y), ContextExtensions.AsDeg(Angle)));
+							break;
+						}
 					case ParsedAction.RestorePos: {
-						(Point point, double angle) = storedPositions.Peek();
-						if (data.PopPosition) {
-							storedPositions.Pop();
+							(Point point, double angle) = storedPositions.Peek();
+							if (data.PopPosition) {
+								storedPositions.Pop();
+							}
+							X = point.X;
+							Y = point.Y;
+							Rotate(angle, true);
+							NewPath();
+							break;
 						}
-						X = point.X;
-						Y = point.Y;
-						Rotate(angle, true);
-						NewPath();
-						break;
-					}
 					case ParsedAction.ScreenCapture: {
-						if (IsFullscreen && !ControlPanelHolderVisible) {
-							await Task.Delay(10); // TODO Hardcoded delay
-							Capture();
-							await Task.Delay(10); // TODO Hardcoded delay
+							if (IsFullscreen && !ControlPanelHolderVisible) {
+								await Task.Delay(10); // TODO Hardcoded delay
+								Capture();
+								await Task.Delay(10); // TODO Hardcoded delay
+							}
+							break;
 						}
-						break;
-					}
 				}
 			}
 		}
@@ -706,6 +698,18 @@ namespace TurtleGraphics {
 				IsEnabled = true;
 				Focus();
 				App.Instance.Cfg.Save();
+			}
+		}
+
+		private void OnCommandTextAction() {
+			int intelliElements = InteliCommandModel.Handle(CommandsText, CommandsTextInput.CaretIndex);
+			if (intelliElements > 0) {
+				Rect r = CommandsTextInput.GetRectFromCharacterIndex(CommandsTextInput.CaretIndex - 1);
+				Canvas.SetTop(CommandsView, r.Top + r.Height);
+				Canvas.SetLeft(CommandsView, 0);
+
+				CommandsView.Width = ControlArea.ActualWidth;
+				CommandsView.Height = 60;
 			}
 		}
 

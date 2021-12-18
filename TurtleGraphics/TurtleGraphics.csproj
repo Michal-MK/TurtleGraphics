@@ -239,9 +239,9 @@
     <Compile Include="Helpers\FleeHelper.cs" />
     <Compile Include="Language\Definition\FunctionDefinition.cs" />
     <Compile Include="Language\Definition\Parameter.cs" />
+    <Compile Include="Language\ILanguageElement.cs" />
     <Compile Include="Language\FunctionCall.cs" />
     <Compile Include="Language\Keywords\ForLoop.cs" />
-    <Compile Include="Language\ILanguageElement.cs" />
     <Compile Include="Language\Logic\AssignmentInfo.cs" />
     <Compile Include="Language\Logic\Condition.cs" />
     <Compile Include="Language\Logic\Operator.cs" />

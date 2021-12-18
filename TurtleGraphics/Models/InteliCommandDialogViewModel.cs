@@ -34,42 +34,40 @@ namespace TurtleGraphics.Models {
 			new FunctionDefinition {Name = "RestoreTurtlePosition", Parameters = {new Parameter{Description = "Keep position in memory, able to return repeatedly", Name = "keepInMem", Type = typeof(bool)}}},
 			new FunctionDefinition {Name = "SetBrushSize", Parameters = {new Parameter{Description = "Pen radius in pixels", Name = "radius", Type = typeof(double)}}},
 			new FunctionDefinition {Name = "SetLineCapping", Parameters = {new Parameter{Description = "Pen capping style", Name = "capStyle", Type = typeof(string)}}},
-			new ForLoop()
+			new ForLoop(),
+			new FunctionDefinition {Name = "SetColor", Parameters = {new Parameter { Description = "Changes the brush color", Name = "color", Type = typeof(string)} }},
+			new FunctionDefinition {Name = "SetColor", Parameters = {
+					new Parameter { Description = "Sets the RED component of the RGB color", Name = "colorR", Type = typeof(byte)},
+					new Parameter { Description = "Sets the GREEN component of the RGB color", Name = "colorG", Type = typeof(byte)},
+					new Parameter { Description = "Sets the BLUE component of the RGB color", Name = "colorB", Type = typeof(byte)}
+			}},
 		};
 
 		public InteliCommandDialogViewModel() {
 			Source = new ObservableCollection<InteliCommandData>();
 		}
 
-		public void Handle(string value, TextBox input, InteliCommandsDialog commandsView, double controlAreaWidth) {
-			if (value.Length > 0 && input.CaretIndex > 0 && input.CaretIndex <= value.Length) {
-				char c = value[input.CaretIndex - 1];
+		public int Handle(string fullText, int caretIndex) {
+			if (fullText.Length > 0 && caretIndex > 0 && caretIndex <= fullText.Length) {
+				char c = fullText[caretIndex - 1];
 				if (char.IsWhiteSpace(c)) {
 					Source.Clear();
 					Visible = Visibility.Collapsed;
-					return;
+					return 0;
 				}
-				if (input.CaretIndex < value.Length && !char.IsWhiteSpace(value[input.CaretIndex])) {
+				if (caretIndex < fullText.Length && !char.IsWhiteSpace(fullText[caretIndex])) {
 					Source.Clear();
 					Visible = Visibility.Collapsed;
-					return;
+					return 0;
 				}
-				string fullWord = GetFullWord(value, input.CaretIndex - 1);
+
+				string wordArtifact = GetFullWord(fullText, caretIndex - 1);
 				Source.Clear();
-				foreach (ILanguageElement cmd in _intelliCommands) {
-					if (cmd.Name.StartsWith(fullWord) && cmd.Name.Length != fullWord.Length) { // TODO the computation has to move to the classes
-						string suffix = cmd.Name.Remove(0, fullWord.Length);
-						Source.Add(new InteliCommandData(cmd, fullWord + suffix, suffix));
-					}
-				}
+
+				_intelliCommands.ForEach(elem => { InteliCommandData data = elem.Process(wordArtifact); if (data != null) Source.Add(data); });
+
 				if (Source.Count > 0) {
 					Visible = Visibility.Visible;
-					Rect r = input.GetRectFromCharacterIndex(input.CaretIndex - 1);
-					Canvas.SetTop(commandsView, r.Top + r.Height);
-					Canvas.SetLeft(commandsView, 0);
-
-					commandsView.Width = controlAreaWidth;
-					commandsView.Height = 60;
 					SelectedIndex = 0;
 					Source[SelectedIndex].Selected = true;
 				}
@@ -78,6 +76,7 @@ namespace TurtleGraphics.Models {
 				Source.Clear();
 				Visible = Visibility.Collapsed;
 			}
+			return Source.Count;
 		}
 
 		private string GetFullWord(string value, int v) {

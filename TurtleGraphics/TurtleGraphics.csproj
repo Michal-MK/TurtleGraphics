@@ -236,6 +236,7 @@
     </ApplicationDefinition>
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Exceptions\ParsingException.cs" />
+    <Compile Include="Helpers\CaretHelper.cs" />
     <Compile Include="Helpers\FleeHelper.cs" />
     <Compile Include="Language\Definition\FunctionDefinition.cs" />
     <Compile Include="Language\Definition\Parameter.cs" />
@@ -247,8 +248,8 @@
     <Compile Include="Language\Logic\Operator.cs" />
     <Compile Include="Language\Logic\ParameterValuation.cs" />
     <Compile Include="Models\Base\BaseViewModel.cs" />
-    <Compile Include="InteliCommands\InteliCommandData.cs" />
-    <Compile Include="Models\InteliCommandDialogViewModel.cs" />
+    <Compile Include="IntelliCommands\IntelliCommandData.cs" />
+    <Compile Include="Models\IntelliCommandDialogViewModel.cs" />
     <Compile Include="Models\LanguageButtonModel.cs" />
     <Compile Include="Models\Base\NotifyAspect.cs" />
     <Compile Include="Structs\ModificationData.cs" />
@@ -342,7 +343,7 @@
     </Compile>
     <Compile Include="Parsers\CommandParser.cs" />
     <Compile Include="Parsed Data\ForLoopData.cs" />
-    <Compile Include="Helpers\Helpers.cs" />
+    <Compile Include="Helpers\HelpersFunctions.cs" />
     <Compile Include="XAML\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

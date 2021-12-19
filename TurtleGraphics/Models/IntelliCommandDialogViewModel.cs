@@ -1,16 +1,18 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using TurtleGraphics.InteliCmmands;
+using TurtleGraphics.Helpers;
+using TurtleGraphics.IntelliCommands;
 using TurtleGraphics.Language;
 using TurtleGraphics.Language.Definition;
 using TurtleGraphics.Language.Keywords;
-using TurtleGraphics.XAML;
 
 namespace TurtleGraphics.Models {
-	public class InteliCommandDialogViewModel : BaseViewModel {
+	public class IntelliCommandDialogViewModel : BaseViewModel {
 		[Notify]
 		public int SelectedIndex { get; set; }
 
@@ -18,9 +20,9 @@ namespace TurtleGraphics.Models {
 		public Visibility Visible { get; set; }
 
 		[Notify]
-		public ObservableCollection<InteliCommandData> Source { get; set; }
+		public ObservableCollection<IntelliCommandData> Source { get; set; }
 
-		private readonly ILanguageElement[] _intelliCommands = {
+		public static readonly ILanguageElement[] INTELLI_COMMANDS = {
 			new FunctionDefinition {Name = "Rotate", Parameters = {new Parameter{Description = "Angle in degrees", Name = "angle", Type = typeof(double)}}},
 			new FunctionDefinition {Name = "Forward", Parameters = {new Parameter{Description = "Number of pixels", Name = "distance", Type = typeof(double)}}},
 			new FunctionDefinition {Name = "MoveTo", Parameters = {
@@ -43,8 +45,9 @@ namespace TurtleGraphics.Models {
 			}},
 		};
 
-		public InteliCommandDialogViewModel() {
-			Source = new ObservableCollection<InteliCommandData>();
+		public IntelliCommandDialogViewModel() {
+			
+			Source = new ObservableCollection<IntelliCommandData>();
 		}
 
 		public int Handle(string fullText, int caretIndex) {
@@ -64,7 +67,7 @@ namespace TurtleGraphics.Models {
 				string wordArtifact = GetFullWord(fullText, caretIndex - 1);
 				Source.Clear();
 
-				_intelliCommands.ForEach(elem => { InteliCommandData data = elem.Process(wordArtifact); if (data != null) Source.Add(data); });
+				INTELLI_COMMANDS.ForEach(elem => { IntelliCommandData data = elem.Process(wordArtifact); if (data != null) Source.Add(data); });
 
 				if (Source.Count > 0) {
 					Visible = Visibility.Visible;
@@ -88,7 +91,7 @@ namespace TurtleGraphics.Models {
 			return sb.ToString();
 		}
 
-		public void TextEvents(object _, KeyEventArgs e) {
+		public async void TextEvents(object _, KeyEventArgs e) {
 			if (Visible == Visibility.Visible) {
 				if (e.Key == Key.Escape) {
 					e.Handled = true;
@@ -103,16 +106,32 @@ namespace TurtleGraphics.Models {
 					e.Handled = true;
 				}
 				if (e.Key == Key.Enter || e.Key == Key.Return || e.Key == Key.Tab) {
-					InsertInteliCommand();
+					await InsertIntelliCommand();
 					e.Handled = true;
 				}
 			}
+			if (CaretHelper.HasAllParameters(MainWindow.Instance.CommandsTextInput) && (e.Key == Key.Enter || e.Key == Key.Return)) {
+				e.Handled = true;
+				TextBox text = MainWindow.Instance.CommandsTextInput;
+				int index = CaretHelper.NextNewLineIndex(text);
+				HandleNewlineIndent = true;
+				intermediateIndex = index + Environment.NewLine.Length;
+				text.Text = text.Text.Insert(index, Environment.NewLine);
+				// text.CaretIndex = index + Environment.NewLine.Length;
+				HandleNewlineIndent = false;
+			}
 		}
 
-		public void InsertInteliCommand() {
+		public bool HandleNewlineIndent;
+		public int intermediateIndex;
+
+		public async Task InsertIntelliCommand() {
 			TextBox textBox = MainWindow.Instance.CommandsTextInput;
 			int caret = textBox.CaretIndex;
-			InteliCommandData data = Source[SelectedIndex];
+			IntelliCommandData data = Source[SelectedIndex];
+			if (data.Def.PreInsertEvent != null) {
+				data.Def = await data.Def.PreInsertEvent.Invoke();
+			}
 			textBox.Text = textBox.Text.Insert(caret, data.FullInsertText);
 			textBox.CaretIndex = data.GetCaretPos(caret);
 		}

@@ -9,7 +9,7 @@
 			 Visibility="{Binding Visible}">
 
 	<UserControl.DataContext>
-		<local:InteliCommandDialogViewModel/>
+		<local:IntelliCommandDialogViewModel/>
 	</UserControl.DataContext>
 	<Grid>
 		<ListBox ItemsSource="{Binding Source}">

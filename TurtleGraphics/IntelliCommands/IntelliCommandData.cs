@@ -1,8 +1,8 @@
 ﻿using TurtleGraphics.Language;
 using TurtleGraphics.Models;
 
-namespace TurtleGraphics.InteliCmmands {
-	public class InteliCommandData : BaseViewModel {
+namespace TurtleGraphics.IntelliCommands {
+	public class IntelliCommandData : BaseViewModel {
 
 		[Notify]
 		public bool Selected { get; set; }
@@ -12,20 +12,15 @@ namespace TurtleGraphics.InteliCmmands {
 
 		public string FullInsertText => Def.CompletionText;
 
-		public ILanguageElement Def { get; }
+		public ILanguageElement Def { get; set; }
 		public string FullCommand { get; }
 		public int CaretPosition => Def.CaretIndex;
 
 
-		public InteliCommandData(ILanguageElement def, string wordArtifact, string suffix) {
+		public IntelliCommandData(ILanguageElement def, string wordArtifact, string suffix) {
 			Def = def;
 			FullCommand = def.Name;
 			HintText = wordArtifact + suffix;
-		}
-
-		public InteliCommandData(ILanguageElement def) {
-			Def = def;
-			FullCommand = def.Name;
 		}
 
 		public int GetCaretPos(int caret) {

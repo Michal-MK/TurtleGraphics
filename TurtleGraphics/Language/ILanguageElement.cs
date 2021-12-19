@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using TurtleGraphics.InteliCmmands;
+using TurtleGraphics.IntelliCommands;
 
 namespace TurtleGraphics.Language {
 	public interface ILanguageElement { 
@@ -12,6 +12,6 @@ namespace TurtleGraphics.Language {
 
 		Func<Task<ILanguageElement>> PreInsertEvent { get; }
 
-		InteliCommandData Process(string wordArtifact);
+		IntelliCommandData Process(string wordArtifact);
 	}
 }

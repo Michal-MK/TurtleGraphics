@@ -4,8 +4,8 @@ using System.Windows;
 using System.Windows.Media;
 using Flee.PublicTypes;
 
-namespace TurtleGraphics {
-	public static class Helpers {
+namespace TurtleGraphics.Helpers {
+	public static class HelpersFunctions {
 		public static double Lerp(double start, double end, double by) {
 			return start * (1 - by) + end * by;
 		}

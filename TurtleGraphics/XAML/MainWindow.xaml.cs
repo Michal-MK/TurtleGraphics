@@ -12,7 +12,7 @@ using System.Windows.Media;
 using Igor.Models;
 using System.IO;
 using System.Windows.Media.Imaging;
-using static TurtleGraphics.Helpers;
+using static TurtleGraphics.Helpers.HelpersFunctions;
 using Path = System.Windows.Shapes.Path;
 using Igor.Localization;
 using TurtleGraphics.Models;
@@ -34,7 +34,7 @@ namespace TurtleGraphics {
 		#region Bindings
 
 		[Notify]
-		public InteliCommandDialogViewModel InteliCommandModel { get; } = new InteliCommandDialogViewModel();
+		public IntelliCommandDialogViewModel IntelliCommandModel { get; } = new IntelliCommandDialogViewModel();
 
 		[Notify]
 		public ImageSource ImgSource { get; private set; }
@@ -175,7 +175,7 @@ namespace TurtleGraphics {
 			Loaded += MainWindow_Loaded;
 
 			SizeChanged += MainWindow_SizeChanged;
-			CommandsTextInput.PreviewKeyDown += InteliCommandModel.TextEvents;
+			CommandsTextInput.PreviewKeyDown += IntelliCommandModel.TextEvents;
 			CommandsTextInput.TextChanged += CommandsTextInput_TextChanged;
 
 			SetWindowState(App.Instance.LaunchFullScreen);
@@ -248,7 +248,7 @@ namespace TurtleGraphics {
 		}
 
 		private void Control_SizeChanged(object sender, SizeChangedEventArgs e) {
-			if (InteliCommandModel.Visible == Visibility.Visible) {
+			if (IntelliCommandModel.Visible == Visibility.Visible) {
 				CommandsView.Width = ControlArea.ActualWidth;
 			}
 		}
@@ -285,6 +285,17 @@ namespace TurtleGraphics {
 					string changedText = CommandsText.Substring(change.Offset, change.AddedLength);
 					if (changedText == Environment.NewLine) {
 						HandleNewLineIndent(change);
+					}
+				}
+				if (IntelliCommandModel.HandleNewlineIndent) {
+					string region = CommandsText.Substring(0, IntelliCommandModel.intermediateIndex);
+					int indentLevel = (region.Count(s => s == '{') - region.Count(s => s == '}')) * 3;
+					int carret = IntelliCommandModel.intermediateIndex;
+					if (!(carret < CommandsTextInput.Text.Length && CommandsTextInput.Text[carret] == '}')) {
+						IntelliCommandModel.HandleNewlineIndent = false;
+						CommandsTextInput.Text = CommandsTextInput.Text
+																  .Insert(IntelliCommandModel.intermediateIndex, new string(' ', indentLevel <= 0 ? 0 : indentLevel));
+						CommandsTextInput.CaretIndex = IntelliCommandModel.intermediateIndex + indentLevel;
 					}
 				}
 			}
@@ -432,76 +443,76 @@ namespace TurtleGraphics {
 				}
 				switch (data.Action) {
 					case ParsedAction.NONE: {
-							break;
-						}
+						break;
+					}
 					case ParsedAction.Forward: {
-							await Forward(data.Distance);
-							break;
-						}
+						await Forward(data.Distance);
+						break;
+					}
 					case ParsedAction.Rotate: {
-							Rotate(data.Angle, data.SetAngle);
-							break;
-						}
+						Rotate(data.Angle, data.SetAngle);
+						break;
+					}
 					case ParsedAction.MoveTo: {
-							X = data.MoveTo.X;
-							Y = data.MoveTo.Y;
-							NewPath();
-							break;
-						}
+						X = data.MoveTo.X;
+						Y = data.MoveTo.Y;
+						NewPath();
+						break;
+					}
 					case ParsedAction.Color: {
-							if (data.Brush == null) {
-								Color = data.SerializedBrush;
+						if (data.Brush == null) {
+							Color = data.SerializedBrush;
+							NewPath();
+						}
+						else {
+							string newColor = ((SolidColorBrush)data.Brush).Color.ToString();
+							if (newColor != Color) {
+								Color = newColor;
 								NewPath();
 							}
-							else {
-								string newColor = ((SolidColorBrush)data.Brush).Color.ToString();
-								if (newColor != Color) {
-									Color = newColor;
-									NewPath();
-								}
-							}
-							break;
 						}
+						break;
+					}
 					case ParsedAction.Thickness: {
-							BrushSize = data.BrushThickness;
-							double scale = BrushSize / 4;
-							TurtleScale.ScaleX = TurtleScale.ScaleY = scale;
-							NewPath();
-							break;
-						}
+						BrushSize = data.BrushThickness;
+						double scale = BrushSize / 4;
+						TurtleScale.ScaleX = TurtleScale.ScaleY = scale;
+						NewPath();
+						break;
+					}
 					case ParsedAction.PenState: {
-							PenDown = data.PenDown;
-							NewPath();
-							break;
-						}
+						PenDown = data.PenDown;
+						NewPath();
+						break;
+					}
 					case ParsedAction.Capping: {
-							LineCapping = data.LineCap;
-							NewPath();
-							break;
-						}
+						LineCapping = data.LineCap;
+						NewPath();
+						break;
+					}
 					case ParsedAction.StorePos: {
-							storedPositions.Push((new Point(X, Y), ContextExtensions.AsDeg(Angle)));
-							break;
-						}
+						storedPositions.Push((new Point(X, Y), ContextExtensions.AsDeg(Angle)));
+						break;
+					}
 					case ParsedAction.RestorePos: {
-							(Point point, double angle) = storedPositions.Peek();
-							if (data.PopPosition) {
-								storedPositions.Pop();
-							}
-							X = point.X;
-							Y = point.Y;
-							Rotate(angle, true);
-							NewPath();
-							break;
+						(Point point, double angle) = storedPositions.Peek();
+						if (data.PopPosition) {
+							storedPositions.Pop();
 						}
+						X = point.X;
+						Y = point.Y;
+						Rotate(angle, true);
+						NewPath();
+						break;
+					}
 					case ParsedAction.ScreenCapture: {
-							if (IsFullscreen && !ControlPanelHolderVisible) {
-								await Task.Delay(10); // TODO Hardcoded delay
-								Capture();
-								await Task.Delay(10); // TODO Hardcoded delay
-							}
-							break;
+						if (IsFullscreen && !ControlPanelHolderVisible) {
+							await Task.Delay(10); // TODO Hardcoded delay
+							Capture();
+							await Task.Delay(10); // TODO Hardcoded delay
 						}
+						break;
+					}
 				}
 			}
 		}
@@ -701,8 +712,17 @@ namespace TurtleGraphics {
 			}
 		}
 
+		private string previousValue;
+
 		private void OnCommandTextAction() {
-			int intelliElements = InteliCommandModel.Handle(CommandsText, CommandsTextInput.CaretIndex);
+			if (CommandsText.Contains('\t') && !previousValue.Contains('\t')) {
+				int index = CommandsText.IndexOf('\t');
+				const string INSERT = "   ";
+				CommandsTextInput.Text = CommandsText.Remove(index, 1).Insert(index, INSERT);
+				CommandsTextInput.CaretIndex = index + INSERT.Length;
+			}
+
+			int intelliElements = IntelliCommandModel.Handle(CommandsText, CommandsTextInput.CaretIndex);
 			if (intelliElements > 0) {
 				Rect r = CommandsTextInput.GetRectFromCharacterIndex(CommandsTextInput.CaretIndex - 1);
 				Canvas.SetTop(CommandsView, r.Top + r.Height);
@@ -711,6 +731,7 @@ namespace TurtleGraphics {
 				CommandsView.Width = ControlArea.ActualWidth;
 				CommandsView.Height = 60;
 			}
+			previousValue = CommandsText;
 		}
 
 		public bool NoDialogsActive => !(SaveDialogActive || LoadDialogActive || ExceptionDialogActive);

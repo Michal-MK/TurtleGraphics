@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TurtleGraphics.InteliCmmands;
+using TurtleGraphics.IntelliCommands;
 
 namespace TurtleGraphics.Language.Definition {
 	public class FunctionDefinition : ILanguageElement {
@@ -16,12 +16,12 @@ namespace TurtleGraphics.Language.Definition {
 
 		public Func<Task<ILanguageElement>> PreInsertEvent => null;
 
-		public InteliCommandData Process(string wordArtifact) {
+		public IntelliCommandData Process(string wordArtifact) {
 			if (Name.StartsWith(wordArtifact) && Name.Length != wordArtifact.Length) {
 				string suffix = Name.Remove(0, wordArtifact.Length);
 				completionText = suffix + "();";
 				CaretIndex = suffix.Length + 1;
-				return new InteliCommandData(this, wordArtifact, suffix);
+				return new IntelliCommandData(this, wordArtifact, suffix);
 			}
 			return null;
 		}

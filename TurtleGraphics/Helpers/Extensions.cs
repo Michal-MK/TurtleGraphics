@@ -12,5 +12,19 @@ namespace TurtleGraphics {
 				action(x);
 			}
 		}
+
+		public static int[] AllIndicesOf(this string source, char character) {
+			int index = 0;
+			List<int> ret = new List<int>();
+			while (index < source.Length) {
+				int charIndex = source.Substring(index).IndexOf(character);
+				if (charIndex == -1) {
+					return ret.ToArray();
+				}
+				index = charIndex;
+				ret.Add(charIndex);
+			}
+			return ret.ToArray();
+		}
 	}
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Flee.PublicTypes;
+using TurtleGraphics.Helpers;
 
 namespace TurtleGraphics {
 	public static class FleeHelper {

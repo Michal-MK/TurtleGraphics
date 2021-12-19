@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Flee.PublicTypes;
+using TurtleGraphics.Helpers;
 
 namespace TurtleGraphics {
 	public class ForLoopData : ParsedData {
@@ -176,7 +177,7 @@ namespace TurtleGraphics {
 			Queue<ParsedData> data = CommandParser.Parse(
 				string.Join(Environment.NewLine, Lines),
 				CommandParser.Window,
-				Helpers.Join(Variables, new Dictionary<string, object> { { LoopVariable, 0 } }));
+				HelpersFunctions.Join(Variables, new Dictionary<string, object> { { LoopVariable, 0 } }));
 
 			singleIteration.AddRange(data);
 

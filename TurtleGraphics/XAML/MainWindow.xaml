@@ -7,6 +7,8 @@
 		xmlns:xaml="clr-namespace:TurtleGraphics.XAML"
         xmlns:controls="clr-namespace:Igor.Controls;assembly=Igor.Controls"
         mc:Ignorable="d"
+		d:DesignWidth="800"
+		d:DesignHeight="600"
         Title="{Binding L.WindowName}">
 	<d:Window.DataContext>
 		<local:MainWindow/>
@@ -123,7 +125,7 @@
 		</Grid>
 
 		<Canvas>
-			<xaml:InteliCommandsDialog x:Name="CommandsView" DataContext="{Binding InteliCommandModel}"/>
+			<xaml:InteliCommandsDialog x:Name="CommandsView" DataContext="{Binding IntelliCommandModel}"/>
 		</Canvas>
 	</Grid>
 </Window>

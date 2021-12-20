@@ -6,8 +6,6 @@ namespace TurtleGraphics.Language.Definition {
 
 		public string Name { get; set; }
 
-		public string CompletionText => Name; // There is nothing new to add other than the name
-
 		public string Description { get; set; }
 	}
 }

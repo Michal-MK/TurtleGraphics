@@ -1,9 +1,10 @@
-﻿using Igor.Configuration;
+﻿using System.Windows.Input;
+using Igor.Configuration;
 using Igor.Localization;
 using Igor.Models;
-using System.Windows.Input;
+using TurtleGraphics.Configuration;
 
-namespace TurtleGraphics {
+namespace TurtleGraphics.Models {
 	public class LanguageButtonModel : BaseViewModel {
 
 		private readonly string _languageCode;

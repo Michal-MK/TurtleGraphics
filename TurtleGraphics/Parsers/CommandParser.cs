@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using System.IO;
 using Flee.PublicTypes;
+using TurtleGraphics.Exceptions;
+using TurtleGraphics.Helpers;
 using TurtleGraphics.Language;
-using TurtleGraphics.Parsers;
+using TurtleGraphics.ParsedData;
+using TurtleGraphics.ParsedData.Base;
 using TurtleGraphics.Validation;
 
-namespace TurtleGraphics {
+namespace TurtleGraphics.Parsers {
 	public class CommandParser {
 
 		public static MainWindow Window { get; set; }
 		private static readonly Stack<ConditionalData> conditionals = new Stack<ConditionalData>();
 		public static Dictionary<string, int> LineIndexes = new Dictionary<string, int>();
 
-		public static Queue<ParsedData> ParseCommands(string commands, MainWindow window) {
+		public static Queue<BaseParsedData> ParseCommands(string commands, MainWindow window) {
 			LineIndexes.Clear();
 			string[] split = commands.Replace("\r", "").Split('\n');
 			for (int i = 0; i < split.Length; i++) {
@@ -39,7 +42,7 @@ namespace TurtleGraphics {
 			return Parse(commands, window);
 		}
 
-		public static Queue<ParsedData> Parse(string commands, MainWindow window, Dictionary<string, object> additionalVars = null) {
+		public static Queue<BaseParsedData> Parse(string commands, MainWindow window, Dictionary<string, object> additionalVars = null) {
 			Window = window;
 			conditionals.Clear();
 
@@ -48,7 +51,7 @@ namespace TurtleGraphics {
 				{ "Height", Window.DrawHeight }
 			};
 
-			Queue<ParsedData> ret = new Queue<ParsedData>();
+			Queue<BaseParsedData> ret = new Queue<BaseParsedData>();
 			using (StringReader reader = new StringReader(commands)) {
 
 				if (additionalVars != null) {
@@ -58,7 +61,7 @@ namespace TurtleGraphics {
 				}
 
 				while (reader.Peek() != -1) {
-					ParsedData data = ParseLine(reader.ReadLine(), reader, globalVars);
+					BaseParsedData data = ParseLine(reader.ReadLine(), reader, globalVars);
 					if (data != null) {
 						ret.Enqueue(data);
 					}
@@ -68,7 +71,7 @@ namespace TurtleGraphics {
 		}
 
 
-		private static ParsedData ParseLine(string line, StringReader reader, Dictionary<string, object> variables) {
+		private static BaseParsedData ParseLine(string line, StringReader reader, Dictionary<string, object> variables) {
 			if (string.IsNullOrWhiteSpace(line) || line.Trim() == "}")
 				return null;
 			string original = line;

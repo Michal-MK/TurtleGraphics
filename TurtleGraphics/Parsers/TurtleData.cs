@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media;
+using TurtleGraphics.ParsedData;
 
-namespace TurtleGraphics {
+namespace TurtleGraphics.Parsers {
 	[Serializable]
 	public struct TurtleData {
 		public static TurtleData NoAction => new TurtleData() { Action = ParsedAction.NONE };

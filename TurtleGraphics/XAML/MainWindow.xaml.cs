@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,13 +12,24 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Igor.Models;
-using System.IO;
 using System.Windows.Media.Imaging;
-using static TurtleGraphics.Helpers.HelpersFunctions;
-using Path = System.Windows.Shapes.Path;
 using Igor.Localization;
+using Igor.Models;
+using TurtleGraphics.Exceptions;
+using TurtleGraphics.IO;
 using TurtleGraphics.Models;
+using TurtleGraphics.Models.Base;
+using TurtleGraphics.ParsedData;
+using TurtleGraphics.ParsedData.Base;
+using TurtleGraphics.Parsers;
+using static TurtleGraphics.Helpers.HelpersFunctions;
+using Brush = System.Windows.Media.Brush;
+using Brushes = System.Windows.Media.Brushes;
+using Image = System.Drawing.Image;
+using Path = System.Windows.Shapes.Path;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
+using Point = System.Windows.Point;
+using Size = System.Drawing.Size;
 
 namespace TurtleGraphics {
 	public partial class MainWindow : Window, INotifyPropertyChanged {
@@ -268,13 +282,13 @@ namespace TurtleGraphics {
 			if (e.KeyboardDevice.Modifiers == (ModifierKeys.Control | ModifierKeys.Alt) && e.Key == Key.C) {
 				if (IsFullscreen && !ControlPanelHolderVisible) {
 					(int actualWidth, int actualHeight) = GetActualScreenSize();
-					System.Drawing.Bitmap bitmap;
+					Bitmap bitmap;
 					using (MemoryStream ms = CaptureScreenshot(actualWidth, actualHeight)) {
-						bitmap = (System.Drawing.Bitmap)System.Drawing.Image.FromStream(ms);
+						bitmap = (Bitmap)Image.FromStream(ms);
 					}
 					string fileName = $"ScreenCapture {DateTime.Now:dd-MM-yyyy hh_mm_ss}.png";
 					string path = System.IO.Path.Combine(App.Instance.Cfg.CurrentSettings.ScreenshotSaveLocation, fileName);
-					bitmap.Save(path, System.Drawing.Imaging.ImageFormat.Png);
+					bitmap.Save(path, ImageFormat.Png);
 				}
 			}
 		}
@@ -383,10 +397,10 @@ namespace TurtleGraphics {
 			MemoryStream ms = new MemoryStream();
 			int ix = 0;
 			int iy = 0;
-			System.Drawing.Bitmap image = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-			System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(image);
-			g.CopyFromScreen(ix, iy, ix, iy, new System.Drawing.Size(width, height), System.Drawing.CopyPixelOperation.SourceCopy);
-			image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+			Bitmap image = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+			Graphics g = Graphics.FromImage(image);
+			g.CopyFromScreen(ix, iy, ix, iy, new Size(width, height), CopyPixelOperation.SourceCopy);
+			image.Save(ms, ImageFormat.Png);
 			return ms;
 		}
 
@@ -562,7 +576,7 @@ namespace TurtleGraphics {
 			ButtonText = L.GenericStop;
 			try {
 				FSManager.CreateCodeBackup(CommandsText);
-				Queue<ParsedData> tasks = CommandParser.ParseCommands(CommandsText, this);
+				Queue<BaseParsedData> tasks = CommandParser.ParseCommands(CommandsText, this);
 				List<TurtleData> compiledTasks = await CompileTasks(tasks, cancellationTokenSource.Token);
 				if (ShowTurtleCheckBox) {
 					ShowTurtleCheckBox = compiledTasks.All(w => w.Action != ParsedAction.ScreenCapture);
@@ -589,14 +603,14 @@ namespace TurtleGraphics {
 			}
 		}
 
-		private Task<List<TurtleData>> CompileTasks(Queue<ParsedData> tasks, CancellationToken token) {
+		private Task<List<TurtleData>> CompileTasks(Queue<BaseParsedData> tasks, CancellationToken token) {
 			return Task.Run(() => {
 				List<TurtleData> ret = new List<TurtleData>(128) {
 					new TurtleData { Angle = Angle, Brush = Brushes.Blue, BrushThickness = BrushSize, MoveTo = new Point(X, Y), PenDown = true }
 				};
 
 				while (tasks.Count > 0) {
-					ParsedData current = tasks.Dequeue();
+					BaseParsedData current = tasks.Dequeue();
 					if (current.IsBlock) {
 						ret.AddRange(current.CompileBlock(token));
 					}

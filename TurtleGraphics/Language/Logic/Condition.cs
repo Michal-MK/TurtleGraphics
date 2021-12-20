@@ -1,4 +1,4 @@
-﻿namespace TurtleGraphics {
+﻿namespace TurtleGraphics.Language.Logic {
 
 	public enum ConditionType {
 		Greater,
@@ -9,7 +9,6 @@
 	}
 
 	public class Condition {
-
 		public const string LESS = "<";
 		public const string GREATER = ">";
 		public const string GREATER_OR_EQUAL = ">=";

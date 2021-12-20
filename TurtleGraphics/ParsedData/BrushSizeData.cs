@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using Flee.PublicTypes;
+using TurtleGraphics.ParsedData.Base;
+using TurtleGraphics.Parsers;
 
-namespace TurtleGraphics {
-	public class BrushSizeData : ParsedData {
+namespace TurtleGraphics.ParsedData {
+	public class BrushSizeData : BaseParsedData {
 
 		private readonly IGenericExpression<double> _expression;
 

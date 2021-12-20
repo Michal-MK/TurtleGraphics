@@ -4,6 +4,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Igor.Localization;
 using Igor.Models;
+using TurtleGraphics.Exceptions;
+using TurtleGraphics.Parsers;
 
 namespace TurtleGraphics {
 	/// <summary>

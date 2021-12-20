@@ -1,7 +1,7 @@
 ﻿using System;
 using TurtleGraphics.Language.Definition;
 
-namespace TurtleGraphics {
+namespace TurtleGraphics.Language.Logic {
 	public abstract class ParameterValuation {
 		public ParameterValuation(Parameter param, object value) {
 			Param = param;

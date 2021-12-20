@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Flee.PublicTypes;
-using TurtleGraphics.Helpers;
+using TurtleGraphics.ParsedData;
 
-namespace TurtleGraphics {
+namespace TurtleGraphics.Helpers {
 	public static class FleeHelper {
 		public static ExpressionContext GetExpression(Dictionary<string, object> variables) {
 			ExpressionContext c = new ExpressionContext();

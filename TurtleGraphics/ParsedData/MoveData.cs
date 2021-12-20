@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
 using Flee.PublicTypes;
+using TurtleGraphics.Exceptions;
+using TurtleGraphics.Helpers;
+using TurtleGraphics.Language.Logic;
+using TurtleGraphics.ParsedData.Base;
+using TurtleGraphics.Parsers;
 
-namespace TurtleGraphics {
-	public class MoveData : ParsedData {
+namespace TurtleGraphics.ParsedData {
+	public class MoveData : BaseParsedData {
 
 		private readonly IGenericExpression<double> x;
 		private readonly IGenericExpression<double> y;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TurtleGraphics {
+namespace TurtleGraphics.Language.Logic {
 	public class AssignmentInfo {
 
 		public Type Type { get; set; }

@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using Flee.PublicTypes;
+using TurtleGraphics.Exceptions;
+using TurtleGraphics.Helpers;
+using TurtleGraphics.ParsedData;
+using TurtleGraphics.ParsedData.Base;
 
 namespace TurtleGraphics.Parsers {
 	public class IfStatementParser {
@@ -48,9 +52,9 @@ namespace TurtleGraphics.Parsers {
 				}
 				List<string> lines = BlockParser.ParseBlock(reader);
 
-				List<ParsedData> isStatement = new List<ParsedData>();
+				List<BaseParsedData> isStatement = new List<BaseParsedData>();
 
-				Queue<ParsedData> data = CommandParser.Parse(string.Join(Environment.NewLine, lines), MainWindow.Instance, variables);
+				Queue<BaseParsedData> data = CommandParser.Parse(string.Join(Environment.NewLine, lines), MainWindow.Instance, variables);
 				isStatement.AddRange(data);
 
 				return new ConditionalData(line, ifCondition, data, variables.Copy());

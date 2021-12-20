@@ -1,29 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
+using TurtleGraphics.Exceptions;
 using TurtleGraphics.Language;
+using TurtleGraphics.Language.Logic;
 using TurtleGraphics.Parsers;
 
 namespace TurtleGraphics.Validation {
 	public static class LineValidators {
-		public static readonly Dictionary<string, Type> typeDict = new Dictionary<string, Type> {
-			{ "int", typeof(int) },
-			{ "long", typeof(long) },
-			{ "Point", typeof(Point) },
-		};
-
 		public static bool IsAssignment(string line, out AssignmentInfo assignment) {
 			assignment = null;
 
 			string[] split = line.Split(new[] { ' ' }, 2);
-			string[] type_name = split[0].Trim().Split();
+			string[] typeName = split[0].Trim().Split();
 
 			AssignmentInfo i = new AssignmentInfo();
-			if (!IsType(type_name[0], out Type t)) {
+			if (!IsType(typeName[0], out Type t)) {
 				return false;
 			}
 			i.Type = t;
-			i.VariableName = type_name[1];
+			i.VariableName = typeName[1];
 			i.Value = split[1].TrimEnd(';');
 			assignment = i;
 			return true;
@@ -31,8 +28,8 @@ namespace TurtleGraphics.Validation {
 
 		public static bool IsType(string line, out Type t) {
 			t = null;
-			if (typeDict.ContainsKey(line)) {
-				t = typeDict[line];
+			if (SupportedTypes.TYPE_DICT.ContainsKey(line)) {
+				t = SupportedTypes.TYPE_DICT[line];
 				return true;
 			}
 			return false;
@@ -110,7 +107,7 @@ namespace TurtleGraphics.Validation {
 
 			bool isValidType = IsType(split[1].Split()[0], out _);
 
-			return split.Length >= 3 && startsWithFor && isValidType;
+			return split.Length >= 3 && isValidType;
 		}
 
 		internal static bool IsConditional(string line) {
@@ -124,45 +121,58 @@ namespace TurtleGraphics.Validation {
 		internal static bool IsVariableDeclaration(string line, Dictionary<string, object> variables, out (string, string, string) data) {
 			data = (null, null, null);
 			string[] values = line.Split('=');
-			if (values.Length != 2) { return false; }
-			values[0].Trim();
-			values[1].Trim();
+			if (values.Length != 2) {
+				return false;
+			}
+			values[0] = values[0].Trim();
+			values[1] = values[1].Trim();
 			string[] typeName = values[0].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 			if (typeName.Length == 2) {
-				typeName[0].TrimEnd();
-				typeName[1].TrimStart();
-				if (!SupportedTypes.Types.Contains(typeName[0])) { return false; }
-				if (typeName[1] == "Width" || typeName[1] == "Height" || variables.ContainsKey(typeName[1])) { throw new ParsingException($"'{typeName[1]}' is already defined in an outer scope!", line); }
-				if (!values[1].EndsWith(";")) { return false; }
+				typeName[0] = typeName[0].TrimEnd();
+				typeName[1] = typeName[1].TrimStart();
+				if (!SupportedTypes.TYPE_DICT.Keys.ToList().Contains(typeName[0])) {
+					return false;
+				}
+				if (typeName[1] == "Width" || typeName[1] == "Height" || variables.ContainsKey(typeName[1])) {
+					throw new ParsingException($"'{typeName[1]}' is already defined in an outer scope!", line);
+				}
+				if (!values[1].EndsWith(";")) {
+					return false;
+				}
 				values[1] = values[1].TrimStart().TrimEnd(' ', ';');
 				data = (typeName[0], typeName[1], values[1]);
 				return true;
 			}
-			else {
-				//Variable assignment
-				if (IsVariableAssignment(new string[] { typeName[0].TrimEnd(), values[1] }, line, variables, out (string, string) assignData)) {
-					data = (null, assignData.Item1, assignData.Item2);
-					return true;
-				}
-				return false;
+
+			//Variable assignment
+			if (IsVariableAssignment(new[] { typeName[0].TrimEnd(), values[1] }, line, variables, out (string, string) assignData)) {
+				data = (null, assignData.Item1, assignData.Item2);
+				return true;
 			}
+			return false;
 		}
 
 		private static bool IsVariableAssignment(string[] info, string line, Dictionary<string, object> variables, out (string, string) data) {
-			if (!variables.ContainsKey(info[0])) { throw new ParsingException("Unable to assign value to an undefined variable!", line); }
-			if (info[0] == "Width" || info[0] == "Height") { throw new ParsingException($"'{info[0]}' is a read-only variable!", line); }
-			if (!info[1].EndsWith(";")) { throw new ParsingException($"Missing a semicolon at the end of variable assignment!", line); }
+			if (!variables.ContainsKey(info[0])) {
+				throw new ParsingException("Unable to assign value to an undefined variable!", line);
+			}
+			if (info[0] == "Width" || info[0] == "Height") {
+				throw new ParsingException($"'{info[0]}' is a read-only variable!", line);
+			}
+			if (!info[1].EndsWith(";")) {
+				throw new ParsingException($"Missing a semicolon at the end of variable assignment!", line);
+			}
 			info[1] = info[1].TrimEnd(' ', ';');
 			data = (info[0].Trim(), info[1].TrimStart());
 			return true;
 		}
 
-		public static bool IsEmptyLine(string value, int carret) {
-			while (char.IsWhiteSpace(value[carret])) {
-				if(value[carret] == Environment.NewLine[0]) {
+		public static bool IsEmptyLine(string value, int caret) {
+			while (char.IsWhiteSpace(value[caret])) {
+				if (value[caret] == Environment.NewLine[0]) {
 					return true;
 				}
-				carret++;
+				caret++;
 			}
 			return false;
 		}

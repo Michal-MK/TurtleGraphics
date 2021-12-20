@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Threading;
 using Flee.PublicTypes;
 using TurtleGraphics.Helpers;
+using TurtleGraphics.Language.Logic;
+using TurtleGraphics.ParsedData.Base;
+using TurtleGraphics.Parsers;
 
-namespace TurtleGraphics {
-	public class ForLoopData : ParsedData {
+namespace TurtleGraphics.ParsedData {
+	public class ForLoopData : BaseParsedData {
 		public IGenericExpression<int> From { get; set; }
 		public IGenericExpression<int> To { get; set; }
 		public string LoopVariable { get; set; }
@@ -30,15 +33,15 @@ namespace TurtleGraphics {
 
 		public override IList<TurtleData> CompileBlock(CancellationToken token) {
 			List<TurtleData> ret = new List<TurtleData>(4096);
-			List<ParsedData> loopContents = CompileLoop();
+			List<BaseParsedData> loopContents = CompileLoop();
 
 			ret.AddRange(CompileQueue(loopContents, token));
 			return ret;
 		}
 
-		private IEnumerable<TurtleData> CompileQueue(List<ParsedData> data, CancellationToken token) {
+		private IEnumerable<TurtleData> CompileQueue(List<BaseParsedData> data, CancellationToken token) {
 			List<TurtleData> interData = new List<TurtleData>();
-			ParsedData current;
+			BaseParsedData current;
 
 			UpdateVars(From);
 			UpdateVars(To);
@@ -171,10 +174,10 @@ namespace TurtleGraphics {
 			return interData;
 		}
 
-		private List<ParsedData> CompileLoop() {
-			List<ParsedData> singleIteration = new List<ParsedData>();
+		private List<BaseParsedData> CompileLoop() {
+			List<BaseParsedData> singleIteration = new List<BaseParsedData>();
 
-			Queue<ParsedData> data = CommandParser.Parse(
+			Queue<BaseParsedData> data = CommandParser.Parse(
 				string.Join(Environment.NewLine, Lines),
 				CommandParser.Window,
 				HelpersFunctions.Join(Variables, new Dictionary<string, object> { { LoopVariable, 0 } }));

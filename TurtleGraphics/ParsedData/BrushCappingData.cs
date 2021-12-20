@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Media;
+using TurtleGraphics.Exceptions;
+using TurtleGraphics.Language.Logic;
+using TurtleGraphics.ParsedData.Base;
+using TurtleGraphics.Parsers;
 
-namespace TurtleGraphics {
-	public class BrushCappingData : ParsedData {
+namespace TurtleGraphics.ParsedData {
+	public class BrushCappingData : BaseParsedData {
 		public BrushCappingData(ParameterValuation[] args, Dictionary<string, object> variables, string line) : base(variables, line, args) { }
 
 		public override bool IsBlock => false;

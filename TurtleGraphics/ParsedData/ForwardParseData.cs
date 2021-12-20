@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Windows;
 using Flee.PublicTypes;
+using TurtleGraphics.ParsedData.Base;
+using TurtleGraphics.Parsers;
 
-namespace TurtleGraphics {
-	public class ForwardParseData : ParsedData {
+namespace TurtleGraphics.ParsedData {
+	public class ForwardParseData : BaseParsedData {
 
 		private readonly IGenericExpression<double> _expression;
 

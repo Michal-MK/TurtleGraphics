@@ -3,11 +3,12 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace TurtleGraphics {
+namespace TurtleGraphics.IO {
 	public class FileSystemManager {
 
 		public const string EXTENSION = ".tgs";
 		public const string CRASH_BCK = ".crash_bck";
+
 		public string SavedDataPath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SavedData");
 		private LoadSaveDataDialog loadDialog;
 
@@ -26,9 +27,8 @@ namespace TurtleGraphics {
 			File.WriteAllText(Path.Combine(SavedDataPath, saveFileName + EXTENSION), string.Join(Environment.NewLine, code));
 		}
 
-
 		public void AbortLoad() {
-			if(loadDialog != null) {
+			if (loadDialog != null) {
 				loadDialog.CancelCommand.Execute(null);
 			}
 		}

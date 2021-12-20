@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Threading;
 using Flee.PublicTypes;
+using TurtleGraphics.Exceptions;
 using TurtleGraphics.Language;
+using TurtleGraphics.ParsedData.Base;
+using TurtleGraphics.Parsers;
 
-namespace TurtleGraphics {
-	public class RotateParseData : ParsedData {
+namespace TurtleGraphics.ParsedData {
+	public class RotateParseData : BaseParsedData {
 
 		private readonly IGenericExpression<double> _expression;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TurtleGraphics {
+namespace TurtleGraphics.Helpers {
 	public static class Extensions {
 		public static Dictionary<T, K> Copy<T, K>(this Dictionary<T, K> dict) {
 			return new Dictionary<T, K>(dict);

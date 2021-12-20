@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TurtleGraphics {
+namespace TurtleGraphics.Exceptions {
 	public sealed class ParsingException : Exception {
 		public ParsingException(string message, string lineText) : base(message) {
 			LineText = lineText;

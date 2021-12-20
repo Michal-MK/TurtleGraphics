@@ -10,6 +10,7 @@ using TurtleGraphics.IntelliCommands;
 using TurtleGraphics.Language;
 using TurtleGraphics.Language.Definition;
 using TurtleGraphics.Language.Keywords;
+using TurtleGraphics.Models.Base;
 
 namespace TurtleGraphics.Models {
 	public class IntelliCommandDialogViewModel : BaseViewModel {
@@ -46,7 +47,6 @@ namespace TurtleGraphics.Models {
 		};
 
 		public IntelliCommandDialogViewModel() {
-			
 			Source = new ObservableCollection<IntelliCommandData>();
 		}
 

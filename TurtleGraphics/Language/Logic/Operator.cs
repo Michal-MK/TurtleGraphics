@@ -1,4 +1,4 @@
-﻿namespace TurtleGraphics {
+﻿namespace TurtleGraphics.Language.Logic {
 	public enum OperatorType {
 		PlusPlus,
 		MinMin,
@@ -13,4 +13,3 @@
 		public const string MIN_EQUALS = "-=";
 	}
 }
-

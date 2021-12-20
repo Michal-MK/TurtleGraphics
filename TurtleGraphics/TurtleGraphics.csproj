@@ -252,7 +252,6 @@
     <Compile Include="Models\IntelliCommandDialogViewModel.cs" />
     <Compile Include="Models\LanguageButtonModel.cs" />
     <Compile Include="Models\Base\NotifyAspect.cs" />
-    <Compile Include="Structs\ModificationData.cs" />
     <Compile Include="XAML\Converters\AngleConverter.cs" />
     <Compile Include="XAML\Converters\CoordinateConverter.cs" />
     <Compile Include="XAML\ForLoopVarNameDialog.xaml.cs">
@@ -265,13 +264,13 @@
       <DependentUpon>LoadDialogItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="locale\Locale.cs" />
-    <Compile Include="Parsed Data\BrushCappingData.cs" />
-    <Compile Include="Parsed Data\ContextExtensions.cs" />
+    <Compile Include="ParsedData\BrushCappingData.cs" />
+    <Compile Include="ParsedData\ContextExtensions.cs" />
     <Compile Include="IO\FileSystemManager.cs" />
-    <Compile Include="Parsed Data\RestorePositionData.cs" />
-    <Compile Include="Parsed Data\ScreenCaptureData.cs" />
-    <Compile Include="Parsed Data\StoredPositionData.cs" />
-    <Compile Include="Parsed Data\VariableData.cs" />
+    <Compile Include="ParsedData\RestorePositionData.cs" />
+    <Compile Include="ParsedData\ScreenCaptureData.cs" />
+    <Compile Include="ParsedData\StoredPositionData.cs" />
+    <Compile Include="ParsedData\VariableData.cs" />
     <Compile Include="Parsers\ArgParser.cs" />
     <Compile Include="Parsers\FunctionNames.cs" />
     <Compile Include="Parsers\SupportedTypes.cs" />
@@ -286,13 +285,13 @@
       <DependentUpon>LoadSaveDataDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Extensions.cs" />
-    <Compile Include="Parsed Data\BrushSizeData.cs" />
-    <Compile Include="Parsed Data\ConditionalData.cs" />
-    <Compile Include="Parsed Data\MoveData.cs" />
-    <Compile Include="Parsed Data\ColorData.cs" />
-    <Compile Include="Parsed Data\ForwardParseData.cs" />
-    <Compile Include="Parsed Data\ParsedAction.cs" />
-    <Compile Include="Parsed Data\RotateParseData.cs" />
+    <Compile Include="ParsedData\BrushSizeData.cs" />
+    <Compile Include="ParsedData\ConditionalData.cs" />
+    <Compile Include="ParsedData\MoveData.cs" />
+    <Compile Include="ParsedData\ColorData.cs" />
+    <Compile Include="ParsedData\ForwardParseData.cs" />
+    <Compile Include="ParsedData\ParsedAction.cs" />
+    <Compile Include="ParsedData\RotateParseData.cs" />
     <Compile Include="Parsers\BlockParser.cs" />
     <Compile Include="Parsers\IfStatementParser.cs" />
     <Compile Include="IO\SavedData.cs" />
@@ -336,13 +335,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Parsed Data\PenPositionData.cs" />
+    <Compile Include="ParsedData\PenPositionData.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Parsers\CommandParser.cs" />
-    <Compile Include="Parsed Data\ForLoopData.cs" />
+    <Compile Include="ParsedData\ForLoopData.cs" />
     <Compile Include="Helpers\HelpersFunctions.cs" />
     <Compile Include="XAML\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -358,7 +357,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Parsed Data\Base\ParsedData.cs" />
+    <Compile Include="ParsedData\Base\BaseParsedData.cs" />
     <Compile Include="Parsers\ForLoopParser.cs" />
     <Compile Include="Parsers\LogicParsers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

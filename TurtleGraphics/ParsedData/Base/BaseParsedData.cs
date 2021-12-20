@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using Flee.PublicTypes;
+using TurtleGraphics.Language.Logic;
+using TurtleGraphics.Parsers;
 
-namespace TurtleGraphics {
+namespace TurtleGraphics.ParsedData.Base {
 
-	public abstract class ParsedData {
+	public abstract class BaseParsedData {
 
-		public ParsedData(Dictionary<string, object> variables, string originalLine, params ParameterValuation[] parameters) {
+		public BaseParsedData(Dictionary<string, object> variables, string originalLine, params ParameterValuation[] parameters) {
 			Parameters = parameters;
 			Variables = variables;
 			Line = originalLine;

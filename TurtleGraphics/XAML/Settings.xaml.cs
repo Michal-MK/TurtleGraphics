@@ -11,6 +11,8 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using System.IO;
 using System.Windows.Forms;
 using Igor.Configuration;
+using TurtleGraphics.Configuration;
+using TurtleGraphics.Models;
 
 namespace TurtleGraphics {
 	/// <summary>

@@ -2,8 +2,9 @@
 using System.Linq;
 using System.Reflection;
 using AspectInjector.Broker;
+using TurtleGraphics.Helpers;
 
-namespace TurtleGraphics.Models {
+namespace TurtleGraphics.Models.Base {
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Class)]
 	[Injection(typeof(NotifyAspect))]
 	public class NotifyAttribute : Attribute { }

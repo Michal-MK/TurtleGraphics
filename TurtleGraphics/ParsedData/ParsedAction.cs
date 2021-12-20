@@ -1,4 +1,4 @@
-﻿namespace TurtleGraphics {
+﻿namespace TurtleGraphics.ParsedData {
 	public enum ParsedAction {
 		NONE,
 		Forward,

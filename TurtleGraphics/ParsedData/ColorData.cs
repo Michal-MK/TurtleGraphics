@@ -4,9 +4,14 @@ using System.Text;
 using System.Threading;
 using System.Windows.Media;
 using Flee.PublicTypes;
+using TurtleGraphics.Exceptions;
+using TurtleGraphics.Helpers;
+using TurtleGraphics.Language.Logic;
+using TurtleGraphics.ParsedData.Base;
+using TurtleGraphics.Parsers;
 
-namespace TurtleGraphics {
-	public class ColorData : ParsedData {
+namespace TurtleGraphics.ParsedData {
+	public class ColorData : BaseParsedData {
 
 		private readonly char[] HEX = new[] { '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 		private readonly Random _random;

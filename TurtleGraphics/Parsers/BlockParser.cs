@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using TurtleGraphics.Exceptions;
 
-namespace TurtleGraphics {
+namespace TurtleGraphics.Parsers {
 	public static class BlockParser {
 		public static List<string> ParseBlock(StringReader reader) {
 			List<string> ret = new List<string>();

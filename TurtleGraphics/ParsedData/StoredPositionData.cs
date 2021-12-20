@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
+using TurtleGraphics.Language.Logic;
+using TurtleGraphics.ParsedData.Base;
+using TurtleGraphics.Parsers;
 
-namespace TurtleGraphics {
-	public class StoredPositionData : ParsedData {
+namespace TurtleGraphics.ParsedData {
+	public class StoredPositionData : BaseParsedData {
 
 		public StoredPositionData(ParameterValuation[] args, Dictionary<string, object> variables, string line) : base(variables, line, args) { }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TurtleGraphics.Language.Definition;
+using TurtleGraphics.Language.Logic;
 
 namespace TurtleGraphics.Parsers {
 	public static class ArgParser {

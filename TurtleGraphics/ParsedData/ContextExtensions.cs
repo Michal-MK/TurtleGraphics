@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace TurtleGraphics {
+namespace TurtleGraphics.ParsedData {
 	public static class ContextExtensions {
 
-		private static readonly Random random = new Random();
+		private static readonly Random RANDOM = new Random();
 
 		public static double AsRad(double degrees) {
 			return Math.PI * degrees / 180.0;
@@ -14,22 +14,22 @@ namespace TurtleGraphics {
 		}
 
 		public static double RandX() {
-			return random.NextDouble() * MainWindow.Instance.DrawWidth;
+			return RANDOM.NextDouble() * MainWindow.Instance.DrawWidth;
 		}
 
 		public static double RandY() {
-			return random.NextDouble() * MainWindow.Instance.DrawHeight;
+			return RANDOM.NextDouble() * MainWindow.Instance.DrawHeight;
 		}
 
 		public static double Random(double from, double to) => Rand(from, to);
 		public static double Random(int from, int to) => Rand(from, to);
 
 		public static double Rand(double from, double to) {
-			return random.Next((int)from, (int)to - 1) + random.NextDouble();
+			return RANDOM.Next((int)from, (int)to - 1) + RANDOM.NextDouble();
 		}
 
 		public static double Rand(int from, int to) {
-			return random.Next(from, to - 1) + random.NextDouble();
+			return RANDOM.Next(from, to - 1) + RANDOM.NextDouble();
 		}
 
 		public static int Map(double value, double min, double max, double newMin, double newMax) {

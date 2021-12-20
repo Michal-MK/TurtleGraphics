@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using Flee.PublicTypes;
+using TurtleGraphics.ParsedData.Base;
+using TurtleGraphics.Parsers;
 
-namespace TurtleGraphics {
-	public class VariableData : ParsedData {
+namespace TurtleGraphics.ParsedData {
+	public class VariableData : BaseParsedData {
 		public override bool IsBlock => false;
 
 		public override string Line { get; set; }

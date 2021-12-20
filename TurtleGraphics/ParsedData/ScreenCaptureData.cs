@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using TurtleGraphics.Language.Logic;
+using TurtleGraphics.ParsedData.Base;
+using TurtleGraphics.Parsers;
 
-namespace TurtleGraphics {
-	public class ScreenCaptureData : ParsedData {
+namespace TurtleGraphics.ParsedData {
+	public class ScreenCaptureData : BaseParsedData {
 
 		public ScreenCaptureData(ParameterValuation[] args, string originalLine, Dictionary<string, object> variables) : base(variables, originalLine, args) {
 

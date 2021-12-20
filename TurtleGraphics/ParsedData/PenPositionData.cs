@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using TurtleGraphics.ParsedData.Base;
+using TurtleGraphics.Parsers;
 
-namespace TurtleGraphics {
-	public class PenPositionData : ParsedData {
+namespace TurtleGraphics.ParsedData {
+	public class PenPositionData : BaseParsedData {
 
 		public PenPositionData(bool state, Dictionary<string, object> variables, string line) : base(variables, line) {
 			PenState = state;

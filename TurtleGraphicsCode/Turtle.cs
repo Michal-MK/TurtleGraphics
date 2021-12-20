@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using TurtleGraphics;
+using TurtleGraphics.ParsedData;
+using TurtleGraphics.Parsers;
 
 namespace TurtleGraphicsCode {
 	/// <summary>

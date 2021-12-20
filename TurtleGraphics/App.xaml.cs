@@ -3,6 +3,7 @@ using Igor.Localization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
+using TurtleGraphics.Configuration;
 
 namespace TurtleGraphics {
 	/// <summary>

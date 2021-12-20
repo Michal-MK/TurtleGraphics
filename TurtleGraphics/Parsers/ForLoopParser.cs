@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using Flee.PublicTypes;
+using TurtleGraphics.Exceptions;
+using TurtleGraphics.Helpers;
+using TurtleGraphics.Language.Logic;
+using TurtleGraphics.ParsedData;
 
 namespace TurtleGraphics.Parsers {
 	public class ForLoopParser {

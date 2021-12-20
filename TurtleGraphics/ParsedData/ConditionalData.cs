@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using Flee.PublicTypes;
+using TurtleGraphics.ParsedData.Base;
+using TurtleGraphics.Parsers;
 
-namespace TurtleGraphics {
-	public class ConditionalData : ParsedData {
+namespace TurtleGraphics.ParsedData {
+	public class ConditionalData : BaseParsedData {
 
 		public IGenericExpression<bool> IfCondition { get; set; }
-		public Queue<ParsedData> IfData { get; set; }
-		public Queue<ParsedData> ElseData { get; set; }
-		public IList<(IGenericExpression<bool>, Queue<ParsedData>)> ElseIfs { get; set; }
+		public Queue<BaseParsedData> IfData { get; set; }
+		public Queue<BaseParsedData> ElseData { get; set; }
+		public IList<(IGenericExpression<bool>, Queue<BaseParsedData>)> ElseIfs { get; set; }
 		public bool IsModifiable { get; set; } = true;
 		public int LineIndex { get; set; }
 
@@ -20,7 +22,7 @@ namespace TurtleGraphics {
 
 		public override string Line { get; set; }
 
-		public ConditionalData(string line, IGenericExpression<bool> ifCondition, Queue<ParsedData> data, Dictionary<string, object> variables) : base(variables, line/*,line TODO*/) {
+		public ConditionalData(string line, IGenericExpression<bool> ifCondition, Queue<BaseParsedData> data, Dictionary<string, object> variables) : base(variables, line/*,line TODO*/) {
 			IfCondition = ifCondition;
 			IfData = data;
 			Line = line;
@@ -32,7 +34,7 @@ namespace TurtleGraphics {
 			}
 			List<string> lines = BlockParser.ParseBlock(reader);
 
-			Queue<ParsedData> data = CommandParser.Parse(string.Join(Environment.NewLine, lines), CommandParser.Window, Variables);
+			Queue<BaseParsedData> data = CommandParser.Parse(string.Join(Environment.NewLine, lines), CommandParser.Window, Variables);
 			ElseData = data;
 		}
 
@@ -51,9 +53,9 @@ namespace TurtleGraphics {
 			return ret;
 		}
 
-		private IEnumerable<TurtleData> CompileQueue(Queue<ParsedData> data, CancellationToken token) {
+		private IEnumerable<TurtleData> CompileQueue(Queue<BaseParsedData> data, CancellationToken token) {
 			List<TurtleData> interData = new List<TurtleData>();
-			ParsedData current;
+			BaseParsedData current;
 			int counter = 0;
 			if (data.Count == 0) {
 				return interData;

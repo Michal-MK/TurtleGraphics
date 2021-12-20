@@ -1,5 +1,5 @@
 ﻿using TurtleGraphics.Language;
-using TurtleGraphics.Models;
+using TurtleGraphics.Models.Base;
 
 namespace TurtleGraphics.IntelliCommands {
 	public class IntelliCommandData : BaseViewModel {

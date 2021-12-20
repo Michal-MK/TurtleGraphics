@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
+using TurtleGraphics.Language.Logic;
+using TurtleGraphics.ParsedData.Base;
+using TurtleGraphics.Parsers;
 
-namespace TurtleGraphics {
-	public class RestorePositionData : ParsedData {
+namespace TurtleGraphics.ParsedData {
+	public class RestorePositionData : BaseParsedData {
 
 		public RestorePositionData(ParameterValuation[] args, Dictionary<string, object> variables, string line) : base(variables, line, args) {
 			if (Arg1 != null) {

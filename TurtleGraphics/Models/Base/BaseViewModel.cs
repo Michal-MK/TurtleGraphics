@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace TurtleGraphics.Models {
+namespace TurtleGraphics.Models.Base {
 	public class BaseViewModel : INotifyPropertyChanged {
 		public event PropertyChangedEventHandler PropertyChanged;
 

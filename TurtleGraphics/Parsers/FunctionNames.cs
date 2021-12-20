@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using TurtleGraphics.Exceptions;
 using TurtleGraphics.Language.Definition;
 
-namespace TurtleGraphics {
+namespace TurtleGraphics.Parsers {
 	public static class FunctionNames {
 		public static List<string> Functions { get; } = new List<string> {
 			"Forward",

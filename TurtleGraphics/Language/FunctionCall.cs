@@ -1,4 +1,6 @@
-﻿using TurtleGraphics.Language.Definition;
+﻿using TurtleGraphics.Exceptions;
+using TurtleGraphics.Language.Definition;
+using TurtleGraphics.Language.Logic;
 
 namespace TurtleGraphics.Language {
 	public class FunctionCall {
